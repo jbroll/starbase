@@ -65,5 +65,6 @@ level directories will be configured and compiled from here.
 
 
  5. radar - The radar library is provided by its author for use with Starbase and
-	    further redistribution is not authorized.
+	    further redistribution is not authorized.  The radar library is not 
+	    available from the github based distribution.
 
