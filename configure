@@ -1,0 +1,89 @@
+#!/bin/sh
+#
+echo $* > .config
+
+MAKEFILES="
+	./utillib/Makefile
+	./tablelib/Makefile
+	./tablesrc/Makefile
+	./tablefun/Makefile
+	./python/Makefile
+	./nlfit/Makefile
+	./bsd/Makefile
+	./gnu/Makefile
+	./Makefile
+"
+
+SUBDIRS="utillib tablelib tablesrc tablefun tawk nlfit gnu bsd"
+
+
+if [ -d ./radar ] ; then
+    MAKEFILES="$MAKEFILES ./radar/Makefile ./slalink/Makefile"
+    SUBDIRS="$SUBDIRS radar slalink"
+fi
+if [ -d ../slalib ] ; then
+    MAKEFILES="$MAKEFILES ../slalib/Makefile"
+fi
+
+WD=`pwd`
+OS=`uname`
+CPU=`uname -p`
+
+prefix=""
+arch=""
+
+CF=$WD/config
+
+OFS="$IFS"
+for arg in $* ;  do
+    case $arg in 
+	*prefix=*)	IFS="="	; set -- $arg; prefix=$2; IFS="$OFS"	;;
+	*arch=*)	IFS="="	; set -- $arg; arch=.$2;  IFS="$OFS"	;;
+	*slalib=*)	IFS="="	; set -- $arg; SLALIB=$2; IFS="$OFS"	;;
+	*slainc=*)	IFS="="	; set -- $arg; SLAINC=$2; IFS="$OFS"	;;
+        *)
+		echo "unknown option : $arg" 1>&2
+		exit
+		;;
+    esac
+done
+
+if [ "$prefix" = "" ] ; then
+	prefix=`pwd`
+fi
+
+makemake() {
+    echo "# Starbase Makefile"			 > Makefile
+    echo "#"					>> Makefile
+    echo " WD=$WD"				>> Makefile
+    echo " OS=$OS"				>> Makefile
+    echo "CPU=$CPU"				>> Makefile
+    echo ""					>> Makefile
+    cat $CF/Makefile.Base			>> Makefile
+    cat $CF/Makefile.$OS  			>> Makefile
+    echo ""					>> Makefile
+    echo "prefix=$prefix"			>> Makefile
+    echo "arch=$arch"				>> Makefile
+    echo ""					>> Makefile
+    echo "exec_prefix = \$(prefix)"		>> Makefile
+    echo "exec_arch =   \$(arch)"		>> Makefile
+    echo "bindir = \$(exec_prefix)/bin\$(exec_arch)"	>> Makefile
+    echo "libdir = \$(exec_prefix)/lib\$(exec_arch)"	>> Makefile
+    echo "incdir = \$(prefix)/include"		>> Makefile
+    echo "arch=$arch"				>> Makefile
+    echo ""					>> Makefile
+    echo "SUBDIRS=$SUBDIRS"			>> Makefile
+    echo ""					>> Makefile
+    cat     Makefile.in				>> Makefile
+    cat $CF/Makefile				>> Makefile
+}
+
+for makefile in $MAKEFILES ; do
+    cd `dirname $makefile`;	makemake;	cd $WD
+done
+
+cat $CF/Makefile.Packaging			>> Makefile
+
+
+cd tawk
+./configure --prefix=$prefix

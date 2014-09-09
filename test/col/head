@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+. ../Test
+
+
+jottable 10    X > head.tmp
+jottable 10 91 X > tail.tmp
+
+Test "Headtable"
+    jottable 100 X | headtable -10 | DiffFiles - head.tmp
+
+Test "Tailtable"
+    jottable 100 X | tailtable -10 | DiffFiles - tail.tmp
+
+
+TestDone

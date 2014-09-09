@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# jiggletable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+    amount=1
+
+    while [ $# != 0 ] ; do
+     case $1 in
+	-D)	debug=-D			;;
+	-seed)	seed=$2; shift			;;
+	[.0-9]*)	amount=$1		;;
+        *)
+	    column=$1
+
+	    compute="$compute $column+=gresid($amount);"
+     esac
+     shift
+    done
+
+    if [ "$seed" = "" ] ; then
+        seed=`date +%N`
+    fi
+
+
+    if [ "$compute" = "" ] ; then
+	echo "usage: jiggletable [amount] column [column ...]"	1>&2
+	exit 1
+    fi
+
+    table $debug -p -h -v seed=$seed "BEGIN { srandom(seed) } { $compute ; print }"

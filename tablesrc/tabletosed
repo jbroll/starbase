@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# tabletom4	- convert table columns to m4 marco defines.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+if [ $# != 2 ] ; then
+	echo "usage: tabletom4 FROM_COL TO_COL" 1>&2
+	exit 0
+fi
+
+table -h '{ print "s/"'"$1"'"/"'"$2"'"/g" }'
+

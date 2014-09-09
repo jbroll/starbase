@@ -1,0 +1,38 @@
+
+ Starbase Version 3 Release Notes:
+
+ NEW Simpler Tables Format, backward compatibility retained.
+
+ The original starbase release in 1994...   Followed the /rdb tables format
+
+ Most user tables do not benifit from strict tabbed tables, most "data"
+ columns contain only a single value with out embeded spaces.
+
+ Users may set the NICE flag to enable whitespace delimited columns.
+ If a table header has fewer column names than a row has columns
+ all of the trailing text is placed in the last columns.
+
+
+ 1. Strict tables by default.
+
+ 2. Program parsing mode set with flags option to table_header routine.
+
+    A program can request nice or strict parsing of its input.
+
+ 3. Global parsing mode set with "STARBASE_TAB" environment variable.
+
+    The user can get nice tab tables for all thier starbase programs by 
+    setting an environment variable.
+
+	setenv STARBASE_TAB NICE
+	or
+	setenv STARBASE_TAB STRICT
+
+ 4. Table parsing mode set by "TAB" table header keyword.
+
+    A Table can tell the program that is reading it how it wants to be parsed.
+
+	TAB	NICE
+	or
+	TAB	STRICT
+

@@ -1,0 +1,10 @@
+# Global environment definitions for the starbase iraf packages.
+
+set	pkglibs		= "starbase$bin(arch)/,starbase$lib/"
+set	starbasebin	= "starbase$bin(arch)/"  
+set	starbaselib	= "starbase$lib/"
+set	starbasepkg	= "starbase$pkg/"
+
+set	starbase	= "starbasepkg$starbase/"
+
+keep

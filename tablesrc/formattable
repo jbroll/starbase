@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# formattable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+    Key=$1
+    if [ "$Key" = "" ] ; then
+	Key=Format
+    fi
+
+    HEADER=`header -u`
+    FORMAT=`echo "$HEADER" | reckon -h "print $Key"`
+
+(
+    echo "$HEADER"
+    cat
+) \
+| justify $FORMAT

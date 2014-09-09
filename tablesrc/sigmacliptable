@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# sigmacliptable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+hi=1
+lo=1
+
+	if [ "$1" = -f ] ; then
+	    FIT="$2"
+	    shift
+	    shift
+	fi
+	if [ "$1" = -hi ] ; then
+	    lo=0
+	    shift
+	fi
+	if [ "$1" = -lo ] ; then
+	    hi=0
+	    shift
+	fi
+
+if [ "$1" = "" ] ; then
+    echo "sigmacliptable <column> <sigma> <nrounds>"	1>&2
+    exit 1
+fi
+
+	COL=$1
+	SIG=$2
+	NCLIP=$3
+
+	TAB="$$.clip"
+	cat > $TAB
+
+    i=0
+    while [ $i -lt $NCLIP ] ; do
+	if [ "$FIT" != "" ] ; then
+	    eval < $TAB $FIT > $TAB.out
+	    mv $TAB.out $TAB
+	fi
+
+	AVG=`meantable < $TAB | headoff $COL`
+	RMS=`rmstable  < $TAB | headoff $COL`
+
+
+	if [ "$hi" = 1 ] ; then
+	    HI="$COL <= $AVG+$RMS*$SIG"
+	else 
+	    HI=1
+	fi
+	if [ "$lo" = 1 ] ; then
+	    LO="$COL >= $AVG-$RMS*$SIG"
+	else
+	    LO=1
+	fi
+
+	< $TAB			\
+	row "$LO && $HI" 	\
+	> $TAB.new
+	mv $TAB.new $TAB
+
+	i=`expr $i + 1`
+    done
+
+    cat $TAB
+    rm  $TAB
+

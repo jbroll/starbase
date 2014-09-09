@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# intertable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -o) shift; ofile=$1			;;
+    *)   if [ "$table1" = "" ] ; then
+	table1=$1
+       elif [ "$table2" = "" ] ; then
+	table2=$1
+       else
+	args="${args}${tab}$1"
+	tab="	"
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$table1" = "" -o "$table2" = "" ] ; then
+	echo "usage: intertable table1 table2 [columns] [-o ofile]" 1>&2
+	echo "" 1>&2
+	exit 1
+ fi
+ 
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+ headline1=`headline < $table1 | tr -d " "`
+ dashline1=`dashline < $table1 | tr -d " "`
+ headline2=`headline < $table2 | tr -d " "`
+ dashline2=`dashline < $table2 | tr -d " "`
+
+ if [ "$args" = "" ] ; then
+     args="$headline1"
+ else
+     compline1=`echo "$headline1
+$dashline1
+$headline1" 	\
+		| headoff $args 				\
+		| tr -d " "`
+
+     if [ "$compline1" != "$args" ] ; then
+	echo "intertable: requested columns not in table1"
+	exit 1
+     fi
+ fi
+
+
+ compline2=`echo "$headline2
+$dashline2
+$headline2" 	\
+		| headoff $args 			\
+		| tr -d " "`
+
+ if [ "$compline2" != "$args" ] ; then
+    echo "intertable: requested columns not in table2"
+    exit 1
+ fi
+
+  (column < $table1 $headline1; headoff < $table2 $headline1) 	\
+ | sorttable -D $args
+

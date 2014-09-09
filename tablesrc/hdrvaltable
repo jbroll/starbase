@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# hdrvaltable	- Get header values from a table.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+    if [ "$1" = -h ] ; then
+	shift
+	headoff=-b
+    fi
+
+    column -hV | listtotable -l | column $headoff $*

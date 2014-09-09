@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+
+    HEADER=`headline -u`
+
+    export _ROW=1
+    OFS="$IFS"
+    tr "	" "" | while IFS="" read $HEADER ; do
+#       echo $* 1>&2
+        export $HEADER _ROW
+
+
+        eval "$*"
+        _ROW=`expr $_ROW + 1`
+    done
+

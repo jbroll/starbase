@@ -1,0 +1,145 @@
+#!/bin/sh
+#
+# uniontable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+Tables=""
+
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -o) shift; ofile=$1					;;
+   -h)        head=head					;;
+   -n)	      numb=-n					;;
+   -N) shift; numb="-N $1"				;;
+   -f) shift; fcol=$1; file=file			;;
+   -base) shift; base=$1				;;
+   -)  break;						;;
+   -*) echo "uniontable: unknown option: $1" 1>&2; exit 1	;;
+    *) break;						;;
+  esac
+  shift
+ done
+
+ if [ $# -lt 1 ] ; then
+	echo "usage: uniontable table1 table2 ..." 1>&2
+	echo "" 1>&2
+	exit 1
+ fi
+
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+if [ $1 = "-" ] ; then
+	stdin=1
+	Tables=`cat`
+else 
+	Tables=$*
+fi
+
+
+    for tableN in $Tables ; do
+	if [ $tableN = "-" ] ; then
+	    headstdin=`header -u`
+	    headtrial=`echo "$headstdin" | trim -u -hl $headline1 -a 2> /dev/null`
+	    if [ $? = 0 ] ; then
+	        headline1="$headtrial"
+	    else 
+	        echo "uniontable: cannot read header from $tableN"	1>&2
+		continue
+	    fi
+	else
+	    if [ -f $tableN ] ; then 
+		headtrial=`trim -hl $headline1 -a < $tableN 2> /dev/null`
+		if [ $? = 0 ] ; then
+		    headline1="$headtrial"
+		else 
+		    echo "uniontable: cannot read header from $tableN" 1>&2
+		    continue
+		fi
+	    else 
+	        continue
+	    fi
+	fi
+
+	if [ "$head" = head ] ; then
+	    if [ $tableN = "-" ] ; then
+		heads1=`echo "$headstdin" | hdrvaltable | trim -u -hl $heads1 -a`
+	    else
+		if [ -f $tableN ] ; then 
+		    heads1=`< $tableN hdrvaltable | trim -u -hl $heads1 -a`
+		fi
+	    fi
+	fi
+
+	OKTables="$OKTables $tableN"
+    done
+
+    column=column
+
+    if [ "$file" != "" -o "$head" != "" ] ; then
+        headline1="$fcol $heads1 $headline1"
+
+        for tableN in $OKTables ; do
+	    if [ "$file" != "" ] ; then
+		name=$tableN
+		if [ "$base" != "" ] ; then
+		    name=`basename $name $base`
+		fi
+		fcmd="| echo $name | fldtotable $fcol"
+	    fi
+
+	    if [ "$head" != "" ] ; then
+	    	hcmd="| < $tableN hdrvaltable"
+	    fi
+
+	    case $file-$head in 
+	     file-)
+		if [ $tableN = "-" ] ; then
+		      (echo "$headstdin"; cat) | cprodtable "$fcmd"         - | $column $numb $headline1
+		else
+		    if [ -f $tableN ] ; then 
+		         < $tableN	         cprodtable "$fcmd"         - | $column $numb $headline1
+		    fi
+		fi
+		;;
+	     -head)
+		if [ $tableN = "-" ] ; then
+		      (echo "$headstdin"; cat) | cprodtable         "$hcmd" - | $column $numb $headline1
+		else
+		    if [ -f $tableN ] ; then 
+		         < $tableN	         cprodtable         "$hcmd" - | $column $numb $headline1
+		    fi
+		fi
+		;;
+	     file-head)
+		if [ $tableN = "-" ] ; then
+		      (echo "$headstdin"; cat) | cprodtable "$fcmd" "$hcmd" - | $column $numb $headline1
+		else
+		    if [ -f $tableN ] ; then 
+		         < $tableN	         cprodtable "$fcmd" "$hcmd" - | $column $numb $headline1
+		    fi
+		fi
+		;;
+	    esac
+            column=headoff
+        done
+    else
+        for tableN in $OKTables ; do
+    	    if [ $tableN = "-" ] ; then
+	         (echo "$headstdin"; cat) | $column $headline1
+	    else
+	         < $tableN                  $column $headline1
+	    fi
+            column=headoff
+        done
+    fi
+

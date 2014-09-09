@@ -1,0 +1,36 @@
+# Makefile.in
+#
+# Starbase Data Tables	- An Ascii Database for UNIX
+# 
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+#  Starbase Data Tables is distributed without warranty under the terms of
+#   the GNU General Public License, version 2, 1991.
+#
+
+PROGS = _jot
+SCPTS = jottable gridtable
+
+PK_LDLIBS= ../utillib/libutil.a -lm
+
+
+all: $(PROGS)
+
+install: 
+	for f in $(PROGS) ; do 								\
+	    if [ -f $$f ] ; then 							\
+	        cp $$f$(exeext) $(bindir)/.;		\
+	    else  									\
+		cp ../bin/$$f$(exeext) $(bindir)/.;	\
+	    fi ;									\
+	    echo $$f >> ../Commands;							\
+	done
+	for f in $(SCPTS) ; do 								\
+           sed "s%PATH=.%PATH=$(bindir)%" <$$f > $(bindir)/$$f; 			\
+	   chmod +x $(bindir)/$$f;							\
+	   echo $$f >> ../Commands;							\
+	done
+
+clean::
+	rm -f $(PROGS)
+

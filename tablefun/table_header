@@ -1,0 +1,59 @@
+# Read a table header from "file"
+#
+function table_header(file, T, first	, Header, Dashes, header, i) {
+
+	T["File"]  = file
+	T["NText"] = 0
+
+ 	if ( first == "" ) {
+	    if ( file == "" ) {
+		if ( (getline Dashes) < 0 ) return -1
+	    } else {
+		if ( (getline Dashes < file) < 0 ) return -1
+	    }
+	} else {
+	    Dashes = first
+	}
+
+	while ( Dashes !~ /^((-*)\t)*-+$/ ) {
+
+	    T["Text", T["NText"]++] = Dashes
+
+	    if ( n = split(Header, header, " *	 *") ) {
+		if ( header[1] ~ /^ *[a-zA-Z][a-zA-Z0-9]* *$/ ) {
+		    T[header[1], -1] = T["NText"]
+		    for ( i = 0; i < n; i++ ) {
+			T[header[1], n] = header[n+1]
+		    }
+		}
+	    }
+
+	    Header = Dashes
+	    if ( file == "" ) {
+		if ( (getline Dashes) < 0 ) return -1
+	    } else {
+		if ( (getline Dashes < file) < 0 ) return -1
+	    }
+	}
+
+	T["Text", T["NText"]++] = Dashes
+
+	n = split(Header, header, " *	 *")
+	sub(/^ */, "", header[1]) 
+	sub(/ *$/, "", header[n]) 
+	for ( i in header ) {
+		T[header[i]] = i
+	}
+	
+	T["cols"] = n
+	T["header"] = Header
+	T["dashes"] = Dashes
+
+	return n
+}
+
+function table_col(T, col) {
+	return T[col]
+}
+
+

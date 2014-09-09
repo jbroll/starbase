@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# evalpolytable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ if [ $# -lt 2 ] ; then
+	echo "usage: evalpolytable col coeff0 [coeff1] [-- col ...]" 1>&2
+	exit 1
+ fi
+
+    C=$1
+    N=0
+    shift
+
+    init="$init
+		_$C=$C"
+    expr="$expr
+		$C = "
+
+while [ $# -ge 1 ] ; do
+    if [ $1 = "--" ] ; then
+	shift
+
+	if [ $N -lt 1 ] ; then
+		echo "evalpolytable: no coeff for column: $C" 1>&2
+		exit 1
+	fi
+        N=0
+
+	if [ $# -lt 1 ] ; then
+		echo "evalpolytable: no column" 1>&2
+		exit 1
+	fi
+	C=$1
+
+	init="$init
+		_$C=$C"
+	expr="$expr
+		$C = "
+    else
+	case $N in
+	0) expr="$expr + $1 "		;;
+	1) expr="$expr + $1*_$C "	;;
+	*) expr="$expr + $1*_$C^$N "	;;
+	esac
+	N=`expr $N + 1`
+    fi
+
+    shift
+done
+ 
+if [ $N -lt 1 ] ; then
+	echo "evalpolytable: no coeff for column: $C" 1>&2
+	exit 1
+fi
+
+compute "
+		$init
+		$expr
+"

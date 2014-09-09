@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+
+	cmd=$1
+	shift
+	arg=`echo $* | sed -e "s/ /,/g"`
+
+	table -h -v cmd="$cmd" "{
+		run = sprintf(cmd, $arg)
+		system(run)
+		}
+	"

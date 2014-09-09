@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+
+catalog=$1
+radius=$2
+
+scat=/data/oir/wcs/bin.solaris/scat
+
+case $catalog in 
+ gsc2)
+    (
+	HEADER="gsc2id ra dec RaErr DecErr Epoch RaPM DecPM RaPMErr DecPMErr fmag FmagErr jmag JmagErr vmag VmagErr Nmag NmagErr a e PA class Status"
+ 	fldtotable < /dev/null $HEADER
+
+	  compute 'ra+=0:00:00; dec+=0:00:00'		\
+	| /data/mmti/bin/foreachrow 			\
+		   $scat -t -c $catalog -vvv 		\
+		   	-r $radius -n 100000		\
+			'$ra' '$dec' J2000		\
+		'| headoff'
+    )							\
+    | column gsc2id ra dec fmag jmag vmag class		\
+    | sorttable -h -u ra dec				\
+    | compute 'ra=d2h(ra)'
+    ;;
+
+ *)
+    (
+	  $scat -t -c $catalog -r 0 -n 0 0 0 J2000 
+
+	  compute 'ra+=0:00:00; dec+=0:00:00'	\
+	| /data/mmti/bin/foreachrow 				\
+		   $scat -t -c $catalog '$ra' '$dec' J2000 -r $radius -n 100000 \
+		'| headoff'
+    )   | sorttable -h -u ra dec
+    ;;
+esac

@@ -1,0 +1,163 @@
+#!/bin/sh
+#
+# fldtotable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+TABLELIB=$TABLELIB
+export TABLELIB
+
+ ifs=" "
+ SKIP=0
+ COPY=0
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   --) shift; argv="$argv $*";  break			;;
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -skip) shift; SKIP=$1				;;
+   -comment) shift; comment=$1
+	COMMENT='if ( $0 ~ /^'$comment'/ ) {
+		    if ( !header && '"$COPY"' ) print $0;
+		    next;
+	        }'					;;
+   -ifs) shift; ifs="$1"				;; 
+   -copy) COPY=1					;;
+   -*) echo "fldtotable: unknown option"; exit 1	;;
+    *) argv="$argv $1"					;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+tawk -F"$ifs" '
+BEGIN {
+	OFS = "	"
+
+#	 Check argc
+#	
+	if ( ARGC <= 1 ) { 
+		print "usage: fldtotable COLUMN:n[-m] ..." > "/dev/stderr"
+		exit(1)
+	}
+
+#	 parse argv for column names
+#	
+	col = 0
+	for ( i = 1; i < ARGC; i++ ) {
+
+	    argx    = ARGV[i]
+	    delete ARGV[i]
+
+	    if ( !(c = index(argx, ":")) ) {
+		name[i]   = argx
+		colm[i] = col + 1
+		colx[i] = col + 1
+	    } else {
+		name[i] = substr(argx, 1, c - 1)
+		argx    = substr(argx, c + 1)
+
+		if ( !(c = index(argx, "-")) ) {
+		    colm[i] = argx + 0
+		    colx[i] = argx + 0
+		} else {
+		    colm[i] = substr(argx, 1, c - 1) + 0
+		    colx[i] = substr(argx, c + 1)    + 0
+		    if ( colm[i] + 0 == 0 ) colm[i] =  1
+		    if ( colx[i] + 0 == 0 ) colx[i] = -1
+		}
+	    }
+
+ 	    if ( colm[i] == 0 ) {
+		print "fldtotable: invalid field number: " colm[i] > "/dev/stderr"
+		exit(1)
+	    }
+
+	    if ( colx[i] == 0 ) {
+		print "fldtotable: invalid field number: " colx[i] > "/dev/stderr"
+		exit(1)
+	    }
+
+	    col = colx[i]
+	}
+
+
+	header = 0;
+
+	for ( x = 0; x < '"$SKIP"'; x++ ) { 
+		getline
+		if ( '"$COPY"' ) { print $0 }
+	}
+}
+{	
+    '"$COMMENT"'
+    if ( !header ) {
+	    doheader()
+    }
+
+    for ( i = 1; i < ARGC - 1; i++ ) {
+      star = colm[i]
+      endf = ((colx[i] == -1) ? NF : colx[i])
+      if ( star < endf ) {
+	for ( j = star; j <= endf; j++ ) {
+	    printf("%s", $j)
+	    if ( j != endf ) printf " "
+	}
+      } else printf("%s", $star)
+      printf OFS
+    }
+
+    star = colm[i]
+    endf = ((colx[i] == -1) ? NF : colx[i])
+    if ( star < endf ) {
+	for ( j = star; j <= endf; j++ ) {
+	    printf("%s", $j)
+	    if ( j != endf ) printf " "
+	}
+    } else printf("%s", $star)
+    printf ORS
+}
+END {
+    if ( !header ) {
+	    doheader()
+    }
+}
+
+function doheader() {
+	#	Output Headline
+	#	
+	for ( i = 1; i < ARGC - 1; i++ ) {
+		printf	"%s%s", name[i], OFS
+	}
+	printf "%s%s", name[i], ORS
+
+	#	Output Dashline
+	#	
+	for ( i = 1; i < ARGC -1; i++ ) {
+	    l = length(name[i])
+	    for ( j = 1; j <= l; j++ )
+		printf("-")
+	    printf OFS
+	} 
+	l = length(name[i])
+	for ( j = 1; j <= l; j++ )
+	    printf("-")
+	printf ORS
+
+	header = 1
+}
+' $argv

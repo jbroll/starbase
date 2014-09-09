@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ table=$1
+ x1col=$2
+ y1col=$3
+ x2col=$5
+ y2col=$5
+
+ coeffs=`hdrvaltable -h < $table $coeff`
+
+ xycoefftable $x1col $y1col $x2col $y2col $coeffs

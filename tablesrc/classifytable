@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# classifytable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+   search -X $*			\
+ | sorttable -u `headline < $1` \
+ | sorttable -n SetNumber	\
+ | reseqtable   SetNumber

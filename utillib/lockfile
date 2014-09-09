@@ -1,0 +1,62 @@
+mkdir -p $LOCK
+
+lockfile() {
+        TEMPFILE="$1.$$"
+        LOCKFILE="$1.lock"
+
+        echo $$ > $TEMPFILE 2> /dev/null || {
+                echo "You don't have permission to access `dirname $TEMPFILE`"
+                return 0
+        }
+
+        ln -n $TEMPFILE $LOCKFILE > /dev/null 2>&1 && {
+                rm -f $TEMPFILE;  	return 1
+        }
+        kill -0 `cat $LOCKFILE` > /dev/null 2>&1 && {
+                rm -f $TEMPFILE;  	return 0
+        }
+        rm -f $LOCKFILE
+        ln $TEMPFILE $LOCKFILE > /dev/null 2>&1 && {
+                rm -f $TEMPFILE;  	return 1
+        }
+        rm -f $TEMPFILE;  		return 0
+}
+
+lockwait() {
+    N=$2
+    LOCKER=`dirname $LOCK/$1`
+
+    mkdir -p $LOCKER
+
+    while lockfile $LOCK/$1 ; do
+	N=`expr $N - 1`
+	if [ $N -lt 0 ] ; then
+	    echo "Content-Type: text/html
+
+	          <html><body>Cannot get a lock on $1.</body></html>"
+	    exit
+	fi
+	sleep 1
+    done
+    return 1
+}
+
+lockdone() {
+    rm -f $LOCK/$1.lock
+}
+
+locktime() {
+    lock=$LOCK/locktime.$$;  touch -t $2 $lock
+
+    if /usr/bin/test $1 -nt $lock ; then 
+	    echo "Content-Type: text/html
+
+	      <html><body>Someone else has updated this file while
+		 	  you were editing it. <br><br>
+		Trying to lock $1 at $2 <br>"
+	      ls -l $1
+	      echo "</body></html>"
+	rm -f    $lock;  exit
+    fi
+    rm -f $lock
+}

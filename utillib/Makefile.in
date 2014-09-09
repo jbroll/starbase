@@ -1,0 +1,54 @@
+
+TARGETS  = libutil.a
+
+C_PFLAGS = $(C_PIC)
+
+INCFILE = xos.h xfile.h xlist.h except.h cache.h filelist.h range.h
+
+OBJECTS =bsearch.o	\
+	cache.o		\
+	caldate.o	\
+	coproc.o	\
+	except.o	\
+	f77.o		\
+	f77handle.o	\
+	getdate.o	\
+	saotng.o	\
+	filelist.o	\
+	muxio.o		\
+	poll.o		\
+	range.o		\
+	readfile.o	\
+	shm.o		\
+	sleep.o		\
+	slurpline.o	\
+	sokfile.o	\
+	sokmult.o	\
+	strtod.o	\
+	strupr.o	\
+	termcap.o	\
+	tmatch.o	\
+	xfile.o		\
+	xpipe.o		\
+	xlist.o	
+
+all: $(TARGETS)
+
+clean::
+	rm -f getdate.c
+
+install:
+	if [ ! -d $(incdir) ] ; then mkdir $(incdir) ; fi                               
+	cp -pf $(INCFILE) $(incdir)/.
+	if [ ! -d $(libdir) ] ; then mkdir $(libdir) ; fi                               
+	if [ -f libutil.a ] ; then 				\
+	    cp -pf libutil.a $(libdir)/.;			\
+	else  							\
+	    cp -pf ../lib/libutil.a $(libdir)/.;			\
+	fi ;							\
+
+libutil.a: $(OBJECTS)
+	rm -f $@
+	$(AR) cr $@ $(OBJECTS)
+	-$(RANLIB) $@
+

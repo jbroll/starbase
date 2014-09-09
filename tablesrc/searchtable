@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# searchtable ~table~ [search options]
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+
+    Table=$1
+    shift
+
+    for T in $Table $Table_[1234567890]; do
+	search $T $*
+    done
+
+exit
+
+
+#!/bin/sh
+#
+# mergetable ~table~
+
+    Table=$1
+    shift
+
+    Primary=
+
+    if [ "$Primary" = "" ] ; then
+	print "mergetable: table $Table is not indexed!" 1>&2
+	exit 1
+    fi
+
+    for T in $Table $Table_[1234567890]; do
+	index if needed $T $Primary
+    done
+
+    sorttable -m $Table $Table_[1234567890] > $Table.tmp
+    mv $Table.tmp $Table
+
+    touch $(indexof $Table $Primary)
+    exit 0
+
+#!/bin/sh
+#
+# appendtable [-s ~column~:~type~] [-i] ~table~ < ~newdata~
+
+  # Compute next appended table
+  #
+  Append=
+
+  cat > $Append
+
+  if [ $index = 1 ] ; then 
+      foreach indexed type
+	    index $Append
+      done
+  fi

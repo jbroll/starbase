@@ -1,0 +1,26 @@
+Outline: starbase.wu
+
+NAME
+====
+
+#tailtable	- use the tail utility on an ascii tab table.
+
+SYNOPSYS
+========
+
++
+    #tailtable [-n] ~file~
+-
+
+DESCRIPTION
+===========
+
+#tailtable output the last #n lines in a table.
+
+SEE ALSO
+========
+
+ * @headtable	- head an ascii tab table.
+ * @tactable	- tac an ascii tab table.
+
+include starbase.seealso

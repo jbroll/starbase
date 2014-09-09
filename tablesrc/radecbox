@@ -1,0 +1,190 @@
+#!/bin/sh
+#
+# radecbox - 	Search an starbase data table catalog for targets in an ra dec specified box.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+ if [ $# -lt 4 ] ; then
+	echo "usage: radecbox file ra dec width [rcol dcol search debug]"	1>&2
+	echo									1>&2
+	exit 1
+ fi
+
+ TABLEFUN=""
+ export TABLEFUN
+
+# Here the first parameter must always be given as a positional.
+# so that the shell can get to it and provide it as the stdin
+# to table
+#
+File="$1"
+
+if [ "$1" = "-" ] ; then
+    File=""
+    Optn="-p"
+else
+    File="$1"
+    Optn="-H $File"
+    if [ ! -f "$1" ] ; then
+	echo "radecbox: can't access $1" 1>&2
+        echo				 1>&2
+        exit 1
+    fi
+fi
+
+table -x $Optn $* program=$0 '
+BEGIN {
+    	OFS	= "	"
+	rcol	= "RA"
+	dcol	= "Dec"
+	search 	= "fast"
+	debug	= 0
+
+#	ARGV[1] is an accessible file or "-"
+#	save the file name and then add it to ARGV after processing
+#	the parameters so that the file is opened as the stdin.
+#
+	fx = ARGV[1]
+	paramcheck("radecbox", "file|ra|dec|width|rcol|dcol|search|radius|height|catradeg|debug|circle")
+	if ( fx != "-" ) ARGV[ARGC++] = fx
+	Init=0
+
+	catradeg = 0
+	circle   = 0
+}
+!Init {
+	sub("((/|\.)[^/]*)*/", "", program)
+
+        if ( substr(program, 6) == "circ" ) { 
+            circle=1
+        }
+
+	paramrange(program, "ra"    , "n", ra,  0,  24)
+	paramrange(program, "dec"   , "n", dec, -90, 90)
+
+#	 Handle width, height and radius explicitly
+#	 
+	if ( circle == 0 ) {
+	    if ( width  == "" ) { print program ": width not set."	 > "/dev/stderr";	exit(1);	}
+	    if ( height != "" )   paramrange(program, "height", "n", height,  -90,  90)
+	} else {
+	    if ( height != "" ) { print program ": no parameter: height" > "/dev/stderr";   exit(1);        }
+	    if ( radius != "" )	width  = radius * 2
+	    else
+		if ( width != "" ) radius = width  / 2
+
+	    if ( radius == "" ) { print program ": radius not set."	 > "/dev/stderr";	exit(1);	}
+	}
+
+	paramrange(program, "search", "s", search, "row|fast")
+
+	if ( file == "-" ) search = "row"
+	
+	if ( !(_rcol = table_colnum(rcol)) ) {
+		printf("%s: no column %s in file: %s\n", program, rcol, file) > "/dev/stderr"
+		exit(1)
+	}
+	if ( !(_dcol = table_colnum(dcol)) ) {
+		printf("%s: no column %s in file: %s\n", program, dcol, file) > "/dev/stderr"
+		exit(1)
+	}
+
+	if ( radeg == 1 ) {
+	    ra = d2h(ra)+0
+	}
+
+	if ( height == "" ) {
+	    height = width
+	}
+
+	[ r1, r2, d1, d2 ] = radecbox(ra, dec, width, height)
+
+	if ( catradeg ) {
+	    seswitch = "-S2ddd"
+	    raswitch = "-S1dd"
+	    ra	     = h2d(ra)
+	    r1       = h2d(r1)
+	    r2       = h2d(r2)
+	    rawrap   = 360
+
+	    if ( radeg != 1 ) {
+	        compute  = " | compute \"" rcol " = d2h(" rcol ")\""
+	    }
+	} else {
+	    seswitch = "-S2hdd"
+	    raswitch = "-S1h"
+	    rawrap   = 24
+
+	    compute  = ""
+	}
+
+	if ( search == "fast" ) {
+	    if ( circle ) {
+		search = "search " file " " seswitch " " rcol " " dcol " " width/2
+	    } else {
+		if ( r1 > r2 ) {
+		    width = rawrap - r1 + r2
+		} else {
+ 		    width = r2 - r1
+		}
+	
+		search = "search " file " " raswitch " " rcol " " width/2 " -C1d " dcol " " height/2
+	    }
+
+	    search = search compute
+
+	    if ( debug ) {
+		print search " <<- EOF"
+		print "", rcol, dcol
+		print "", "--", "--"
+		print "", ra, dec
+		print "EOF"
+	    } else {
+		print  rcol, dcol		| search
+		print "----", "----"		| search
+		print    ra ,   dec		| search
+		close(search)
+	    }
+
+	    exit(0)
+	}
+
+	Init = 1
+
+	if ( file != "-" ) {
+	    table_header("", T, $0)
+	    table_hdrput("", T)
+	    next
+	}
+}
+# We come down here if the table to search is on the stdin.
+#
+
+$_dcol >= d1 && $_dcol <= d2 {
+	if ( r1 < r2 )
+	    if ( ($_rcol >= r1 && $_rcol <= r2) )
+		if ( !circle \
+	   	  || (circle \
+		   && sep($_rcol, $_dcol, ra, dec) < radius ) )
+		    print
+	else
+	    if ( (($_rcol >= r1       && $_rcol <= rawrap) 	\
+	       || ($_rcol >= 00:00:00 && $_rcol <= r2)) )
+		if ( !circle \
+	   	  || (circle \
+		   && sep($_rcol, $_dcol, ra, dec) < radius ) )
+		    print
+}
+
+include ../tablefun/paramcheck
+include ../tablefun/paramrange
+include ../tablefun/table_header
+include ../tablefun/table_hdrput
+include ../tablefun/table_colnum
+include ../tablefun/radecbox
+
+'

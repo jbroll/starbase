@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+
+  < /data/adc.text/astrom/fk5/fk5.dat					\
+    fixtotable  FK5:1-4							\
+	RA_H2000:7-8   RA_M2000:10-11 RA_S2000:13-18 RA_PM2000:19-27	\
+	DecD2000:30-32 DecM2000:34-35 DecS2000:37-41 DecPM2000:42-50	\
+	RA_H1950:53-54 RA_M1950:56-57 RA_S1950:59-64 RA_PM1950:65-73	\
+	DecD1950:76-78 DecM1950:80-81 DecS1950:83-87 DecPM1950:88-96	\
+	RAEpoch:99-103 DecEpoch:117-121					\
+  | column -a RA_2000 Dec2000 RA_1950 Dec1950				\
+  | compute '
+		gsub(" ", "", DecD2000)
+		gsub(" ", "", DecD1950)
+
+		gsub(" ", "", RA_PM2000)
+		gsub(" ", "", DecPM2000)
+		gsub(" ", "", RA_PM1950)
+		gsub(" ", "", DecPM1950)
+
+		RA_2000 = RA_H2000 ":" RA_M2000 ":" RA_S2000
+		Dec2000 = DecD2000 ":" DecM2000 ":" DecS2000
+		RA_1950 = RA_H1950 ":" RA_M1950 ":" RA_S1950
+		Dec1950 = DecD1950 ":" DecM1950 ":" DecS1950
+
+		gsub(" ", "0", RA_2000)
+		gsub(" ", "0", Dec2000)
+		gsub(" ", "0", RA_1950)
+		gsub(" ", "0", Dec1950)
+
+		RA_Epoch += 1900
+		DecEpoch += 1900
+		Epoch = (RA_Epoch+DecEpoch)/2
+
+		RA_PM1950=h2r(RA_PM1950/100/3600)+0
+		DecPM1950=d2r(DecPM1950/100/3600)+0
+		RA_PM2000=h2r(RA_PM2000/100/3600)+0
+		DecPM2000=d2r(DecPM2000/100/3600)+0
+	    '

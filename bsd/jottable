@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# jottable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin
+
+    pastetable=pastetable
+
+    case $0 in
+	*gridtable)	pastetable=cprodtable	;;
+    esac
+
+    while [ $# != 0 ] ; do
+     case $1 in
+	-D)	debug=1				;;
+	-g)	pastetable=cprodtable		;;
+	-?)
+	    if [ "$column" = "" ] ; then
+		default="$default $1"
+	    else
+		switch="$switch $1"
+	    fi					;;
+	[-.0-9]*)	
+	    if [ "$column" = "" ] ; then
+		default="$default $1"
+	    else
+		number="$number $1"
+	    fi					;;
+         *)
+	    if [ "$column" = "" ] ; then
+		column=$1
+	    else
+		if [ "$default $number" = " " ] ; then
+		    echo "jottable: no data specification"	1>&2
+		    exit 1
+		fi
+		command="$command \"| _jot $switch $default $number | fldtotable $column\""
+		number=""
+		switch=""
+		column=$1
+	    fi
+     esac
+     shift
+    done
+
+    if [ "$column" = "" ] ; then
+	echo "jottable: no column names found" 1>&2
+	exit 1
+    fi
+
+    if [ "$default $number" = " " ] ; then
+	echo "jottable: no data specification"	1>&2
+	exit 1
+    fi
+    command="$command \"| _jot $switch $default $number | fldtotable $column\""
+
+    if [ "$debug" = 1 ] ; then
+    	echo $pastetable $command
+    else
+    	eval $pastetable $command
+    fi
+

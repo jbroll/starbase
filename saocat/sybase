@@ -1,0 +1,97 @@
+ create table saocat (
+	  Number int
+	, Dup char(1)
+	, RA1950H char(2)
+	, RA1950M char(2)
+	, RA1950S char(6)
+	, RA1950PM float(4)
+	, RA1950PMDev int
+	, RA1950PLUS char(1)
+	, RA1950SEC float(4)
+	, RA2Dev int
+	, RA2Epoch float(4)
+	, Dec1950D char(3)
+	, Dec1950M char(2)
+	, Dec1950S char(5)
+	, Dec1950PM float(4)
+	, Dec1950PMDev int
+	, Dec1950PLUS char(1)
+	, Dec1950SEC float(4)
+	, Dec2Dev int
+	, Dec2Epoch float(4)
+	, DevPos float(4)
+	, PMag float(4)
+	, VMag float(4)
+	, SpecType char(3)
+	, VMagSource smallint
+	, NotesSource smallint
+	, PMagSource smallint
+	, PMSource smallint
+	, TypeSource smallint
+	, Remarks smallint
+	, VMagAcc char(1)
+	, PMagAcc char(1)
+	, CatSource smallint
+	, SourceNumber int
+	, DM char(2)
+	, DMZone int
+	, DMNumber int
+	, DMID char(2)
+	, BDLetter char(1)
+	, HD int
+	, HDCode char(1)
+	, GC int
+	, RA1950Rad float(4)
+	, Dec1950Rad float(4)
+	, RA2000H char(2)
+	, RA2000M char(2)
+	, RA2000S char(6)
+	, RA2000PM float(4)
+	, Dec2000D char(3)
+	, Dec2000M char(2)
+	, Dec2000S char(5)
+	, Dec2000PM float(4)
+	, RA2000Rad float(4)
+	, Dec2000Rad float(4) )
+	
+bcp roll..saocat in sao.dat -f bcp.fmt -Uroll -SSYBASE
+
+sp_who;
+ 
+select * from saocat;
+
+
+create procedure saocircle
+	@ra 	double precision = 	null,
+	@dec	double precision = 	null,
+	@radius	double precision =	null
+as
+if @ra is null
+or @dec is null
+or @radius is null
+begin
+print "Format: kcircle ra, dec, radius"
+return
+end
+else
+begin
+delete circletemp
+declare @ramax double precision
+declare @ramin double precision
+declare @decmax double precision
+declare @decmin double precision
+declare @absdec double precision
+select @absdec = abs(@dec) + @radius
+select @ramax = @ra + @radius/cos(radians(@absdec))
+select @ramin = @ra - @radius/cos(radians(@absdec))
+select @decmax = @dec + @radius
+select @decmin = @dec - @radius
+insert circletemp select * from saocat
+where RA1950Rad  >= radians(@ramin)
+  and RA1950Rad  <= radians(@ramax)
+  and Dec1950Rad >= radians(@decmin)
+  and Dec1950Rad <= radians(@decmax)
+delete circletemp where
+abs(acos(sin(radians(@dec))*sin(Dec1950Rad) 
+    + cos(radians(@dec))*cos(Dec1950Rad)*cos(radians(@ra)-RA1950Rad))) > @radius
+end

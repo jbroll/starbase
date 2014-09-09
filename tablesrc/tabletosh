@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# tabletosetenv	- convert table columns to setenv csh commands.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+if [ $# != 2 ] ; then
+	echo "usage: tabletosetenv VarName Value" 1>&2
+	exit 0
+fi
+
+HEADER=`header -u`
+VALUES=`echo "$HEADER" | column -hV | sed -e '/^$/d'`
+
+if [ "$VALUES" != "" ] ; then 
+    REPLAC=`echo "$VALUES" | table '{ print "-e s/"$1"/"$2"/g" }'`
+    sed $REPLAC	
+else
+    cat
+fi					\
+| ( 
+	echo "$HEADER" | tail -2
+	cat
+) 					\
+| table -h '{
+	gsub(/\(/, "", '"$2"')
+	gsub(/\)/, "", '"$2"')
+	gsub(/'"'"'/, "", '"$2"')
+	gsub(/[^A-Za-z0-9]/, "_", '"$1"')
+	gsub("&", "", '"$1"')
+	print '"$1 "'"='"'"'"'" $2 "'"'"'"'; export "'" $1"'";" 
+}'

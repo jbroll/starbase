@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+
+usage() {
+    echo "usage: 
+	evalxyfittable -model xoffset yoffset [rotation] [scale]
+	evalxyfittable -coeff <coeffs>" 1>&2
+    exit
+}
+
+
+    if [ $# = 0 ] ; then
+	usage
+    fi
+
+    while [ $# -gt 0 ] ; do
+        case $1 in
+	 -model) shift; 				;;
+	 -ceoff)				;;
+	 *) usage				;;
+	esac
+    done
+
+

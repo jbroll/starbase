@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# gethdrtable	- Get header values from a table.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+echo $1
+
+
+    header | grep $1 | sed -e 's/^[^	]*	//'

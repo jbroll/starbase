@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# scaletable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ if [ $# -lt 3 ] ; then
+        echo "usage: shifttable xcol ycol xshift [yshift]"	1>&2
+        exit 1
+ fi
+ 
+X=$1
+Y=$2
+xshift=$3
+
+ if [ $# -eq 4 ] ; then 
+	yshift=$4
+ else
+	yshift=$3
+ fi
+
+compute "
+    $X += $xshift
+    $Y += $yshift
+"

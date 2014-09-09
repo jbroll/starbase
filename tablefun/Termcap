@@ -1,0 +1,80 @@
+#
+# Termcap
+#
+function Termcap() {
+	if ( TERMCAP == 1 ) { return }
+	TERMCAP = 1
+
+	if ( ROWS == "" ) if ( (ROWS = ENVIRON["ROWS"]) == "" ) ROWS = 24
+	if ( COLS == "" ) if ( (COLS = ENVIRON["COLS"]) == "" ) COLS = 80
+
+	ROWS = ROWS + 0
+	COLS = COLS + 0
+
+	if ( MOVE  == "" ) MOVE="\033[%02d;%02dH"
+	if ( CLEAR == "" ) CLEAR="\033[H\033[2J"
+	if ( PUSH  == "" ) PUSH="\0337"
+	if ( POP   == "" ) POP="\0338"
+	if ( SO    == "" ) SO="\033[7"
+	if ( SE    == "" ) SE="\033[7"
+
+    COLORS["black"]  = "0"
+    COLORS["red"]    = "1"
+    COLORS["green"]  = "2"
+    COLORS["yellow"] = "3"
+    COLORS["blue"]   = "4"
+    COLORS["magenta"]= "4"
+    COLORS["cyan"]   = "6"
+    COLORS["white"]  = "7"
+}
+
+
+function normal() {
+    printf "\033[0m"
+}
+
+function bright() {
+    printf "\033[1m"
+}
+function faint() {
+    printf "\033[2m"
+}
+
+function color(fg, bg) {
+    if ( fg == "normal" ) {
+	printf "\033[0m"
+	return
+    }
+
+    if ( fg != "" ) { printf "\033[%dm", 30 + COLORS[fg] }
+    if ( bg != "" ) { printf "\033[%dm", 40 + COLORS[bg] }
+}
+
+function clear() {
+	printf CLEAR
+}
+
+function move(row, col) {
+	printf MOVE, row, col
+}
+
+function at(y, x, str) {
+	pshcur()
+	move(y, x)
+	printf str
+	popcur()
+}
+
+function pshcur() {
+	printf PUSH
+}
+
+function popcur() {
+	printf POP
+}
+
+function standout() {
+	printf SO
+}
+
+

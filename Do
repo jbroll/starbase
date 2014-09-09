@@ -1,0 +1,106 @@
+
+ Join on N columns - specify sort order as in sorttable
+ Join N files
+
+ Add simplexfittable
+	Fix up cprodtable
+
+ Headers
+    Add type/units/format specifications to the table columns
+      Information lines could be sandwitched between the headline/ dashline
+      pair.  These are just "inverted" keyword - value arrays stored in a way
+      to empahsize thier coorspondence to the columns they describe.
+
+	    X    	Y	Z
+	    double	double	double	type
+	    %6g 	%6g	%6g	format
+	    mm  	mm	mm	units
+	    --  	--	--
+	    <data>
+	    ...
+
+    Accept TABLEHEADERCHAR in the environment.
+
+		#
+		!
+
+
+ Search
+     Search needs one more pass of optimization.  Currently the search
+     runs in the order specified on the command line.  The search descriptors
+     should be organized in a list that can be sorted by various factors.
+
+     During a search with multiple input key rows the results of the previous
+     search can be used to guide the execution of the next.  In addition the
+     index file for a particular column might contain information about the 
+     distribution of the indexed data.  This way the number of rows resulting
+     from a particular search could be (roughly) predicted.
+
+    Search Optimization
+
+	    Homiginize search and filter
+	    Push sequential search off as filter
+	    Mini language to build complex search expr.
+
+	    Search functions:
+
+		box(Xcol, Ycol, X, Y, width [, height])
+		circle(Xcol, Ycol, X, Y, radius);
+
+		radecunits(RA, Dec, units)
+
+		radecbox(Rcol, Dcol, RA, Dec, width [, height])
+		radeccircle(Rcol, Dcol, RA, Dec, radius)
+
+
+  Record Locking
+
+	Offset	Length
+	-	-
+
+	locktable	file	< records
+	unlocktable	file	< records
+
+    Add record location output to search
+
+    Record update by Offset
+
+	table_rowupdate(file, offset, row, space)
+
+Frank's Q&A page.
+	+ How do I add columns?
+	+ How do I rename columns?
+	+ How do I delete columns?
+	+ How do I justify some column and not others?
+
+
+ Programs that are yet unimplimented.
+
+	Set/Data Base operators
+	-----------------------
+	fdtable		- compute functional dependence of tables
+	dbdictable	- print database dictionary of columns
+	domaintable	- print/check the domain of a column
+
+	General info
+	------------
+
+	Misc
+	----
+	filesize	- print the size of a file in bytes
+	header		- get/set header
+
+	Formatting
+	----------
+	tabletotbl	- format with tbl/nroff
+	tabletotex	- format with tbl/nroff
+
+	Fast Access/Editing
+	-----------
+	append		- append row to table
+	seek		- get row at location from table (with search -l)
+	replace		- replace row at location
+	blank		- blank out row at location
+	deleteblank	- kill blank rows in a table
+	lock		- lock a sequence of bytes in a file/index
+	update		- fast access and update records

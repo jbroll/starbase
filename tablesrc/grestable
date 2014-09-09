@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# grestable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -o) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -*) echo "grestable: unknown option: $1" 1>&2; exit 1;;
+    *) if [ "$table" = "" ] ; then
+	table=$1
+       elseif [ "$fromcol" = "" ] ; then
+	fromcol=$1
+       elseif [ "$tocol" = "" ] ; then
+	tocol=$1
+       else
+	echo "grestable [-i ifile] table fromcol tocol [-o ofile]" 1>&2
+	echo "" 1>&2
+	exit 1
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$table" = "" -o "$fromcol" = "" -o "$tocol" = "" ] ; then
+	echo "grestable [-i ifile] table fromcol tocol [-o ofile]" 1>&2
+	exit 1
+ fi
+
+ if [ tabletosed < $table $fromcol $tocol > /tmp/$$.sed ] ; then
+	:
+ else
+	exit 1
+ fi
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+ sed -f /tmp/$$.sed
+ rm -f /tmp/$$.sed
+	

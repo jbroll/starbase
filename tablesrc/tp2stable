@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# tp2stable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+
+export TABLEFUNCTIONS
+TABLEFUNCTIONS=""
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -D) DEBUG=-D						;;
+   -*) echo "tp2stable: unknown option"; exit 1		;;
+    *) argv="$argv $1"					;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+table -p $DEBUG $argv '
+BEGIN {
+	Init = 0
+
+	xcol 	 = "X"
+	ycol 	 = "Y"
+	rotation = 0
+	scale    = 1
+
+	paramcheck("tp2stable", "xcol|ycol|zra|zdec|rotation|rcol|dcol|scale")
+}
+!Init {	__x = table_colnum(xcol)
+	__y = table_colnum(ycol)
+
+	if ( !__x )	 printf("tp2stable: no column \"%s\".\n", rcol) > "/dev/stderr"
+	if ( !__y )	 printf("tp2stable: no column \"%s\".\n", dcol) > "/dev/stderr"
+
+       	__r = table_colnum(rcol)
+	__d = table_colnum(dcol)
+
+	if ( !__r )	__r = __x
+	if ( !__d )	__d = __y
+
+	if ( zra == "" ) printf("tp2stable: RA zero point\n")  > "/dev/stderr"
+	if ( zdec== "" ) printf("tp2stable: Dec zero point\n") > "/dev/stderr"
+	if ( !__x || !__y || zra == "" || zdec == "" ) {
+		exit 1
+	}
+
+	Init = 1
+}
+{	[ $__x, $__y ] = tp2s($__x, $__y, zra, zdec, scale, rotation); print }
+
+include ../tablefun/paramcheck 
+include ../tablefun/table_colnum 
+
+ '

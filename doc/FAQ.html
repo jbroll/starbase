@@ -1,0 +1,401 @@
+<html>
+<title>Starbase: Frequently Asked Questions</title>
+<body>
+
+<h1> Starbase: Frequently Asked Questions </h1>
+
+<a href="#intro"><h4>Introducing Starbase</h4></a>
+<a href="#Q.1" >Q.1.  What is Starbase?</a> <br>
+<a href="#Q.2" >Q.2.  Why might I be interested in it?</a> <br>
+<a href="#Q.3" >Q.3.  Where can Starbase be obtained?</a> <br>
+<a href="#Q.4" >Q.4.  How much does it cost?</a> <br>
+<a href="#start"><h4>Getting Started with Starbase</h4></a>
+<a href="#Q.5" >Q.5.  What do I need to know to get started?</a> <br>
+<a href="#Q.6" >Q.6.  What is the format of a table file?</a> <br>
+<a href="#Q.7" >Q.7.  What are the minimum commands I need to know to get
+              	      started?</a> <br>
+<a href="#Q.8" >Q.8.  What are operators that can be used with the
+                      row command?</a> <br>
+<a href="#Q.9" >Q.9.  What is a regular expression?  How do I use it?</a> <br>
+<a href="#Q.10">Q.10. Are there any tutorials on Starbase and databases
+                      available?</a> <br>
+<a href="#trouble"><h4>Troubleshooting</h4></a>
+<a href="#Q.11">Q.11. How do I find out about reported bugs in
+                      starbase programs?  </a> <br>
+<a href="#Q.12">Q.12. How can I tell the difference between
+                      spaces and TAB characters in my tables? </a> <br>
+<a href="#Q.13">Q.13. Emacs keeps screwing up the TABs in my table!
+                      How can I make it behave?</a> <br>
+<a href="#Q.14">Q.14. Whenever I try to use the <code>column</code> command,
+                      I get a <em>"No such file or directory"</em>
+                      error.</a> <br>
+
+<a name="intro">
+<h2>Introducing Starbase</h2></a>
+
+<a name="Q.1">
+<h3> Q.1. What is Starbase? </h3></a>
+
+Starbase is a simple relational database system developed by John Roll
+that is specially suited for managing tables of astronomical data.  It
+is made up of collection of UNIX programs that make use of standard
+UNIX features and tools.  The basic table manipulating features are
+similar to the /rdb system (but does not require it).  Extra support
+for astronomical applications were implemented at the <B> Smithsonian
+Astrophysical Observatory</B>.  The package also contains tools from
+the <B> Star Link Project</B>.
+
+<a name="Q.2">
+<h3> Q.2. Why might I be interested in it? </h3></a>
+
+Starbase's simple design makes it particularly well-suited for
+manipulating "small" tables (&lt 100,000 rows?) containing astronomical
+data.  With a little preparation in advance Starbase can handle very 
+large tables  (hundreds of millions of rows). Here are some reasons why:
+
+<ul>
+  <li> The tables are plain ASCII with TABS delimiting the columns.
+       This means you can:
+       <ul>
+	 <li> view them with cat, more, less, etc.
+	 <li> edit them using your favorite editor
+	 <li> integrate them easily into your own programs and
+	      scripts. 
+       </ul>
+  <li> Starbase understands sexadecimal format used for things like
+       right ascension and declination. 
+  <li> Starbase provides funtions useful to astronomers
+       such as coordinate precession, FK4-FK5 conversions, and
+       searches by distance from a sky position.
+  <li> Starbase requires no special shell so it can interact with
+       standard UNIX tools, such as grep, awk, and sed.  
+</ul>
+
+<a name="Q.3">
+<h3> Q.3. Where can Starbase be obtained? </h3></a>
+
+Starbase can be downloaded from the starbase home page
+<a href="http://cfa-www.harvard.edu/~john/starbase/starbase.html">home page</a>
+
+
+<a name="Q.4">
+<h3> Q.4. How much does it cost? </h3></a>
+
+Nothing--it's free.
+
+<a name="start">
+<h2>Getting Started With Starbase</h2></a>
+
+<a name="Q.5">
+<h3> Q.5. What do I need to know to get started? </h3></a>
+
+Check <a href="#Q.6">Q.6</a> for a quick overview of table format and
+then <a href="#Q.7">Q.7</a> for an introduction to the most basic
+commands.  <p> 
+
+Starbase comes with HTML documentation.  A good place to start is the main
+Starbase page (the starbase man page or <a
+href="starbase.html">starbase</a>).  This lists and briefly describes the
+programs that make up Starbase.  The extensions that have been added
+at SAO are covered in the <a href="tawk.html"> tawk extensions </a> page.
+
+<a name="Q.6">
+<h3> Q.6. What is the format of a table file? </h3></a>
+
+A Starbase table is a plain ASCII file with the following components:
+<ul>
+  <li> the first line is taken as the title of the table.
+  <li> a section of comments made up of free-format text.  (Note that no
+       comment character is needed.)
+  <li> a two-line table header.  The first line gives the names of the
+       columns, seperated by single TAB characters.  The second line
+       is a set of dashed lines, one set for each column, seperated by
+       TAB characters.  The dashed line signals the start of the table
+       data.
+  <li> rows of table data.  Each line is a table record where the
+       values for each column are seperated by single TAB characters.
+</ul>
+
+Here's an example:
+<pre>
+Table1
+
+This table is named Table1
+
+This is a text comment in the header of a table.  This portion may 
+ramble on and on but should not contain any line with ONLY dash (-)
+and tab characters.  The dash line is the indication that the data
+table is about to begin.
+
+RA	Dec
+--	---
+0:0:0	0:0:0
+12:00	-30.0
+15	60:00:30.4
+</pre>
+
+If you use an editor to create a table, it's a good idea to look it
+over to make sure that there is only one TAB character between each
+column in a row.  To see where the TABS are, run <code>cat -tv table |
+more</code>, where table is the name of the file containing the
+table (see also <a href="#Q.12">Q.12</a>).  <p>
+
+See the <a href="starbase.5.html">format man page</a> for more
+examples of tables.
+
+<a name="Q.7">
+<h3> Q.7. What are the minimum commands I need to know to get started? </h3></a>
+
+Refer to the <a href="starbase.html">starbase man page</a> for a
+short summary of all the starbase commands.  For starters, though,
+here's a quick explanation of the three commands you might use the
+most.  
+
+<h4><a href="justify.html">justify</a></h4>
+
+Before you do anything interesting with a table, you often want to
+just look at it.  A good way to do this is with the <a href="justify.html">
+jusitfy</a> command, which will neaten up a table so that all the
+columns are aligned.  Try,
+<pre>
+       justify &lt in.tbl | more
+</pre>
+where <code>in.tbl</code> is the input table.  Or,
+<pre>
+       justify -i in.tbl | more
+</pre>
+Tables are usually read into a starbase command either with the -i
+option or with the UNIX input redirection operator, &lt.  The output
+is usually either redirected to a file (using &gt) or piped into
+another command like <code>more</code> or another starbase command.
+
+<h4><a href="row.html">row</a></h4>
+
+The most common fuction of a database is to allow one to extract
+records that match certain conditions.  With Starbase, this is
+accomplished with the <a href="row.html">row</a> command.  If the
+table looks like the one given in <a href="#Q.6">Q.6</a> and is called
+<code>in.tbl</code>, one can extract all rows where the RA is greater
+or equal to 12 hours with: 
+<pre>
+    row 'RA>=12' < in.tbl > out.tbl
+</pre>
+Or,
+<pre>
+    row 'RA>11:59' < in.tbl | justify | more
+</pre>
+See <a href="#Q.8">Q.8</a> for a summary of all the operators one can
+use to select rows of data.  Check also the <a href="starbase.5.html">
+file format man page</a> to see how one can define special table
+variables that can be used by the row command.
+
+<h4><a href="column.html">column</a></h4>
+
+Often one is only interested in seeing certain columns from a table
+(especially if the rows are very long).  Using the example table from
+<a href="#Q.6">Q.6</a>, <code>in.tbl</code>, one can extract just the
+RA and Dec columns with:
+<pre>
+    row 'RA>11:59' < in.tbl | column RA Dec > out.tbl
+</pre>
+Or,
+<pre>
+    column RA Dec < in.tbl | row 'RA>11:59' > out.tbl
+</pre>
+Refer to question <a href="#Q.14">Q.14</a> if you get an error like
+<em>column: RA: No such file or directory</em>.
+
+<h4>Other useful commands</h4>
+
+The <a href="header.html">header</a> and <a href="headoff.html">
+headeroff</a> commands allow you to extract or remove the header
+portion from a table.  <a href="compute.html">compute</a> allows you
+to calculate new values for a column from other values in the row.
+<a href="jointable.html">jointable</a> is used to combine rows
+from two tables that have matching values in a column.  <p>
+
+For a complete list, see the <a href="starbase.html">starbase man
+page</a>.
+
+<a name="Q.8">
+<h3>Q.8. What are operators that can be used with the
+<a href="row.html">row</a> command?</h3></a>
+
+The <a href="row.html">row</a> and <a
+href="compute.html">compute</a> commands makes use of the operators
+supported by the UNIX awk command.  Here's a list of those used for
+comparing two values:<p>
+
+<table>
+<tr><td>Operation</td> <td>operator</td> <td>example</td> </tr>
+<tr><td>Equal</td> <td><code>==</code> <td>x == 40, s == "string"</td><tr>
+<tr><td>Greater than</td> <td><code>&gt</code></td>
+<td><code>x &gt 40, s &gt "string"</code></td></tr>
+<tr><td>Greater than or equal</td> <td><code>&gt=</code></td>
+    <td><code>x &gt= 40</code></td></tr>
+<tr><td>Less than</td> <td><code>&lt</code></td> <td><code>x &lt 40</code>
+<tr><td>Less than or equal</td> <td><code>&lt=</code></td>
+    <td><code>x &lt= 40, s &lt= "string"</code></td></tr>
+<tr><td>string contains</td> <td><code>~</code></td>
+    <td><code>s ~ /string/</code></td></tr>
+<tr><td>string does not contain</td> <td><code>!~</code></td>
+    <td><code>s !~ /string/</code></td></tr>
+<tr><td>Logical AND</td> <td><code>&&</code></td>
+    <td><code>x &gt 5 && y &lt 40</code></td></tr>
+<tr><td>Logical OR</td> <td><code>&&</code></td>
+    <td><code>s ~ /big/ || s ~ /large/</code></td></tr>
+<tr><td>Logical NOT</td> <td><code>!</code></td> <td><code>! x</code></td></tr>
+<tr><td>Logical grouping</td> <td><code>( )</code></td>
+    <td> (x &gt 5 && x &lt 11) || (x == 0 && y == 1) </td></tr>
+</table><p>
+
+<a name="Q.9">
+<h3>Q.9. What is a regular expression?  How do I use it?</h3></a>
+
+A regular expression is a way of representing a pattern of characters.
+Such patterns are used to search for substrings in a string of
+characters or to see if a string matches a particular pattern.  In
+Starbase, one would use a regular expression with the row command to
+search for records in which the text in a column matches a certain
+pattern.  For example, in
+<pre>
+    row 'type ~ /gala/' &lt in.tbl &gt out.tbl
+</pre>
+"gala" is the regular expression.  This command returns all records in
+which the string in the "type" column contains the substring "gala".
+This includes galaxy, galaxies, and extragalactic.  <p>
+
+The advantage of regular expressions is their ability to describe
+patterns symbolically via <em>metacharacters</em>.  Here's some of the 
+of the metacharacters you might use:
+
+<table>
+<tr><td>.</td>     <td> </td><td>matches any single character</td></tr>
+<tr><td>*</td>     <td> </td><td>matches zero or more of the previous character
+<tr><td>+</td>     <td> </td><td>matches one or more of the previous character
+<tr><td>?</td>     <td> </td><td>matches zero or one of the previous character
+<tr><td>^</td>     <td> </td><td>when at the beginning of a regular expression,
+                                 matches the beginning of a value
+<tr><td>$</td>     <td> </td><td>when at the end of a regular expression,
+                                 matches the end of a value
+<tr><td>[...]</td> <td> </td><td>matches any one of the characters between the
+                                 brackets </td></tr>
+<tr><td>[^...]</td><td> </td><td>matches any one character not among those
+                                 between the brackets </td></tr>
+<tr><td>\</td>     <td> </td><td>escapes the special meaning of the next
+                                 character, e.g. \. means a real period.
+</table>
+
+Here are some sample uses:
+
+<table>
+<tr valign=top><td><code>type ~ /proto.*env/</code></td> <td> </td>
+    <td>matches when type contains a substring beginning with "proto" and
+        ending with "env", including "protostellar environment" and
+        "protogalactic environment". </td></tr>
+<tr valign=top><td><code>type ~ /[gG]ala/</code></td> <td> </td>
+    <td>matches "gala" or "Gala" appearing anywhere in type</td></tr>
+<tr valign=top><td><code>title ~ /^Study/</code></td> <td> </td>
+    <td>matches when title begins with the "Study"</td></tr>
+<tr valign=top><td><code>type ~ /^[gG]alaxy$/</code></td> <td> </td>
+    <td>type is restricted to being equal to either "galaxy" or
+        "Galaxy"</td></tr>
+</table>
+
+Note that some metacharacters are also interpreted by the UNIX shell.
+That's why it is a good idea to enclose search clauses in single
+quotes when using the <code>row</code> command.  <p>
+
+<a name="Q.10">
+<h3>Q.10. Are there any tutorials on Starbase and databases available? </h3></a>
+
+Because of Starbase's similarity to the commercial /rdb package, the
+book <em>UNIX Relational Database Management</em> by Manis, Schaffer, and
+Jorgensen (Prentice Hall, ~$70) is often recommended.  Chapters 1, 2,
+3, 4, and 6 will bring an astronomer new to relational databases up to
+speed.
+
+<a name="trouble">
+<h2>Troubleshooting</h2>
+
+<a name="Q.11">
+<h3>Q.11. How do I find out about reported bugs in starbase programs?
+    </h3></a> 
+
+The most up-to-date list of bugs can be accessed from 
+<a href="http://cfa-www.harvard.edu/~john/starbase/BUGS">
+http://cfa-www.harvard.edu/~john/starbase/BUGS</a>.  The Starbase
+distribution also comes with a list of bugs in a file called <kbd>
+BUGS</kbd>.  <p>
+
+<a name="Q.12">
+<h3>Q.12. How can I tell the difference between spaces and TAB
+    characters in my tables? </h3></a>
+
+The most important thing to keep in mind when manipulating Starbase
+tables is to make sure that one and only one TAB character appears
+between each column.  Normally, one only needs to worry about this
+when editing tables by hand.  It's often easy to accidently insert
+spaces where a TAB should, or to insert multiple TABs where only one
+should go.  (The Emacs editor by default will often replace spaces
+with TABs without your knowing it--see <a href="#Q.13">Q.13</a> for
+more details.)  <p>
+
+Thus, if you've been editing a Starbase table by hand, you may wish to
+check it over to ensure that the TABs are where they belong.  To do
+this you can use the UNIX <code>cat</code> command by specifying the
+"-vt" options:
+<pre>
+    cat -vt in.tbl | more
+</pre>
+TAB characters in the table will appear as "^I".  You might find the
+output a bit of a jumble.  If so, you might try sending the table
+through the justify command first:
+<pre>
+    justify -i in.tbl | cat -vt | more
+</pre>
+
+<a name="Q.13">
+<h3>Q.13. Emacs keeps screwing up the TABs in my table!  How can I
+    make it behave?</h3></a>
+
+If you use a recent version of the Emacs editor to edit a Starbase
+table, you may find that it sometimes corrupts the TAB structure of
+the table.  This is usually due to a default feature of the Emacs Text
+Mode: when you hit the TAB key, not only will Emacs insert a TAB
+character, it will also replace as many of the preceding spaces with
+TAB characters as possible while still keeping the same alignment.
+<p>
+
+To make your Emacs compatible with Starbase, you need tell Emacs to
+only insert a single TAB when you hit the TAB key.  This can be
+accomplished by placing the following into your .emacs file (normally
+in your home directory):
+<pre>
+(defun my-text-mode-hook ()
+  (define-key text-mode-map "\t" 'self-insert-command))
+(add-hook 'text-mode-hook 'my-text-mode-hook)
+</pre>
+
+<a name="Q.14">
+<h3>Q.14. Whenever I try to use the <code>column</code> command, I get a
+    <em>"No such file or directory"</em> error.  </h3></a>
+
+If when you issue the command:
+<pre>
+    column RA &lt in.tbl &gt out.tbl
+</pre>
+you get the error message <em>column: RA: No such file or
+directory</em>, you may need to adjust your command search path.  Some
+UNIX systems come with a another command called "column" (e.g. Linux
+has /usr/bin/column) not related to Starbase.  To make sure the
+Starbase version gets called, place the directory containing the
+Starbase commands closer to the beginning of your search path.  For
+example, if the starbase commands are located in
+/usr/local/starbase/bin, you can (if you are using the C-shell) type:
+<pre>
+    set path = (/usr/local/starbase/bin $path)
+</pre>
+
+</body>
+</html>

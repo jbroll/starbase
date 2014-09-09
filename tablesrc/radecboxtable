@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# radecboxtable - 	compute the r1, r2, d1, d2 limits of ra, dec, columns.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+rcol=ra
+dcol=dec
+wcol=width
+hcol=height
+r1col=r1
+r2col=r2
+d1col=d1
+d2col=d2
+
+ while [ $# -gt 0 ] ; do
+  case $1 in 
+    -rcol)	shift;	rcol=$1		;;
+    -dcol)	shift;  dcol=$1         ;;
+    -hcol)	shift;  hcol=$1         ;;
+    -wcol)	shift;  wcol=$1         ;;
+    -r1col)	shift;  r1col=$1        ;;
+    -r2col)	shift;  r2col=$1        ;;
+    -d1col)	shift;  r1col=$1        ;;
+    -d2col)	shift;  r2col=$1        ;;
+    -width)	shift;  width=$1        ;;
+    -height)	shift;  height=$1       ;;
+    *)
+	echo "unknows option $1"	1>&2
+	exit
+	;;
+  esac
+  shift
+ done
+
+ if [ "$width" != "" ] ; then
+    wassign=""
+    wxconst="-v width=$width"
+    wcolumn=""
+ fi
+
+ if [ "$height" != "" ] ; then
+    hassign=""
+    hxconst="-v height=$height"
+    hcolumn=""
+ fi
+
+ hwassign="$hassign ; $wassign"
+ hwxconst="$hxconst ; $wxconst"
+ hwcolumn="$hcolumn $wcolumn"
+
+  column $rcol $dcol $hwcolumn $r1col $r2col $d1col $d2col -a	\
+| compute $hwxconst "
+	[ $r1col, $r2col, $d1col, $d2col ] = radecbox($rcol, $dcol, $wcol, $hcol)
+"
+

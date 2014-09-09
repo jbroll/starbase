@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# fitshrd
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+if [ $# -lt 1 ] ; then
+	echo "usage: fitshdr file1.fits file2.fits ..."	1>&2
+	exit 1
+fi
+
+fitshdr() {
+  (
+      echo "HDRFILE	$1"
+
+    < $1				\
+      fold -b -80			\
+    | sed -e "s/'/ /g"'
+	      /^ /d
+	      s%/.*$%%
+	      /^COMMENT/d
+	      /^HISTORY/d
+	      /^END/q
+	    '			 	\
+    | fixtotable Key:1-8 Value:10-	\
+    | trim				\
+    | compute ' gsub("\.", "", Key)
+		gsub("-", "_", Key)'	\
+    | headoff				\
+  ) | listtotable -l
+}
+
+while [ $# -gt 1 ] ; do
+ fitshdr $1
+ echo "\f"
+ shift
+done
+
+fitshdr $1
+
+exit 0

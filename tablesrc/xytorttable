@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# xytorttable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+
+    if [ $# != 4 ] ; then
+	echo "usage: xytorttable x y r t < in.tab" 	1>&2
+	exit 1
+    fi
+
+    X=$1
+    Y=$2
+    R=$3
+    T=$4
+
+      column -a $R $T 			\
+    | compute "[$R, $T] = xytort($X, $Y)"
+
+	

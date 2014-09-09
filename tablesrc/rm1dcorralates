@@ -1,0 +1,37 @@
+#!/bin/sh
+
+ if [ $# != 4 ] ; then
+    echo "usage: rm1dcorralates table column tol N" 1>&2
+    exit 1
+ fi
+
+ Tab=$1
+ Col=$2
+ Tol=$3
+ Dup=$4
+
+I=0
+if [ ! -f $Tab.$Col.i ] ; then
+  I=1
+  index -n -mi $Tab $Col
+fi
+
+# Make the classes
+#
+  classifytable $Tab -C1 $Col $Tol 	\
+> cl.$$
+
+# Count the class members
+#
+< cl.$$					\
+  sorttable -C -n SetNumber		\
+| column SetNumber Count		\
+| row "Count < $Dup"			\
+| jointable -j SetNumber - cl.$$ 	\
+| column SetNumber:x Count:x
+
+rm -f cl.$$
+
+if [ $I = 1 ] ; then
+    rm $Tab.$Col.i
+fi

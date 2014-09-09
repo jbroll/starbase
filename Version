@@ -1,0 +1,90 @@
+starbase 3.4.4 	22-01-2014 Fixes for OS X Mavericks and XCode 5.0.1
+starbase 3.4.3 	29-05-2013 Small PATH fixes
+starbase 3.4.2 	29-04-2013 Release point
+starbase 3.4.1 	29-03-2013 Radar Love.
+starbase 3.3.12	01-03-2013 Bug fixes.
+starbase 3.3.11 26-04-2012 Bug fixes.
+starbase 3.3.10	22-07-2008 Fix Makefiles for OS X 10.5
+starbase 3.3.9 	22-07-2008 Fix Makefiles for OS X 10.5
+starbase 3.3.8 	06-05-2008 Document previously fixed mdj bug in _sorttable -q
+starbase 3.3.7 	16-04-2008 Bug fixes
+starbase 3.3.6 	26-06-2007 Tagged release for cluster
+starbase 3.3.5 	26-06-2007
+starbase 3.3.4 	26-03-2007 Add unsigned type to tawk
+starbase 3.3.3 	22-02-2007 Minor fixes to 3.3.2
+
+starbase 3.3.2 	03-08-2006 Minor fixes to 3.3.1 - Release
+starbase 3.3.1 	22-06-2006 Change packaging makefiles to accomidate plottable + bug fixes
+starbase 3.3.0	22-06-2006 Add column name pattern matching to column.
+
+starbase 3.2.11	01-06-2006 Add warning output to column and search, small fix for xinc on install
+starbase 3.2.10	25-05-2006 Small bug fixes
+starbase 3.2.9 	08-03-2006 Fixes for search and large datafiles
+starbase 3.2.8 	21-06-2005 More small fixes for Mac/OSX, Linux and New configure
+starbase 3.2.7 	21-06-2005
+starbase 3.2.6 	13-06-2005
+starbase 3.2.5 	27-01-2005 Bug fixes, Port to MacOSX, Mostly remove GNU Configure
+starbase 3.2.3 	30-04-2004
+starbase 3.2.2 	13-01-2004 Fast rowbuf for column, wctable and index speed up
+starbase 3.2.1	06-08-2003 Commit huge file support
+starbase 3.2.0	01-07-2003 Add huge file support
+
+starbase 3.1.7	For paul grant - HEAD
+starbase 3.1.6	Fix small cygwin compile issues
+starbase 3.1.5  Fix small RH7.2 compile issues
+starbase 3.1.4
+starbase 3.1.3	Add 3d table programs
+
+starbase 3.0.1	Add NICETAB option to support space delimited tables
+
+starbase 2.7.0	Split out slalib into a separate package.
+		Lots of bugs fixed.
+
+starbase 2.6.7	Several new script and bug fixes
+
+starbase 2.4.0	02/08/1999
+
+		Public bug fix release.
+
+		Restructured documentation.
+		Added several simple programs.
+
+		No major changes
+
+starbase 2.2.5	04/06/1997
+		Internal OIRD/SXG release fixed bugs as reported.
+
+
+starbase 2.2.4	04/06/1996
+
+		Bug fix release.  The starbase configuration is quite untidy
+		but several important bugs are fixed in 2.23d and are needed
+		by users outside SAO OIRD.
+
+starbase 2.2.3	01/01/1996
+		Internal IORD release fixes bugs and optimized searching.
+
+starbase 2.2.2	14/12/1995
+		First bug fix release in responce to use outside the IORD
+		group.
+
+		Linux CDROM Release.  Contains many fixes to 2.2x but no
+		additional features.
+
+starbase 2.2.1	01/11/1995
+		Internal IORD release fixes bugs and optimized sorting.
+
+starbase 2.2.0	01/09/1995
+		Initial "/rdb" compatible release.  Many programs supported
+		and supported more completely.  This is the ADASS release
+		version and the first public release.
+
+starbase 2.1 	First version used on the HEAD network.  Really only supported
+		row and column.  Version used in the prototype of the Hectospec
+		system and demonstrated to Spectrum X Gamma project.
+
+starbase 2.0	01/09/1993
+		Complete rewrite of the tablelib with TableRow structure.
+
+starbase 1.0	01/10/1991
+		Original code developed for measuring engine project.

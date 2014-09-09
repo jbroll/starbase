@@ -1,0 +1,98 @@
+#!        /data/mmti/bin/ksh 
+#
+#	Host Iraf wrapper for the imutil package.
+
+  export iraf=${iraf-/IRAF/iraf}
+  export irafroot=${irafroot-/IRAF/}
+  export IRAFARCH=${IRAFARCH-ssun}
+  export IRAFULIB=${IRAFULIB-/data/mmti/iraf/bin_2.10}
+  export irafpkg=${irafpkg-/IRAF/iraf.pkg/}
+  export paramdir=${paramdir-/data/mmti/iraf/param}
+
+  export package=starbase
+  export packdir=/data/mmti/pkg/starbase/iraf
+  export task=${0##*/}
+  export task=${task#starbase}
+  export timeit=${TIMEIT-}
+
+  export PDIRS="$UPARM;$UREFR:$paramdir:$packdir"
+
+  OFS="$IFS"
+  IFS=$(print "\001")
+  $packdir/xx_$package.e +${timeit}$task "$*"
+  Status=$?
+  IFS="$OFS"
+  exit $Status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!        /data/mmti/bin/ksh
+#
+#	Host Iraf wrapper for the imutil package.
+
+  export iraf=${iraf-/IRAF/iraf}
+  export irafroot=${irafroot-/IRAF/}
+  export IRAFARCH=${IRAFARCH-ssun}
+  export IRAFULIB=${IRAFULIB-/data/mmti/iraf/bin_2.11}
+  export irafpkg=${irafpkg-/IRAF/iraf.pkg/}
+  export unixirafdir=${unixirafdir-/data/mmti/iraf/param}
+  
+  export package=images
+  export packdir=$iraf/pkg/images/
+  export paramdir=$iraf/pkg/images/imutil
+  export $package=$packdir
+  export task=${0##*/}
+  export task=${task#images}
+  export timeit=${TIMEIT-}
+  export PDIRS="$UPARM;$UREFR:$unixirafdir:$paramdir:$packdir"
+
+  OFS="$IFS"
+  IFS=$(print "\001")
+  $iraf/bin.$IRAFARCH/x_images.e +${timeit}$task "$*"
+  Status=$?
+  IFS="$OFS"
+  exit $Status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+#
+# perk F1.cat 12 0:00:45 0:00:02.5
+#
+
+    cat=$1
+    faint=$2
+    circl=$3
+    close=$4
+
+    rcol=ra
+    dcol=dec
+    mcol=r
+
+    index -h -mb $cat $rcol
+    index -h -mi $cat $dcol
+    index -h -mi $cat $mcol
+
+      search $cat -R $mcol -3 12 				\
+    | search $cat -S $rcol $dcol $circl			\
+    | row 'type == "" || toupper(type) == "TARGET"'		\
+    | sorttable -h -u $rcol $dcol				\
+    > $cat.$$
+
+    Prev=0
+    Cnts=`wctable -l < $cat.$$`
+
+    while [ $Prev -lt $Cnts ] ; do
+      < $cat.$$						\
+    	search $cat -S $rcol $dcol $close		\
+      | row 'type == "" || toupper(type) == "TARGET"'	\
+      | sorttable -h -u $rcol $dcol				\
+      | overwrite $cat.$$
+
+      Prev=$Cnts
+      Cnts=`wctable -l < $cat.$$`
+    done
+
+  < $cat.$$						\
+    search $cat -I -S $rcol $dcol $close		\
+
+    rm $cat.$$
+

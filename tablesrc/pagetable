@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+
+    lines=66
+
+    case $1 in 
+     -n)	lines=$2
+    esac
+
+    table -p -h -v lines=$1 '
+!(NValues % (lines-2)) {
+    print "\f"
+    print Header
+    print Dashes
+}
+{ print; NValues++ }'

@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# modetable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+    if [ $# != 1 ] ; then
+	echo "usage: modetable column < table"
+    fi
+
+    sorttable -C $1 | sorttable -r Count | headtable -1 | headoff $1

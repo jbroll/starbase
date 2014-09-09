@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+# precess - Precess the ra and dec columns from one equinox to another.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+TABLELIB=$TABLELIB;  export TABLELIB
+TABLEFUN="";  export TABLEFUN
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -o) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -*) echo "preces: unknown option"; exit 1	;;
+    *) argv="$argv $1"					;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+table -p $argv '
+BEGIN {
+	Init = 0
+
+	sys	= "FK4"
+	rcol 	= "ra"
+	dcol 	= "dec"
+	eq0	=  1950
+	eq1	=  2000
+
+	paramcheck("preces", "sys|eq0|eq1|rcol|dcol")
+}
+!Init {	__r = table_colnum(rcol)
+	__d = table_colnum(dcol)
+
+	paramrange("preces", "sys", "s", sys, "FK4|fk4|FK5|fk5|FK5nut")
+
+	if ( !__r )	printf("preces: no column \"%s\".\n", rcol)
+	if ( !__d )	printf("preces: no column \"%s\".\n", dcol)
+	if ( !__r || !__d ) {
+		exit 1
+	}
+
+	Init = 1
+}
+{	[ $__r, $__d ] = precess(sys, eq0, eq1, $__r, $__d); print }
+
+include ../tablefun/paramcheck
+include ../tablefun/paramrange
+include ../tablefun/table_colnum
+
+ '

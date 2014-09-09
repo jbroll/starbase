@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+# radialsort
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin; export PATH
+
+trap "" 13
+
+  if [ "$1" = "-r" ] ; then
+	cat=cat
+	shift
+  else
+	cat="column _R:x"
+  fi
+
+  if [ "$1" = "-sep" ] ; then
+	sep=sep
+	shift
+  fi
+
+  if [ $# -lt 2 ] ; then
+	echo "usage: radialsorttable X Y [CX CY]" 1>&2
+	exit 1
+  fi
+
+  X=$1; shift
+  Y=$1; shift
+
+  if [ $# = 2 ] ; then
+      CX=$1; shift
+      CY=$1; shift
+  else 
+      CX=0
+      CY=0
+  fi
+
+  if [ $# -ne 0 ] ; then
+	echo "usage: radialsorttable X Y [CX CY]" 1>&2
+	exit 1
+  fi
+
+  if [ "$sep" = sep ] ; then
+    expr="_R = sep($CX, $CY, $X, $Y)"
+  else
+    expr="_R = ($X-$CX)*($X-$CX) + ($Y-$CY)*($Y-$CY)"
+  fi
+
+  column -a _R		\
+| compute "$expr"	\
+| sorttable -n _R	\
+| $cat

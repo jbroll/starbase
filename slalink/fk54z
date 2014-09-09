@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# fk54z
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+TABLELIB=$TABLELIB;  export TABLELIB
+TABLEFUN="";  export TABLEFUN
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -D) shift; D=-D					;;
+   -*) echo "fk54z: unknown option"; exit 1	;;
+    *) argv="$argv $1"					;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+table -p $D $argv '
+BEGIN {
+	Init = 0
+
+	rcol 	= "ra"
+	dcol 	= "dec"
+        bepoch  = "1950"
+
+	paramcheck("fk54z", "rcol|dcol|bepoch")
+}
+!Init {	__r = table_colnum(rcol)
+	__d = table_colnum(dcol)
+
+	if ( !__r )	printf("fk54z: no column \"%s\".\n", rcol) > "/dev/stderr"
+	if ( !__d )	printf("fk54z: no column \"%s\".\n", dcol) > "/dev/stderr"
+	if ( !__r || !__d ) {
+		exit 1
+	}
+
+	Init = 1
+}
+{	[ $__r, $__d ] = fk54z($__r, $__d, bepoch); print }
+
+include ../tablefun/paramcheck 
+include ../tablefun/table_colnum 
+
+ '

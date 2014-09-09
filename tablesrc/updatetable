@@ -1,0 +1,160 @@
+#!/bin/sh
+#
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2007 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+if [ $# = 0 ] ; then
+    cat 1>&2 <<- EOF
+	usage : updatetable [-n] <table> <column> <expr> [col as newcol]...
+	        updatetable      <table>  -where  <expr1> <expr>
+	
+	  Updatetable allows an existing starbase table to have its values
+	  updated from the values of a table read from the standard input.
+	  The two tables are sorted and joined on <column>.  The rows of the
+	  update values (read from standard input) are made uniq such that
+	  only the first update matching each row in performed.  For each
+	  update row the expression <expr> is passed to "compute" to alter the
+	  values in <table>.  The columns of the two tables should be uniq
+	  so that they may be refered to in an unambigious way.  To aid with
+	  this columns from the input with the same names as those in table
+	  may be renamed by supplying additional column name assignments as
+	  trailing arguments on the command line.  Any number of column
+	  values in <table> may be updated with the <expr>.  A semicolon or
+	  newline should be used to delimit individual assignments.
+
+	Options
+
+	  -d            Debug.  Shows the table program that is executed to
+	  		update the values in each row.
+
+	  -n		Sort/join numeric.
+
+	  -a		Add new entries from input to table.
+
+	  -o <file>	Output file.  The default is to overwrite <table> in place.
+	  		An alternate output file can be specified with the -o option.
+	  		Using "-" as the alternate file name writes the results to the 
+	  		standard output.
+
+	   +            Duplicate results to the stdout.  In addition to
+	  		writing the output to a file the results can be
+	  		duplicated on the standard output.
+
+	  -where        Update rows where <expr1> evaluates to true instead
+	  		of matching values in a column from an input file.
+
+	  		When using the -where option the input table may be
+	  		specified as "-" and the table to be modified will
+	  		be read from the standard input and the result
+	  		written to the standard output.
+
+	Examples
+
+	  updatetable -o - -n table1 X < table2 "Y = YNew" Y as YNew
+
+	    The values in the Y column of table1 are updated from those in
+	    in the Y column of table2.  The tables are joined using thier X
+	    columns and the Y column in table2 is refered to as YNew in the
+	    expression.  The resulting updated table is written to the
+	    standard output.
+
+	  updatetable table1 -where "X == 3" "Y = 23"
+
+	    The values of the Y column are set to 23 where the value of the X
+	    column are equal to 3.
+
+	EOF
+    exit 1
+fi
+
+    out=+
+
+	# -r) shift;	rev=-r		;;
+
+    while [ $# -gt 0 ] ; do
+     case $1 in
+	 +) shift;	dup=-		;;
+	-a) shift;     	app=-a2		;;
+	-d) shift;	dbg=-D		;;
+	-o) shift;	out=-; shift	;;
+	-n) shift;	num=-n		;;
+	-where) shift;	where=1		;;
+	*)
+	    if [ "$table" = "" ] ; then
+		table=$1;
+		shift
+		continue
+	    fi
+
+	    if [ "$column1" = "" ] ; then
+		column1=$1;
+		column2=$1;
+		shift
+		continue
+	    fi
+	    if [ "$expr" = "" ] ; then
+		expr=$1;
+		shift
+		break
+	    fi
+	    ;;
+     esac
+    done
+
+    case $out in
+	-)	overwrite=cat				;;
+	+)	overwrite="overwrite $dup $table"	;;
+	*)	overwrite="overwrite $dup $out"		;;
+    esac
+
+    if [ "$where" = 1 ] ; then
+	if [ $# != 0 ] ; then
+	    echo "updatetable : extra args on command line"	1>&2
+	    exit 1
+	fi
+
+	if [ "$table" = - ] ; then
+	      validate $dbg "$column1 { $expr }"
+	else 
+	    < $table								\
+	      validate $dbg "$column1 { $expr }"				\
+	    > .$$
+	    if [ $? = 0 ] ; then
+		cat .$$ | $overwrite 
+	    fi
+	    rm .$$
+	fi
+    else
+	  header1=`headline    < $table -x $column1`
+	  header2=`headline -u -x $column2`
+
+	  if [ "$expr" = "" ] ; then
+	     for col in $header2 ; do
+		expr="$expr $col=___$col; "
+		colmap="$colmap $col=___$col"
+	     done
+	  else
+	     while [ $# -gt 0 ] ; do
+		 case $2 in
+		    as)	colmap="$colmap $1=$3";	shift; shift;   shift	;;
+		     *)	colmap="$colmap $1";			shift	;;
+		 esac
+	     done
+	  fi
+
+
+	( fldtotable < /dev/null $column2 $header2; cat )			\
+	| column -N __N2 $column2 $colmap -a -x $header1				\
+	| sorttable -u $rev $num $column2					\
+	| jointable $rev $num -a1 $app -j1 $column1 -j2 $column2		\
+		"| column -N __N1 < $table  | sorttable $rev $num $column1"	\
+		 -								\
+	| validate $dbg "__N2 { $expr }"					\
+	| sorttable -n __N1							\
+	| column $column1 $header1 						\
+	| $overwrite 
+    fi

@@ -1,0 +1,104 @@
+#!/bin/sh
+#
+
+    tawk "/$1/ { go = 1 }"'
+    !go          { next   }
+    {	gsub("\t", " ") 
+    	gsub("<tr[^>]*>", "\n--TR\n")
+    	gsub("<TR[^>]*>", "\n--TR\n")
+    	gsub("<th[^>]*>", "\n--TH\n")
+    	gsub("<TH[^>]*>", "\n--TH\n")
+    	gsub("<td[^>]*>", "\n--TD\n")
+    	gsub("<TD[^>]*>", "\n--TD\n")
+
+    	gsub("<\/tr[^>]*>", "\n--TREnd\n")
+    	gsub("<\/TR[^>]*>", "\n--TREnd\n")
+    	gsub("<\/th[^>]*>", "\n--THEnd\n")
+    	gsub("<\/TH[^>]*>", "\n--THEnd\n")
+    	gsub("<\/td[^>]*>", "\n--TDEnd\n")
+    	gsub("<\/TD[^>]*>", "\n--TDEnd\n")
+
+	gsub("<table[^>]*>", "\n--Table\n");
+	gsub("<TABLE[^>]*>", "\n--Table\n");
+	gsub("<\/TABLE>", "--EndTable\n");
+	gsub("<\/table>", "\n--EndTable\n");
+
+	gsub("<[^>]+>", "")
+
+	gsub("[ \t]+", " ");
+
+	print
+    } '	\
+|   tawk '
+    BEGIN {
+	first = 1
+    }
+    {
+	if ( $0 == "" )  { next; }
+	if ( $0 == " " )  { next; }
+    }
+    /--Table/ { 
+	    if ( !first ) {
+		print "\f"
+		first = 0;
+	    }
+	table = 1
+	rows = 0;
+    }
+    !table { next }
+
+    /^--THEnd/ 	{	inh = 0;		next	}
+    /^--TREnd/ 	{			next	}
+    /^--TDEnd/	{			next	}
+
+    /--TR/ 	{	rows++
+			column = 0;	next	}
+
+    /--TH/ 	{	rows = 0
+			header = 1
+			inh    = 1
+    			column++;
+					next	}
+    /--TD/	{	
+    			column++;
+			columns = max(column, columns)
+			next			}
+
+    /--EndTable/{ 
+	if ( header ) {
+	    row = 1
+	    for ( c = 1; c < columns; c++ ) {
+		printf "%s\t", head[c]
+	    }
+	    printf "%s\n", head[c]
+	    for ( c = 1; c < columns; c++ ) {
+		printf "-\t", c
+	    }
+	    printf "-\n", c
+	} else {
+	    row = 1
+	    for ( c = 1; c < columns; c++ ) {
+		printf "c%d	", c
+	    }
+	    printf "c%d\n", c
+	    for ( c = 1; c < columns; c++ ) {
+		printf "-	", c
+	    }
+	    printf "-\n", c
+	}
+	for ( ; row <= rows; row++ ) {
+	    for ( c = 1; c < columns; c++ ) {
+		printf "%s	", data[row,c]
+	    }
+	    printf "%s\n", data[row,c]
+	}
+    	exit
+    }
+    {	
+	if ( inh ) {
+	    head[column] =  head[column] $0
+	} else {
+	    data[rows,column] =  data[rows,column] $0
+	}
+    } '
+

@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# xinc
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin
+
+trap "" 13
+
+for awk in tawk mawk gawk awk ; do
+    MAWK=`which $awk`
+
+    if [ "$MAWK" != '' ] ; then
+    	break
+    fi
+done
+
+
+file=/dev/stdin
+if [ "$1" != "" ] ; then
+    file=$1
+fi
+
+ $MAWK '
+    function include(file) {
+	while ( (getline < file) == 1 ) {
+	    if ( $0 ~ /^set/ ) {
+		set[$2] = $3
+	    }	
+	    if ( ( $1 == "source" || $1 == "include" ) && $0 !~ "NOT UNSOURCED" ) {
+		for ( i in set ) {
+		    gsub("\$" i, set[i], $2)
+		}
+		include($2)
+	    } else {
+		print
+	    }
+	}
+	close(file)
+    }
+
+    BEGIN { include("'$file'") }
+'

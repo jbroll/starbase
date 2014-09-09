@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# radialsort
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+  if [ "$1" = "-r" ] ; then
+	cat=cat
+  else
+	cat="column _R:x"
+  fi
+
+  if [ $# -lt 1 ] ; then
+	echo "usage: abssorttable X [CX ]" 1>&2
+	exit 1
+  fi
+
+  X=$1; shift
+
+  if [ $# = 1 ] ; then
+      CX=$1; shift
+  else 
+      CX=0
+  fi
+
+  if [ $# -ne 0 ] ; then
+	echo "usage: abssorttable X [CX]" 1>&2
+	exit 1
+  fi
+
+  column -a _R						\
+| compute "_R = abs($X)"				\
+| sorttable -n _R					\
+| $cat

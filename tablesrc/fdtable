@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+
+    Count=`sorttable -u $1 $2 | sorttable -D $2 | wctable -l`
+
+    if [ $Count = 0 ] ; then
+	echo yes
+    else
+	echo no
+    fi

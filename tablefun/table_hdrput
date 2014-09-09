@@ -1,0 +1,14 @@
+# Write a table header to "file"
+#
+function table_hdrput(file, T	, i, nrows) {
+
+	nrows = T["NText"]
+
+	for ( i = 0; i < nrows; i++ ) {
+	    if ( file == "" )
+		print T["Text", i]
+	    else
+		print T["Text", i] > file
+	}
+}
+

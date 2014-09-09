@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+
+ls -l $* 	\
+| ( read 
+    fldtotable perm:1 n:2 user:3 group:4 size:5 date:6-8 file:9
+)

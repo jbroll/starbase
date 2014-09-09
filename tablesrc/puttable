@@ -1,0 +1,185 @@
+#****************************************************************************
+#  ##   ##         #####   #####  ##     **        NoSQL RDBMS - write      *
+#  ###  ##        ####### ####### ##     **      $Revision: 1.1 $			*
+#  #### ##        ###     ##   ## ##     ************************************
+#  #######  ####  #####   ##   ## ##     **      Carlo Strozzi (c) 1998     *
+#  ####### ######   ##### ## # ## ##     ************************************
+#  ## #### ##  ##     ### ##  ### ##     **           Written by            *
+#  ##  ### ###### ####### ######  ###### **          Carlo Strozzi          *
+#  ##   ##  ####   #####   #### # ###### **     e-mail: carlos@linux.it     *
+#****************************************************************************
+#   NoSQL RDBMS, Copyright (C) 1998 Carlo Strozzi.                          *
+#   This program comes with ABSOLUTELY NO WARRANTY; for details             *
+#   refer to the GNU General Public License.                                *
+#****************************************************************************
+#
+# Allows safe in-place replacement of a table.
+#
+# Usage:  write  [options]  [-o|--output] file
+#
+# Options:
+#     -b      Accepted for compatibility with older versions,
+#             but unused.
+#
+#     -f|--raw-file
+#             Do not regard the input file as a NoSQL table, but
+#             rather as generic, unstructured file. This must be
+#             used when the input file lacks a valid NoSQL header.
+#
+#     -o|--output
+#             Output file name.
+#
+#     -s|--no-stdout
+#             Suppress writing the table to STDOUT.
+#
+#     -K|--key field
+#             Keep the table sorted on 'field' when writing
+#             it back to disk. If unspecified, the table is
+#             kept sorted on the first (leftmost) field by default.
+#
+#     -u|--unique
+#             Besides sorting on the key field, keep that field unique.
+#             Rows that are duplicated on that field will be silently
+#             dropped. This option should be used with care.
+#
+#     -R[CS]  Accepted for compatibility with older versions,
+#             but unused.
+#
+# It can be safely used in constructs like :
+#
+#     nosql compute ... < table | nosql write -o table | ...
+#
+# without worring that the original input table be destroyed
+# before the pipeline has completed.
+#
+# This operator reads a table via STDIN and produces the same
+# table on STDOUT, [over]writing the output table or file
+# given as a command line argument. It's function is somewhat similar
+# to that of the UNIX utility 'tee'.
+#
+# WARNING: this operator does not do any locking on the target table.
+# That should be done by the calling program if appropriate.
+#
+##########################################################################
+
+Exit ()
+{
+  rm -f "${traplist}"
+  exit $1
+}
+
+# Include main NoSQL front-end.
+. ${NSQLIB}/sh/nosqlmain
+
+while [ $# -ge 1 ]
+do
+  case $1 in
+    -f|--raw-file)      normal_file=1 ;;
+    -s|--no-stdout)     no_stdout=1 ;;
+	-K|--key)           shift; key_field=$1 ;;
+	-u|--unique)        key_unique=1 ;;
+    -b|-R*|-o|--output) ;;
+    *)     			    out_tbl=$1; break ;;
+  esac
+  shift
+done
+
+# Prevent possible clobbering of backup table.
+
+case ${out_tbl} in
+  ""|-*)
+	echo "nosql write: missing output table name" >&2
+    Exit 1
+    ;;
+esac
+
+# Everything is relative to the target directory.
+out_dir=$(dirname ${out_tbl})
+if cd ${out_dir}
+then
+  :
+else
+  echo "nosql write: could not access directory ${out_dir}" >&2
+  Exit 2
+fi
+
+# Table name is mandatory.
+out_tbl=$(basename ${out_tbl})
+if test -z "${out_tbl}"
+then
+  echo "nosql write: missing output table name" >&2
+  Exit 4
+fi
+
+# We must create the work file in the same directory as the
+# target table for 'mv' to work. Using NSQTEMPF here may
+# not be appropriate.
+tmp_file=${$}cccc
+
+traplist=${tmp_file}
+
+trap "rm -f ${traplist}" 0 1 2 15
+
+cat > ${tmp_file}
+
+# Do not overwrite the table stright away, as we may be using
+# it as an input to the pipeline. Furthermore, the input stream may
+# be empty. This also checks whether the input file should be regarded
+# as a NoSQL table or as an unstructured file.
+if test -z "${normal_file}"
+then
+  if nosql not istable < ${tmp_file}
+  then
+	echo "nosql write: input file is not a valid NoSQL table" >&2
+	Exit 3
+  fi
+  if test -z "${key_field}"
+  then
+	# The key column defaults to the leftmost one.
+	key_field=$(nosql field 1 < ${tmp_file} | nosql headline)
+  fi
+fi
+
+# Check whether a final 'ci -u' may be necessary.
+if test -f ${out_tbl}
+then
+  check_in="ci -u"
+else
+  check_in="ci"
+fi
+
+# If no writeable table exists then try and check it out from RCS.
+if test ! -w ${out_tbl}
+then
+  co -q -l ${out_tbl}
+  test $? -eq 0 && use_rcs=1
+fi
+
+if test -z "${normal_file}"
+then
+  # Keep the table sorted on the key column.
+  if test -z "${key_unique}"
+  then
+    nosql sort ${key_field} < ${tmp_file} > ${out_tbl}
+  else
+    nosql sort -u ${key_field} < ${tmp_file} > ${out_tbl}
+  fi
+else
+  mv ${tmp_file} ${out_tbl}
+fi
+
+if test "${use_rcs}"
+then
+  # Handle RCS versioning on output table.
+  echo "." | ${check_in} -q ${out_tbl}
+fi
+
+# This must be done with an 'if-fi' construct, or a return code '1'
+# may be returned under some circumstances. I.e. it cannot be
+# a 'test .... && ....' type thing.
+
+if test -z "${no_stdout}"
+then
+  nosql cat ${out_tbl}
+fi
+

@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+
+(
+	cd /data/www/projects/mmti/mmti/wu/starbase
+	ls -lt starbase*.tar.* | sed -e 's/\(starbase.*\)/@[\1]/'
+) | tee starbase.tab
+
+echo
+
+#(
+#	cd $MMTIHTML/starbase
+#	ls -lt plottable*.tar.* | sed -e 's/\(plottable.*\)/@[\1]/'
+#) | tee plottable.tab

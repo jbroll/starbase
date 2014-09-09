@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+  if [ $# = 0 ] ; then
+	echo "usage: overwrite [-] file"
+	exit 1
+  fi
+
+ stdout=0
+
+  while [ $# -ge 1 ] ; do
+    case $1 in                    
+	-)   stdout=1	 		;;
+	*)   file="$1"
+	     break	 		;;         
+    esac
+    shift
+  done
+
+  case "$file" in
+  ""|-*)
+	echo "overwrite: missing output file name" 1>&2
+	exit 1
+    ;;
+  esac
+
+   tmpfile=overwrite.$$
+
+  trap "rm -f $tmpfile" 0 1 2 15
+
+  dirname=`dirname  $file`
+  basname=`basename $file`
+
+  cd $dirname
+
+  cat > $tmpfile
+  if [ -s $tmpfile ] ; then
+    mv $tmpfile $basname
+  fi
+
+  if [ $stdout = 1 ] ; then
+    cat $basname
+  fi

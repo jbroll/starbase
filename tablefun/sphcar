@@ -1,0 +1,10 @@
+# sphcar
+#
+# Spherical to Cartesian
+
+function sphcar(a, b, v		, cosb) {
+	cosb = cos(b)
+	v[1] = cos(a) * cosb
+	v[2] = sin(a) * cosb
+	v[3] = sin(b)
+}

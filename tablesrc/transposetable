@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# sb_transpose
+#
+# sb_transpose returns a new table where the lines of the new table
+# are the columns of the original and vice-versa.  This program is
+# useful in combination with gnumeric (a spreadsheet program) and
+# html2txt.
+#
+#   Edition 2003 by Richard Lemieux.
+#
+#   Adapted from John Roll, tabletolist. 
+#
+# Example. If file r1 contains,
+#
+# date	group	description	action
+# -	-	-	-
+# 2003-04-10	dentist	clean	appointment
+# 2003-04-12	garage	tires
+# 2003-04-17	irs	send tax	<2003-04-31
+# 
+# then <transpose r1 | justify> returns the file,
+# 
+# date            2003-04-10      2003-04-12      2003-04-17
+# -----------     -----------     ----------      -----------
+# group           dentist         garage          irs        
+# description     clean           tires           send tax   
+# action          appointment                     <2003-04-31
+# 
+PATH=.:/bin:/usr/bin;	export PATH
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+    *) if [ "$ifile" = "" ] ; then
+	ifile=$1
+       else
+	echo "usage: transpose [[-i] ifile] [-o ofile]"
+	exit 1;
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+tawk '
+BEGIN {  FS="	"
+	OFS="	"
+	ncol = table_header(V, C, D)
+        nlin = 1
+
+	for ( i = 1; i <= ncol; i++ ) {
+		A[i,nlin] = C[i]
+	}
+}
+{
+        nlin = nlin+1
+	for ( i = 1; i <= ncol; i++ ) {
+		A[i,nlin] = $i
+	}
+}
+END   {
+       S = ""
+       for (j = 1; j <= nlin; j++) S = S"\t"j
+       S = A[1,1]
+       for (j = 2; j <= nlin; j++) S = S"\t"A[1,j]
+       print S
+       S = "-"
+       for (j = 2; j <= nlin; j++) S = S"\t-"
+       print S
+       for (i = 2; i <= ncol; i++) {
+         S = A[i,1]
+         for (j = 2; j <= nlin; j++) S = S"\t"A[i,j]
+         print S
+       }
+}
+
+function table_header(V, C, D,		header, dashes)
+{
+	getline	header
+	getline	dashes
+	if ( dashes !~ /(-+\t)*(-+)/ ) {
+	     do {
+		header = dashes	
+	     } while ( getline dashes > 0 && dashes !~ /(-+\t)*(-+)/ )
+	}
+
+	n = split(header, C, /\t/)
+	n = split(dashes, D, /\t/)
+
+	return n
+} '

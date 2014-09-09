@@ -1,0 +1,17 @@
+
+When two or more tables are joined together there is the possibility that the
+column header names for two column will clash.  In this case the column names
+are appended with "_n" where n is the table number for the column source.
+
+Here is an example with jointable.  The two input files each have a column
+named X and a column named Y.  The join column also apears in each table but
+it is only output once so renaming is not necessary.  The X and Y columns are
+renamed to X_1, Y_1 and X_2, Y_2.
+
+-
+
+	john@panic: jointable -j Name objs.tab coords.tab
+	Name	X_1	Y_1	X_2	Y_2
+	----	---	---	---	---
+	...
+-

@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# Import DAOPHOT file to Starbase data tables
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "true" 13
+
+usage() {
+	echo "usage: daophototable < input"
+	exit 1
+}
+
+
+    if [ $# != 0 ] ; then
+	usage
+    fi
+
+    tawk 'BEGIN {
+	    print
+	    Lines  = 0
+	    Header = 1
+	}
+
+	Header && /^#N/ {
+	    gsub(/\\$/, "")
+#	    print
+
+	    $1 = ""
+	    gsub(/^ +/, "")
+	    gsub(/ +$/, "")
+	    gsub(/ +/, "\t")
+
+	    HEADER=HEADER htab $0
+	    htab="\t"
+	    next
+	}
+	Header && /^#F/ {
+	    gsub(/\\$/, "")
+#	    print
+
+	    $1 = ""
+	    gsub(/^ +/, "")
+	    gsub(/ +$/, "")
+	    gsub(/ +/, "\t")
+	    gsub(/%-/, "", $0)
+	    gsub(/\.[0-9]*[sdfg]/, "", $0)
+	    gsub(/[sdfg]/, "", $0)
+
+	    FORMAT=FORMAT ftab $0
+	    Fields[++Lines] = NF
+	    ftab="\t"
+	    next
+	}
+	Header && /^#/	{
+#		print
+		next
+	}
+
+	Header {
+	gsub(/%-/, "", FORMAT)
+	gsub(/\.[0-9]*[sdfg]/, "", FORMAT)
+	gsub(/[sdfg]/, "", FORMAT)
+
+	nF = split(FORMAT, F);
+
+	    print HEADER
+	    gsub(/[^\t]/, "-", HEADER)
+	    print HEADER
+	    Header = 0
+	}
+	{
+	    LINE = ""
+	    start = 1
+	    f     = 1
+	    Line  = 1
+	    while ( 1 ) {
+		
+		n = Fields[Line]
+
+
+		for ( i = 1; i <= n; i++ ) {
+			printf("%s%s", substr($0, start, F[f]), (f == nF ? "" : "\t"))
+			start += F[f]
+			f++;
+		}
+		if ( $NF != "\\" ) { break }
+		Line++
+		getline
+		start = 1
+	    }
+	    print ""
+        }
+    '
+

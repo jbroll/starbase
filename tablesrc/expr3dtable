@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# expr3dtable - Run 3d expr over each column of the input tables
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+Func="
+function expr3d(column,	s) {
+	return $Expr;
+}
+"
+
+    fun3dtable expr -f "$Func" "$@"

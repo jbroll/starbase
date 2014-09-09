@@ -1,0 +1,8 @@
+# sex2decsex
+#
+function sex2decsex(SEX,	sex)
+{
+	split(SEX, sex, " ")
+	return sex[1] +  sex[2] / 100 +  sex[3] / 10000
+}
+	

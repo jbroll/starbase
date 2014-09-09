@@ -1,0 +1,581 @@
+#!/bin/sh
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+if [ $# = 0 ] ; then
+cat << EOF
+	pivottable - group and reduce data tables by column values
+
+	SUMMARY
+
+		> pivottable groupcol [groupcol ...] -- [options] valuecol [valuecol ...]
+
+		The values in specified group columns select rows to be grouped together.
+
+
+	OPTIONS
+	    Global options
+		-all	- output all of the rows in the table
+		-debug	- print the mawk program to be executed on the input table.
+		-fmt	- output values with this format specifier (%.6g default)
+		-sorted	- assume that the input is sorted.  If there are no -group options and
+			  the input is known to be sorted in the groupcol order, then significant
+			  optimization can be done in the executed program.  This option should 
+			  only be used with humongous input tables.
+
+	    Selection Options
+	    	In addition to binning by the uniq values in the indicated group columns, rows may be 
+		placed into bins by their numeric values.  The requested values are used as the upper
+		edges of the bins.  If an input value is found that exceeds the upper edge of the last 
+		bin a special bin is generated with the row label equal the last bins upper edge
+		suffixed with "GT" to indicate greater than.
+
+		-bin col bin,bin,bin
+			- Use the listed values as the upper edges of row bins
+
+		-bin col n:start:end:incr
+			- generate values of the upper edges of row bins using
+			  jottable.  The start, end, increment or number of 
+			  bins may be defaulted by specifying "-" for that value.
+
+		> pivottable -bin X 30,70,100 [groupcol ...] -- [options] valuecol [valuecol ...]
+
+	    Pivoting
+	    	-group col - Generate new columns for each value in the domain of the given 
+			     column.
+
+		    Example: Create a two dimensional histogram binning on X values and Y values
+		    	     and displaying the count of the number of value in each bin.
+
+		      john@home : jottable 20 X 1 5 Y 6 7 | pivottable X -- -group Y -count | justify
+		      X	Y_6_Count	Y_7_Count
+		      -	---------	---------
+		      1	        3	         
+		      2	        5	         
+		      3	        2	        2
+		      4	         	        5
+		      5	         	        3
+
+	    Reduction options
+	    	-count	- the number of values in this bin (default)
+
+		-value	- the value of the column in the grouped rows.  This
+			  will be the actual value when -all is selected and the
+			  value of the last row in the group otherwise.
+		-first	- the column value of the first row in the group.
+		-last	- the column value of the last  row in the group.
+		-sum	- sum the values in the grouped rows
+		-max
+		-min
+		-mean
+		-avg
+		-stdev
+
+		-enum	- enumerate the values in a bin.  Several sub options may preceed the
+			  -enum option to modify the value output in each bin.
+
+			  -esort    - sort the enumerated set in the results
+			  -ereal    - sort the set as numeric value not strings
+			  -estring    - sort the set as strings (default)
+			  -euniq    - output only uniq values in the set
+			  -edelim   - value to delimit enumerated value (default ,)
+
+			  -enosort  - don't sort the enumerated set in the results (default)
+			  -eall     - output all the values in the set (default)
+		
+EOF
+exit 
+fi
+
+	fmt="%.6g"
+	all=0
+	sorted=0
+	group=0
+
+	ESortType=s
+	EDelim=","
+
+	comma=""
+	tab=""
+	while [ "$#" -gt 0 -a "$1" != -- ] ; do
+	    case $1 in 
+	     -fmt)	fmt=$2;			shift;	shift;	continue	;;
+	     -debug|-D)	debug=-D;			shift;  continue;	;;
+	     -bin)
+		shift
+			
+		rowby="$rowby$comma${1}_Bin"
+		rowdh="$rowdh$tab-"
+		comma=","
+		tab="	"
+
+		bins=$2
+
+		case $bins in
+		 *:*)
+			bins=`echo $bins | sed "s/:/ /g"`
+			bins=`_jot $bins | sort -n`
+			bins=`echo $bins | tr " " ","`
+		    ;;
+		esac
+
+		BEGI="$BEGI
+		__N_${1}_Bins = split(\"$bins\", __${1}_Bins, \",\")
+		# Convert bins to double, This code is included to avoid a string refcount
+		# bug in mawk split().
+		#
+		for ( __i = 1; __i <= __N_${1}_Bins; __i++ ) {
+		    __${1}_Bins[__i] = __${1}_Bins[__i] + 0.0
+		}
+		"
+
+		BINS="$BINS
+		for ( __i = 1; __i <= __N_${1}_Bins; __i++ ) {
+		    if ( $1 <= __${1}_Bins[__i] ) { ${1}_Bin = __${1}_Bins[__i]; break }
+		}
+		if ( __i > __N_${1}_Bins ) { ${1}_Bin = \"GT\" __${1}_Bins[__N_${1}_Bins] }"
+
+		shift; shift
+		;;
+	     -all)	all=1;			shift;	continue	;;
+	     -sorted)	sorted=1;		shift;	continue	;;
+	     *)
+		rowby="$rowby$comma$1";	shift
+		rowdh="$rowdh$tab-"
+		comma=","
+		tab="	"
+
+		;;
+	    esac
+	done
+	rowhd=`echo $rowby | sed "s/,/	/g"`
+	rowxx=`echo $rowby | sed "s/,/ TAB /g"`
+
+	if [ $# = 0 ] ; then
+	    echo "pivottable: no columns given for table"	2>&1
+	    exit 1
+	fi
+	shift
+
+	for arg in $* ; do
+	    case $arg in
+	     -all)	all=1;	break
+	    esac
+	done
+
+	comma=""
+	Op="Count"
+	while [ $# -gt 0 ] ; do
+	    case $1 in 
+	     --)	comma=""; colby=""		shift; 	continue	;;
+	     -all)	all=1;				shift;	continue	;;
+	     -sorted)	sorted=1;			shift;	continue	;;
+	     -fmt)	fmt=$2;			shift;	shift;	continue	;;
+	     -debug)	debug=-D;			shift;  continue;	;;
+	     -group)	colby="$colby$comma$2"; comma=","; group=1
+	     		shift;	shift; 	continue	;;
+	     -value)	Op=Value;			shift;	continue	;;
+	     -first)	Op=First;			shift;	continue	;;
+	     -last)	Op=Last;			shift;	continue	;;
+	     -sum)	Op=Sum;				shift;	continue	;;
+	     -min)	Op=Min;				shift;	continue	;;
+	     -max)	Op=Max;				shift;	continue	;;
+	     -stdev)	Op=Stdev;			shift;	continue	;;
+
+	     -stdevp)	Op=Stdev;			shift;	continue	;;
+	     -stdevz)	Op=Stdev;			shift;	continue	;;
+	     -product)	Op=Stdev;			shift;	continue	;;
+	     -variance)	Op=Stdev;			shift;	continue	;;
+	     -mode)	Op=Stdev;			shift;	continue	;;
+
+	     -med*)	Op=Med;				shift;	continue	;;
+	     -mean)	Op=Mean;			shift;	continue	;;
+	     -avg) 	Op=Avg;				shift;	continue	;;
+	     -avg-wei*)	Op=AvgW;			shift;	continue	;;
+	     -compute)					shift;  continue	;;
+	     -count)	Op=Count; 			shift;  		;;
+
+	     -enosort)	Op=Enum; ESort="";		shift;	continue	;;
+	     -esort)	Op=Enum; ESort=Y;		shift;	continue	;;
+	     -ereal)	Op=Enum; ESortType=r;		shift;	continue	;;
+	     -estring)	Op=Enum; ESortType=s;		shift;	continue	;;
+	     -euniq)	Op=Enum; EUniq=Y;		shift;	continue	;;
+	     -eall)	Op=Enum; EUniq="";		shift;	continue	;;
+	     -edelim)	Op=Enum; EDelim=$2;	shift;	shift;	continue	;;
+
+	     -enum)	Op=Enum;			shift;	continue	;;
+
+	     -*) echo "Unrecognized option : $1"; exit 1 			;;
+	     *)		Column=$1			shift			;;
+	    esac
+
+		case $Op in 
+		 AvgW)  Weight=$1;
+			tail="_Avg_WeightedBy_$Weight"
+		 	shift	;;
+		 Value)	tail=""			;;
+		 Count) tail="$Op" ; Column=""	;;
+		 *)	tail="_$Op"		;;
+		esac
+
+		if [ "$colby" != "" ] ; then
+		    colxx=`echo $colby | sed s/,/_/g`
+		    Domain="
+		    __${colxx}Domain[$colby] 	 = 1"
+		    ITER="for ( col in __${colxx}Domain ) {"
+		    BRACE="}"
+		    col=", col"
+
+		    HEAD="$HEAD
+		    $ITER printf \"%s%s_%s%s\", FS, \"${colxx}\", rx(SUBSEP, \"\", col), \"_${Column}$tail\" $BRACE"
+		    DASH="$DASH
+		    $ITER printf \"%s%s\", FS, \"-\" $BRACE"
+		else
+		    colxx=""
+		    Domain=""
+		    ITER=""
+		    BRACE=""
+		    col=""
+
+		    HEAD="$HEAD
+		    printf \"%s%s\", FS, \"${Column}$tail\""
+		    DASH="$DASH
+		    printf \"%s%s\", FS, \"-\""
+		fi
+
+
+		Named="__${colxx}${Column}${Op}"
+
+		X=`eval echo \\\$$Named`
+		if [ "$X" = 1 ] ; then 
+		    echo "pivottable : requesting $Named more than once"	1>&2
+		    exit 1
+		fi
+		eval __${colxx}$Column$Op=1
+
+		NameV="__${colxx}${Column}${Op}Value"
+		Value="__${colxx}${Column}${Op}Value[$rowby $comma $colby]"
+		NameC="__${colxx}${Column}${Op}Count"
+		Count="__${colxx}${Column}${Op}Count[$rowby $comma $colby]"
+		Codex="[$rowby $comma $colby]"
+
+		Final="__${colxx}${Column}${Op}Value[__Rows[i]$col]"
+		Tally="__${colxx}${Column}${Op}Count[__Rows[i]$col]"
+		Endex="[__Rows[i]$col]"
+
+		DELE="$DELE
+		delete $NameV"
+
+		case $Op in
+		 Med|Enum*)
+		    Code="$Code $Domain	
+
+		    	if ( ${Named}_Set$Codex == \"\" ) {
+			    ${Named}_Set$Codex = $Column
+			} else {
+			    ${Named}_Set$Codex = ${Named}_Set$Codex SUBSEP $Column
+			}
+		    "
+
+		    case $Op in
+		     Med)
+			ROWS="$ROWS
+
+			    $ITER
+			    __set_n = split(${Named}_Set$Endex, __set, SUBSEP)
+
+    			    if ( __set_n ) {
+				asortr(__set, __set_n)
+
+				if ( __set_n % 2 ) {
+				    $Final =  __set[int(__set_n/2.0)+1]
+				} else {
+				    $Final = (__set[int(__set_n/2)] + __set[int(__set_n/2)+1]) /2.0
+				}
+
+				delete __set
+			    }
+			    $BRACE
+			"
+			;;
+		     Enum)
+		        if [ "$ESort" = "" -a "$EUniq" = "" ] ; then
+			    ROWS="$ROWS
+			    	$ITER
+				$Final = rx(SUBSEP, \"$EDelim\", ${Named}_Set${Endex})
+				$BRACE
+			    "
+			else 
+			    if [ "$EUniq" != "" ] ; then
+			      EUniq="
+				for ( _i = 1; _i <= __set_n; _i++ ) {
+				    __uniq[__set[_i]] = 1
+				}
+				delete __set
+
+				_i = 1
+				for ( _v in __uniq ) {
+				    __set[_i++] = _v
+				}
+				__set_n = _i-1
+			      "
+			    fi
+			    if [ "$ESort" != "" ] ; then
+			      ESort="asort$ESortType(__set, __set_n)"
+			    fi
+			    ROWS="$ROWS
+			    	$ITER
+				__set_n = split(${Named}_Set$Endex, __set, SUBSEP)
+
+				if ( __set_n ) {
+
+				$EUniq
+				$ESort
+
+				$Final = __set[1]
+
+				for ( _i = 2; _i <= __set_n; _i++ ) {
+				    $Final = $Final \"$EDelim\" __set[_i]
+				}
+
+				delete __set
+				delete __uniq
+				}
+				$BRACE
+			    "
+			fi
+		     	;;
+		    esac
+		    ;;
+		 Stdev)
+		    Code="$Code $Domain	
+			 ${Named}_Sqr$Codex += $Column * $Column
+			 ${Named}_Sum$Codex += $Column
+			 ${Named}_Cnt$Codex ++
+		    "
+		    ROWS="$ROWS
+
+		    	$ITER
+			if ( ${Named}_Cnt$Endex > 2 ) {
+			    mean = ${Named}_Sum$Endex/${Named}_Cnt$Endex
+
+			    ${Named}Value${Endex} = sqrt((${Named}_Sqr$Endex - mean * ${Named}_Sum$Endex) \\
+				/ (${Named}_Cnt$Endex - 1));
+			} else {
+			    ${Named}Value${Endex} = ${Named}_Sum$Endex
+			} 
+			$BRACE
+		    "
+
+		    ;;
+		 Sum)			
+		    Code="$Code $Domain
+		    $Value += $Column
+		    "
+		    ;;
+		 Value)	
+		    if [ $all = 1 ] ; then
+			Code="$Code $Domain
+			$Named[__N] = $Column
+		        "
+			Final="$Named[i]"
+			DELE="$DELE
+			delete $Named"
+		    else
+			Code="$Code $Domain
+			$Value = $Column
+		        "
+		    fi
+		    ;;
+		 Last)
+		    Code="$Code $Domain
+		    $Value = $Column
+		    "
+		    ;;
+		 First)
+		    Code="$Code $Domain
+		    if ( $Value == \"\" ) { $Value = $Column }
+		    "
+		    ;;
+		 AvgW)
+		    Code="$Code $Domain
+		    $Value += $Column * $Weight
+		    $Count += $Weight
+		    "
+		    DELE="$DELE
+		    delete $NameC"
+		    ROWS="$ROWS
+		    if ( $Tally ) {
+		    	$ITER $Final = $Final / $Tally $BRACE
+		    }
+		    "
+		    ;;
+		 Mean|Avg)
+		    Code="$Code $Domain
+		    $Value += $Column
+		    $Count++
+		    "
+		    DELE="$DELE
+		    delete $NameC"
+		    ROWS="$ROWS
+		    if ( $Tally ) { $ITER $Final = $Final / $Tally $BRACE }
+		    "
+		    ;;
+		 Min)
+		    Code="$Code $Domain
+		    $Value = min($Value, $Column)
+    		    "
+		    INIT="$INIT
+		    if ( !$Value ) { $Value =  10^102 }"
+		    ;;
+		 Max)
+		    Code="$Code $Domain
+		    $Value =  max($Value, $Column)
+    		    "
+		    INIT="$INIT
+		    if ( !$Value ) { $Value = -10^102 }"
+		    ;;
+		 Count)
+		    Code="$Code $Domain
+		    $Value++
+		    "
+		    ;;
+		esac
+
+		PROW="$PROW
+		$ITER printf \"%s%s\", FS, $Final $BRACE"
+	done
+
+HEADER="
+    printf \"$rowhd\" $HEAD
+    print \"\"
+    printf \"$rowdh\" $DASH
+    print \"\"
+"
+
+if [ $all = 1 ] ; then
+    SAVE="
+	__Rows[++__N] = $rowxx
+	if ( __Domain[$rowby] != 1 ) {
+	    __Rowx[__N] = $rowxx
+	    __Domain[$rowby] = 1
+	}"
+
+    OUTPUT="
+	__Prev = \"\"
+	for ( i in __Rowx ) {
+		$ROWS
+	}
+	for ( i = 1; i <= __N; i++ ) {
+	    printf \"%s\", __Rows[i]
+	    gsub(TAB, SUBSEP, __Rows[i])
+	    if ( __Prev != __Rows[i] ) { 
+	    }
+	    $PROW
+	    print \"\"
+	    __Prev = __Rows[i]
+	}"
+else
+    SAVE="
+	if ( __Domain[$rowby] != 1 ) {
+	    __Rows[++__N] = $rowxx
+	    __Domain[$rowby] = 1
+	}"
+
+    OUTPUT="
+	for ( i = 1; i <= __N; i++ ) {
+	    printf \"%s\", __Rows[i]
+	    gsub(TAB, SUBSEP, __Rows[i])
+	    $ROWS
+	    $PROW
+	    print \"\"
+	}"
+fi
+
+
+if [ $sorted = 1 -a $group = 0 ] ; then
+    SORTEDHEADER="$HEADER"
+    SORTEDOUTPUT="
+	if ( __Domain[$rowby] != 1 ) {
+	    $OUTPUT
+	    delete __Rows
+	    delete __Domain[__PrevDomain]
+	    ___PrevDomain = $rowxx
+	    $DELE
+	    __N=0
+	}"
+
+    FINALOUTPUT="$OUTPUT"
+else
+    FINALOUTPUT="
+	    $HEADER
+	    $OUTPUT"
+fi
+
+
+table -h $debug -v CONVFMT="$fmt" "
+
+function rx(pat, rep, str) {
+	gsub(pat, rep, str)
+	return str
+}
+
+
+function asortr(__ARRAY, __ELEMENTS) {
+	qsortr(__ARRAY, 1, __ELEMENTS)
+}
+
+function qsortr(__A, __left, __right,   __i, __last) {
+	if (__left >= __right)
+	    return
+	swap(__A, __left, __left+int((__right-__left+1)*rand()))
+	__last = __left
+	for (__i = __left+1; __i <= __right; __i++)
+	    if (__A[__i]+0 < __A[__left]+0)
+		swap(__A, ++__last, __i)
+	swap(__A, __left, __last)
+	qsortr(__A, __left, __last-1)
+	qsortr(__A, __last+1, __right)
+}
+
+function asorts(__ARRAY, __ELEMENTS) {
+	qsortr(__ARRAY, 1, __ELEMENTS)
+}
+
+function qsorts(__A, __left, __right,   __i, __last) {
+	if (__left >= __right)
+	    return
+	swap(__A, __left, __left+int((__right-__left+1)*rand()))
+	__last = __left
+	for (__i = __left+1; __i <= __right; __i++)
+	    if (__A[__i]+\"\" < __A[__left]+\"\")
+		swap(__A, ++__last, __i)
+	swap(__A, __left, __last)
+	qsorts(__A, __left, __last-1)
+	qsorts(__A, __last+1, __right)
+}
+
+function swap(__A, __i, __j,   __t) {
+	__t = __A[__i]; __A[__i] = __A[__j]; __A[__j] = __t
+}
+
+
+BEGIN {
+    TAB = \"	\"
+
+    $SORTEDHEADER
+    $BEGI
+}
+{
+    $BINS
+    $SORTEDOUTPUT
+
+    $SAVE
+    $INIT
+
+    $Code
+}
+
+END { $FINALOUTPUT }"

@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+. ../Test
+
+Cols="X Y Z T U V"
+
+jottable  5 X Y Z  > short.tmp
+jottable  5 $Cols  > control.tmp
+
+Test "Row  X <= 5" 
+    jottable 100 $Cols | row       "X <= 5"	| DiffFiles - control.tmp
+
+Test "Row     X Y Z 'X <= 5'"
+    jottable 100 $Cols | row X Y Z "X <= 5"	| DiffFiles - short.tmp
+
+Test "Row  -i X Y Z 'X <= 5'"
+    row -i control.tmp       X Y Z "X <= 5"	| DiffFiles - short.tmp
+
+Test "Compute +Col"
+    jottable 5 Z | compute ".X=Z; .Y=Z"		| DiffFiles - short.tmp
+
+Test "Compute .Col"
+    jottable 5 X | compute "+Y=X; +Z=X"		| DiffFiles - short.tmp
+
+Test "Compute +Col[1]"
+    jottable 5 Z | compute ".X=Z[1]; .Y=Z[1]"	| DiffFiles - short.tmp
+
+Test "Row ARRDEL"
+    jottable 5  X | compute 'X=X ":" X'                                      > yy.tmp
+    jottable 10 X | compute 'X=X ":" X'                                      > xx.tmp
+    < xx.tmp        row -v ARRDEL=: "X[1] <= 5" | DiffFiles - yy.tmp
+
+Test "Compute Pack   ARRDEL"
+    jottable 5 X | compute 'X=X ":" X'                                       > xx.tmp
+    jottable 5 X | compute -v ARRDEL=: "N_X = 2; X[1]=X; X[2]=X" | DiffFiles - xx.tmp
+
+Test "Compute Unpack ARRDEL"
+    jottable 5 X | compute 'X=X ":" X'                                       > xx.tmp
+    < xx.tmp       compute -v ARRDEL=: "X=X[1]; +Y=NR; +Z=NR" | DiffFiles - short.tmp
+
+Test "Compute .X"
+    jottable 5 X Y Z | compute X Y Z ".X = NR"	| DiffFiles - short.tmp
+
+Test "compute .Z"
+    jottable 5 X Y Z | compute ".Z = NR"      	| DiffFiles - short.tmp
+
+
+TestDone

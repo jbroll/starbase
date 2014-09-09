@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# rowtocoltable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=/data/mmti/bin.linux:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+	  validate '{ print; exit }'	\
+	| headoff			\
+	| tr "\011" "\012"		\
+	| fldtotable $1
+	

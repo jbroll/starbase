@@ -1,0 +1,127 @@
+#!/bin/sh
+#
+  TABLEFUNCTIONS=.
+  export TABLEFUNCTIONS
+
+  echo ""
+  echo "FK5 Reference Catalog"
+  echo ""
+  echo "RMS Error in conversion from RA, Dec B1950 to RA, Dec J2000"
+  echo "--> WITH OUT proper motions"
+  echo ""
+
+    fk5									\
+  | fk45z    RA_1950  Dec1950 						\
+  | column -a Sep							\
+  | compute '
+	     	Sep=sep(RA_2000, Dec2000, RA_1950, Dec1950)
+		RA_1950 =csub(RA_1950, RA_2000)
+	     	Dec1950-=Dec2000
+	    '								\
+  | column   RA_1950           Dec1950           Sep			\
+  | rmstable								\
+  | compute "RA_1950+=0:00:00; Dec1950+=0:00:00; Sep+=0:00:00"		\
+  | justify  RA_1950=RA        Dec1950=Dec       Sep
+
+
+
+  echo ""
+  echo ""
+  echo "RMS Error in conversion from RA, Dec J2000 to RA, Dec B1950"
+  echo "--> WITH OUT proper motions"
+  echo ""
+
+    fk5									\
+  | fk54z    RA_2000  Dec2000 						\
+  | column -a Sep							\
+  | compute '
+	     	Sep=sep(RA_2000, Dec2000, RA_1950, Dec1950)
+		RA_2000 =csub(RA_2000, RA_1950)
+	     	Dec2000-=Dec1950
+	    '								\
+  | column   RA_2000           Dec2000           Sep			\
+  | rmstable								\
+  | compute "RA_2000+=0:00:00; Dec2000+=0:00:00; Sep+=0:00:00"		\
+  | justify  RA_2000=RA        Dec2000=Dec       Sep
+
+
+
+  echo ""
+  echo ""
+  echo "RMS Error in conversion from RA, Dec B1950 to RA, Dec J2000"
+  echo "--> WITH proper motions"
+  echo ""
+
+    fk5									\
+  | fk425    RA_1950   Dec1950 RA_PM1950 DecPM1950			\
+  | column -a Sep							\
+  | compute '
+	     	Sep=sep(RA_2000, Dec2000, RA_1950, Dec1950)
+		RA_1950 =csub(RA_1950, RA_2000)
+	     	Dec1950-=Dec2000
+	    '								\
+  | column   RA_1950           Dec1950           Sep			\
+  | rmstable								\
+  | compute "RA_1950+=0:00:00; Dec1950+=0:00:00; Sep+=0:00:00"		\
+  | justify  RA_1950=RA        Dec1950=Dec       Sep
+
+
+  echo ""
+  echo ""
+  echo "RMS Error in conversion from RA, Dec J2000 to RA, Dec B1950"
+  echo "--> WITH proper motions"
+  echo ""
+
+    fk5									\
+  | fk524    RA_2000   Dec2000 RA_PM2000 DecPM2000			\
+  | column -a Sep							\
+  | compute '
+	     	Sep=sep(RA_2000, Dec2000, RA_1950, Dec1950)
+		RA_2000 =csub(RA_2000, RA_1950)
+	     	Dec2000-=Dec1950
+	    '								\
+  | column   RA_2000           Dec2000           Sep			\
+  | rmstable								\
+  | compute "RA_2000+=0:00:00; Dec2000+=0:00:00; Sep+=0:00:00"		\
+  | justify  RA_2000=RA        Dec2000=Dec       Sep
+
+
+  echo ""
+  echo ""
+  echo "RMS Error in precession from RA, Dec J2000 to RA, Dec J1950"
+  echo "--> This is an incorrect application of precess"
+  echo ""
+
+    fk5									\
+  | precess FK5 2000 1950 RA_2000  Dec2000				\
+  | column -a Sep							\
+  | compute '
+	     	Sep=sep(RA_2000, Dec2000, RA_1950, Dec1950)
+		RA_2000 =csub(RA_2000, RA_1950)
+	     	Dec2000-=Dec1950
+	    '								\
+  | column   RA_2000           Dec2000           Sep			\
+  | rmstable								\
+  | compute "RA_2000+=0:00:00; Dec2000+=0:00:00; Sep+=0:00:00"		\
+  | justify  RA_2000=RA        Dec2000=Dec       Sep
+
+  echo ""
+  echo ""
+  echo "RMS Error in precession from RA, Dec B1950 to RA, Dec B2000"
+  echo "--> This is an incorrect application of precess"
+  echo ""
+
+    fk5									\
+  | precess FK4 1950 2000 RA_1950  Dec1950				\
+  | column -a Sep							\
+  | compute '
+	     	Sep=sep(RA_2000, Dec2000, RA_1950, Dec1950)
+		RA_1950 =csub(RA_1950, RA_2000)
+	     	Dec1950-=Dec2000
+	    '								\
+  | column   RA_1950           Dec1950           Sep			\
+  | rmstable								\
+  | compute "RA_1950+=0:00:00; Dec1950+=0:00:00; Sep+=0:00:00"		\
+  | justify  RA_1950=RA        Dec1950=Dec       Sep
+
+  echo ""

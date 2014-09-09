@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# radialsort
+
+  if [ $# -lt 2 ] ; then
+	echo "usage: radecradialsort ra_col dec_col center_ra center_dec" 1>&2
+	exit 1
+  fi
+
+  r=$1; shift
+  d=$1; shift
+
+  CX=$1; shift
+  CY=$1; shift
+
+  if [ $# -ne 0 ] ; then
+	echo "usage: radecradialsort ra_col dec_col center_ra center_dec" 1>&2
+	exit 1
+  fi
+
+  column -a _R2				\
+| compute "_R2 = sep($r, $d, $CX, $CY)"	\
+| sorttable -n _R2			\
+| column _R2:x

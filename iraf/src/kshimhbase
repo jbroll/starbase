@@ -1,0 +1,32 @@
+#!/data/mmti/bin/ksh 
+#
+
+. ${ENVIRONMENT}
+
+        PDEFAULTS="rw
+input,s,a,,,,Input file list
+mode,s,h,ql,,,
+"
+
+parameters input
+
+IMHBASE="imhbase.$$"
+
+ imhhdr "${input}" mode=h > $IMHBASE
+
+ Columns=`
+     < $IMHBASE			\
+       headline -t '*'		\
+     | tr "\011" "\012"		\
+     | fldtotable Column	\
+     | sorttable -u		\
+     | headoff`
+
+ fldtotable < /dev/null $Columns
+
+ # Get all the rows from IMHBASE
+ #
+ headoff -t '*' < $IMHBASE $Columns
+
+ rm -f $IMHBASE
+ exit 0

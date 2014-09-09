@@ -1,0 +1,64 @@
+#!/bin/sh
+#
+      tr -d "\015"							\
+    | fixtotable							\
+	    Number:1-6 Dup:7-7						\
+	    RA1950H:8-9 RA1950M:10-11 RA1950S:12-17			\
+	    RA1950PM:18-24						\
+	    RA1950PMDev:25-26						\
+	    RA1950PLUS:27-27						\
+	    RA1950SEC:28-33						\
+	    RA2Dev:34-35						\
+	    RA2Epoch:36-41						\
+	    Dec1950D:42-44 Dec1950M:45-46 Dec1950S:47-51		\
+	    Dec1950PM:52-57						\
+	    Dec1950PMDev:58-59						\
+	    Dec1950PLUS:60-60						\
+	    Dec1950SEC:61-65						\
+	    Dec2Dev:66-67						\
+	    Dec2Epoch:68-73						\
+	    DevPos:74-76						\
+	    PMag:77-80 VMag:81-84					\
+	    SpecType:85-87						\
+	    VMagSource:88-89						\
+	    NotesSource:90-91						\
+	    PMagSource:92-92						\
+	    PMSource:93-93						\
+	    TypeSource:94-94						\
+	    Remarks:95-95						\
+	    VMagAcc:96-96						\
+	    PMagAcc:97-97						\
+	    CatSource:98-99	SourceNumber:100-104			\
+	    DM:105-106 DMZone:107-109 DMNumber:110-114 DMID:115-116	\
+	    BDLetter:117-117						\
+	    HD:118-123 HDCode:124-124 GC:125-129			\
+	    RA1950Rad:130-139 Dec1950Rad:140-150			\
+	    RA2000H:151-152   RA2000M:153-154  RA2000S:155-160		\
+	    RA2000PM:161-167						\
+	    Dec2000D:168-170 Dec2000M:171-172 Dec2000S:173-177		\
+	    Dec2000PM:178-183						\
+	    RA2000Rad:184-193 Dec2000Rad:194-204			\
+    | tr -d " " 							\
+    | column -a RA1950 Dec1950 RA2000 Dec2000				\
+    | compute ' if (  RA1950M == 0 )  RA1950M = "00"
+		if ( Dec1950M == 0 ) Dec1950M = "00"
+		if (  RA2000M == 0 )  RA2000M = "00"
+		if ( Dec2000M == 0 ) Dec2000M = "00"
+
+		 RA1950= RA1950H ":"  RA1950M ":"  RA1950S
+		Dec1950=Dec1950D ":" Dec1950M ":" Dec1950S
+		 RA2000= RA2000H ":"  RA2000M ":"  RA2000S
+		Dec2000=Dec2000D ":" Dec2000M ":" Dec2000S '	        \
+    | column RA1950 Dec1950 RA2000 Dec2000			        \
+     Number Dup						                \
+     RA1950PM  RA1950PMDev  RA1950PLUS  RA1950SEC  RA2Dev  RA2Epoch     \
+    Dec1950PM Dec1950PMDev Dec1950PLUS Dec1950SEC Dec2Dev Dec2Epoch DevPos \
+    PMag VMag SpecType VMagSource NotesSource			        \
+    PMagSource PMSource TypeSource Remarks VMagAcc			\
+    CatSource SourceNumber						\
+    DM DMZone DMNumber DMID	BDLetter				\
+    HD HDCode GC 							\
+    RA1950Rad Dec1950Rad						\
+    RA2000PM  Dec2000PM						        \
+    RA2000Rad Dec2000Rad
+

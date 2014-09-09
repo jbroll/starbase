@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# sum3dtable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+
+    if [ $# = 0 ] ; then
+	echo "fun3dtable <function> [-f program] [column [column]... --] table [table...]" 1>&2
+	exit 1
+    fi
+
+    fun3dtable sum "$@"

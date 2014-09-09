@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+. ../Test
+
+
+jottable 10 X Y Z		 	> 1.tmp
+
+jottable 10 A Y Z		 	> A1.tmp
+jottable 10 B X Z		 	> B1.tmp
+jottable 10 C X Y		 	> C1.tmp
+jottable 10 Y Z A		 	> A2.tmp
+jottable 10 X Z B		 	> B2.tmp
+jottable 10 X Y C		 	> C2.tmp
+
+jottable 10 X_1 Y_1 Z_1 X_2 Y_2 Z_2 	> J0.tmp
+jottable 10 X_1 Y_1 Z_1		 	> J1.tmp
+jottable 10 X_2 Y_2 Z_2		 	> J2.tmp
+
+jottable 10 P1_X P1_Y P2_X P2_Y		> P0.tmp
+jottable 10 P1_X P1_Y 			> P1.tmp
+jottable 10 P2_X P2_Y			> P2.tmp
+jottable 10 X Y				> XY.tmp
+
+Test "Column Rename - none 1" ; column < 1.tmp		| DiffFiles -  1.tmp
+
+Test "Column Rename A1"	; column < 1.tmp X=A -a		| DiffFiles - A1.tmp
+Test "Column Rename B1"	; column < 1.tmp Y=B -a		| DiffFiles - B1.tmp
+Test "Column Rename C1"	; column < 1.tmp Z=C -a		| DiffFiles - C1.tmp
+
+Test "Column Rename A2"	; column < 1.tmp -a X=A 	| DiffFiles - A2.tmp
+Test "Column Rename B2"	; column < 1.tmp -a Y=B 	| DiffFiles - B2.tmp
+Test "Column Rename C2"	; column < 1.tmp -a Z=C 	| DiffFiles - C2.tmp
+
+Test "Column Match"	; column < J0.tmp '*_1'		| DiffFiles - J1.tmp
+Test "Column Match"	; column < J0.tmp '*_2'		| DiffFiles - J2.tmp
+
+Test "PatRename J1"	; column < J0.tmp '*_1=?'	| DiffFiles -  1.tmp
+Test "PatRename J1 1"	; column < J0.tmp '*_1=?_1'	| DiffFiles - J1.tmp
+Test "PatRename J1 2"	; column < J0.tmp '*_1=?_2'	| DiffFiles - J2.tmp
+Test "PatRename J2"	; column < J0.tmp '*_2=?'	| DiffFiles -  1.tmp
+Test "PatRename J2 1"	; column < J0.tmp '*_2=?_1'	| DiffFiles - J1.tmp
+Test "PatRename J2 2"	; column < J0.tmp '*_2=?_2'	| DiffFiles - J2.tmp
+
+Test "PatRename P1"	; column < P0.tmp 'P1_?=?'	| DiffFiles - XY.tmp
+Test "PatRename P2"	; column < P0.tmp 'P2_?=?'	| DiffFiles - XY.tmp
+
+Test "PatRename-Del"	; column < J0.tmp '?_1=P1_?' '*Z:x'	| DiffFiles - P1.tmp
+
+TestDone

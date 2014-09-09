@@ -1,0 +1,43 @@
+
+xlsx2table.py uses the python "openpyxl" excel spreadsheet reader/writer module.  You
+may need to install this package.  This installation command worked for me:
+
+INSTALL
+-------
+
+    > easy_install openpyxl
+
+    > cp xlsx2table $BIN/xlsx2table
+    > ln -s $BIN/xlsx2table $BIN/table2xlsx
+
+
+HELP
+----
+
+xlsx2table reads a matrix of cells from an excel xlsx spreadsheet and prints a 
+starbase table to the standard out.
+
+    usage: xlsx2table file.xlsx sheet cell0[:cell2] [-data]
+
+    The program takes an input file name, the sheet name and a cell range to
+    extract a table from.  The first row of the table is taken as the head row.
+    The values in the header row have all characters not in [a-zA-Z0-9_] removed.
+    If the -data switch is specified a plain matrix of data values is output
+    without a starbase header.
+
+    If only the first cell in the desired cell range is specified the spreadsheet
+    the first row/column is searched down/right from that cell until an empty 
+    cell is encountered.
+
+
+table2xlsx reads a starbase table from the standard input and writes it into a 
+range of cells in an xlsx spreadsheet.
+
+    usage: table2xlsx file.xlsx sheet cell0
+
+    The program read a starbase table from the standard input and writes it to
+    a range of cells in an xlsx spreadsheet.  If the spreadsheet already exists the
+    cell values are updated with new values from the input table.  If the named
+    sheet does not exist it will be created.  If the -data switch is specified the
+    table header row is not written into the xlsx spreadsheet.
+

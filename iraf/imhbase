@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+PATH=.:/data/oir/unixiraf/bin:/bin:/usr/bin
+
+ IMHBASE="/tmp/imhbase.$$"
+
+ extn=""
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -o) shift; ofile=$1                                ;;
+   -e) shift; extn="[$1]"                             ;;
+    *) args="$args $1$extn"                           ;;
+  esac
+  shift
+ done
+
+ if [ "$ofile" != "" ] ; then
+        exec > $ofile
+ fi
+
+ echo $* | tr " " "
+" | imhhdr @STDIN mode=h > $IMHBASE
+
+ Columns=`
+     < $IMHBASE			\
+       headline -t '*'		\
+     | tr "\011" "\012"		\
+     | fldtotable Column	\
+     | sorttable -u		\
+     | headoff`
+
+ fldtotable < /dev/null $Columns
+
+ # Get all the rows from IMHBASE
+ #
+ headoff -t '*' < $IMHBASE $Columns
+
+ rm -f $IMHBASE
+ exit 0

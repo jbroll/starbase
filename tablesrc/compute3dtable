@@ -1,0 +1,64 @@
+#!/bin/sh
+#
+# compute3dtable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+	if [ $# -lt 2 ] ; then
+		echo "usage: compute3dtable <program> <file> [file] ..." 1>&2
+		exit 1
+	fi
+
+	while [ $# -gt 0 ] ; do
+	    case $1 in
+	     -D)	Debug=$1; 		;;
+	      *)	break;			;;
+	    esac
+	    shift
+	done
+
+	Prog=$1
+	shift
+
+	ND=0
+	while [ $# -gt 0 ] ; do
+	    case $1 in
+	     -D)	Debug=$1; 		;;
+	     -f)	Func=$2;  shift		;;
+	     @*)	file=`echo $1 | sed -e s/^@//`
+			Files="$Files `cat $file`"	;;
+	     *)		break				;;
+	    esac
+	    shift
+	done
+
+	set "$@" $Files
+	ND=$#
+
+	Header=`headline < $1`
+
+	for col in $Header; do
+	    Default="$Default
+		$col=${col}_1"
+
+	    Sed="$Sed -e s/${col}(\([^)]*\))/\col(\"${col}_\"\\1)/g"
+	done
+
+	Prog=`echo "$Prog" | sed $Sed`
+	Func=`echo "$Func" | sed $Sed`
+
+	  pastetable -f "$@" 		\
+	| column -a $Header		\
+	| table $Debug -p -h -v ND=$ND		\
+		"$Func
+		{ 
+		$Default
+		$Prog
+		print }" 		\
+	| column  $Header

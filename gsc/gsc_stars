@@ -1,0 +1,61 @@
+#!/bin/ksh
+#
+# gsc_stars
+
+CATALOG=gsc
+EQUINOX=J2000
+EPOCH=2000
+
+NORTH=/data/gsc1
+SOUTH=/data/gsc2
+
+REGIONS="gzip -d -c /home/john/Fast/gsc/regions.gsc.z"
+REGIONS="gsc_stage"
+GSCTABLES='/data/gsc?/gsc/*'
+
+	r1=$1
+	r2=$2
+	d1=$3
+	d2=$4
+
+	$REGIONS | row "						\
+		   ( DECHI+0 >= $d1 ) 					\
+		&& ( DECLO+0 <= $d2 )					\
+		&& (   ( $r1 < $r2 && ( RALO+0 <= $r2 && RAHI+0 >= $r1))\
+		    || ( $r1 > $r2 && ( RALO+0 <= $r2 || RAHI+0 >= $r1))\
+		   )"							\
+	| ( read header
+	    read widths
+	    print -- " stars from the HST Guide Star Catalog"
+	    print -- "RA1      $r1"
+	    print -- "RA2      $r2"
+	    print -- "DEC1     $d1"
+	    print -- "DEC2     $d2"
+	    print ""
+	    print -- "CATALOG	ID	RA	DEC	GSC_ID	RA_DEG	DEC_DEG	POS_ERR	MAG	MAG_ERR	MAG_BAND	CLASS PLATE_ID MULTIPLE"
+	    print -- "-------	--	--	---	------	------	-------	-------	---	-------	--------	----- -------- --------"
+
+
+	    while read $header ; do
+	    	# These directories are automounted, cd'ing brings them online
+	    	#
+		cd $NORTH 	> /dev/null
+		cd - 		> /dev/null
+		cd $SOUTH 	> /dev/null
+		cd - 		> /dev/null
+
+		reckon "printf \"%04d\", $REG_NO" | read REG
+
+		  fitstotable ${GSCTABLES}/${REG}.gsc 			\
+		| table	-h "
+			   ( DEC_DEG >= $d1 )					 \
+			&& ( DEC_DEG <= $d2 )					 \
+			&& ( ($r1 < $r2 && ( RA_DEG >= $r1 && RA_DEG <= $r2 ))	 \
+		          || ($r1 > $r2 && ( ( RA_DEG >= $r1 && RA_DEG <= 360 )	 \
+					    || RA_DEG <= $r1 && RA_DEG >= 0.0 )) \
+			   ) 							 \
+		     {
+			ID = \"${REG}.\"GSC_ID
+			print \"gsc\",ID, d2h(RA_DEG), DEC_DEG + \"0 0 0\", \$0 }"
+done )
+

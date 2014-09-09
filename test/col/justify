@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+. ../Test
+
+Test "Justify Large File" 
+	jottable 1000000 A B C D E F > xxx.tmp
+
+	if justify < xxx.tmp > /dev/null ; then
+		Pass
+	else
+		Fail
+	fi
+
+Test "Justify Large Pipe"
+	if jottable 1000000 A B C D E F | justify > /dev/null ; then
+		Pass
+	else
+		Fail
+	fi
+
+	
+TestDone

@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# rand	- choose random lines from a file.
+#
+#	rand [-n #] [file]
+#
+# DESCRIPTION
+# rand outputs n random lines from its input file (or files).
+# If the -n is not given #rand outputs all
+# of the input lines in a random order.
+#
+# NOTES
+# rand is implimented in awk.  It may be of questionable use
+# for large input files.  
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ n=0
+ seed=0
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -s) shift; seed=$1					;;
+   -n) shift; n=$1					;;
+    *) if [ "$ifile" = "" ] ; then
+	ifile=$1
+       else
+	echo "usage: rand [-n #] [[-i] ifile] [-o ofile]" 1>&2
+	echo "" 1>&2
+	exit 1;
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+tawk '
+!Init	{
+	srand(seed)
+	Init = 1
+}
+{	L[NR] = $0	}
+END {
+	if ( n == 0 ) n = NR
+	if ( n > NR ) n = NR
+
+	for ( i = 1; i <= NR; i++ ) X[i] = 0
+
+	while ( x < n ) { 
+		l = int(rand()*NR)+1
+		while ( X[l] == 1 ) {
+			l++
+			if ( l > NR ) l = 1
+		}
+		print L[l];  X[l] = 1;  x++ 
+
+		if ( n > NR && x == NR+1 ) {
+			for ( i = 1; i <= NR; i++ ) X[i] = 0
+		}
+	}
+}' n=$n seed=$seed

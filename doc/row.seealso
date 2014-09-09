@@ -1,0 +1,11 @@
+SEE ALSO
+========
+ * @calc	 - a command line calcutator
+ * @row, @select - select rows from a starbase table
+ * @compute	 - compute column values for the rows of a starbase data table
+ * @validate	 - conditionally run statements on the rows of a starbase data table
+ * @reckon	 - evaluate awk statments as a user program.
+ * @mawk an implementation of the awk programming language by Mike Brennan.
+ * @tawk Awk language extensions implemented at SAO.
+
+include starbase.seealso

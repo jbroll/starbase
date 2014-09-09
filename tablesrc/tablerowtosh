@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+
+table -h '
+BEGIN {
+    N_Header = split(Header, '\t');
+    for ( i = 1; i < N_Header; i++ ) {
+#        gsub(/^ */, 
+#        gsub(/^ */, 
+        print Header[i] "=" $i
+    }
+}
+
+	

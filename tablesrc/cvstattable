@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# cvstattable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin:/usr/local/bin;	export PATH
+
+trap "" 13
+
+  cvs stat  $*	2> /dev/null					\
+| tawk '
+	/^\?/		{ print ""
+			  print "File\t", $2
+			  print "Status\tCruft"
+			  print "Working\tHere"
+			  print "Date\tNone"
+			  print "Reposit\tNo"
+			}
+	/^[ \t]$/ 	{           next }
+	/^==+$/ 	{ print ""; next }
+	/^File:/ 	{ Start = 1
+			  sub("File:", "File\t");
+			  sub("Status:", "\nStatus\t");
+			  sub("no file", "");
+
+			  Status = $4
+			  print
+			  next
+			}
+	/^   Working/	{ if ( Status != "Unknown" ) {
+				print "Working\t", $3
+			  	print "Date\t", $5, $6, $7, $8
+			  } else {
+				print "Working	None"
+				print "Date	None"
+
+			  }
+			}
+	/^   Reposit/	{ print "Reposit\t", $3 }
+'							\
+| listtotable | trim

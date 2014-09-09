@@ -1,0 +1,18 @@
+#
+# decsex2sex
+#
+function decsex2sex(DecSex, 		hours, minutes, seconds, sign)
+{
+	sign = " "
+	if ( DecSex < 0 ) {
+		sign = "-"
+		DecSex = -DecSex
+	}
+
+	hours 	= int(DecSex)
+	minutes = int((DecSex - hours ) * 100)
+	seconds = (DecSex - ( hours + minutes / 100)) * 10000
+
+	return sprintf("%c%02d %02d %7.4f", sign, int(hours), int(minutes), seconds)
+}
+

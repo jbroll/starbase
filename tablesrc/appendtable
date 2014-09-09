@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# appendtable
+#
+# Append the standard input to table fixing up the column defs.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+  if [ $# = 0 ] ; then
+	echo "usage: appendtable datatable"		1>&2
+	exit 1
+  fi
+
+  datatable=$1
+
+  if [ ! -f $1 ] ; then
+    if [ ! -f $1.hdr ] ; then
+        cat > $datatable
+	exit 0
+    fi
+    cp $1.hdr $1
+  fi
+
+  HEADER=`headline < $datatable`
+  headoff $HEADER >> $datatable

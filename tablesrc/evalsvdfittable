@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# evalsvdfittable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2000 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+
+ if [ $# -lt 2 ] ; then
+	echo "usage: evalsvdfittable model col coeff0 [coeff1] [-- col ...]" 1>&2
+	exit 1
+ fi
+
+    OFS="$IFS"
+
+    N=0
+    Model=$1
+    shift
+
+    C=$1
+    shift
+
+    while [ $# -gt 0 ] ; do
+        Cols="$Cols $C"
+	expr="$expr$C ="
+	IFS=,
+	for Term in $Model ; do
+	    IFS="$OFS"
+	    
+	    if [ $# -lt 1 ] ; then
+		    echo "evalpolytable: not enough coefficients for column: $C" 1>&2
+		    exit 1
+	    fi
+
+	    Coeff=$1
+	    shift
+	    expr="$expr+($Coeff*$Term)"
+	done
+
+	expr="$expr\n"
+
+	if [ "$1" = "--" ] ; then 
+		shift
+	fi
+	if [ $# -gt 0 ] ; then
+		C=$1
+		shift
+	fi
+    done
+
+echo $expr
+
+
+  column $Cols -a 		\
+| compute "
+		$expr
+"

@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# randtable	- pick random rows from an starbase data table .
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+
+ n=0
+ seed=0
+ 
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -n) shift; n=$1					;;
+   -s) shift; seed=$1					;;
+    *) argv="$argv $1"					;;
+    *) if [ "$ifile" = "" ] ; then
+	ifile=$1
+       else
+	echo "usage: randtable [-n #] [[-i] ifile] [-o ofile]" 1>&2
+	echo "" 1>&2
+	exit 1;
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+ if header -u ; then :
+ else
+	exit 1
+ fi
+ rand -n $n -s $seed

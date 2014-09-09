@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+
+TestFun=../Test
+
+. $TestFun
+
+
+cat > X.tmp <<- EOF
+X
+-
+A
+EOF
+
+cat > Y.tmp <<- EOF
+Z	X
+-	-
+Z	A
+EOF
+
+cat > Z.tmp <<- EOF
+X	Z
+-	-
+A	Z
+EOF
+
+    Test "Join X"
+    jointable -j X X.tmp X.tmp | DiffFiles - X.tmp
+
+    Test "Join X Y"
+    jointable -j X X.tmp Y.tmp | DiffFiles - Z.tmp
+
+    Test "Join Y X"
+    jointable -j X Y.tmp X.tmp | DiffFiles - Z.tmp
+
+TestDone

@@ -1,0 +1,47 @@
+#!/bin/sh
+
+ if [ $# != 5 ] ; then
+    echo "usage: rm2corralates table col1 col2 tol N" 1>&2
+    exit 1
+ fi
+
+ Tab=$1
+ Co1=$2
+ Co2=$3
+ Tol=$4
+ Dup=$5
+
+I1=0
+if [ ! -f $Tab.$Co1.i ] ; then
+  I1=1
+  index -n -mi $Tab $Co1
+fi
+I2=0
+if [ ! -f $Tab.$Co2.i ] ; then
+  I2=1
+  index -n -mi $Tab $Co2
+fi
+
+# Make the classes
+#
+  classifytable $Tab -C2 $Co1 $Co2 $Tol			\
+> cl.$$
+
+# Count the class members
+#
+< cl.$$					\
+  sorttable -C -n SetNumber		\
+| column SetNumber Count		\
+| row "Count < $Dup"			\
+| jointable -j SetNumber - cl.$$ 	\
+| column SetNumber:x Count:x
+
+
+rm cl.$$
+
+if [ $I1 = 1 ] ; then
+    rm $Tab.$Co1.i
+fi
+if [ $I2 = 1 ] ; then
+    rm $Tab.$Co2.i
+fi

@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+. ../Test
+
+    echo "
+X	1
+
+A	B
+-	-" > add.tmp
+
+    echo "
+X	1
+
+A	B
+-	-" > rep.tmp
+
+    echo "
+X	4
+
+A	B
+-	-" > control.tmp
+
+Test "Column Header Add" 
+< add.tmp column -H X=4 | DiffFiles - control.tmp
+Test "Column Header Add :" 
+< add.tmp column -H X#2=4 | DiffFiles - control.tmp
+Test "Column Header Add :," 
+< add.tmp column -H X#1,1=4 | DiffFiles - control.tmp
+
+Test "Column Header Add" 
+< rep.tmp column -H X=4 | DiffFiles - control.tmp
+TestDone

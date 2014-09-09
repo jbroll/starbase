@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# domaintable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+  Domain=`< $1  table -h '{ print "Domain[\""'$2'"\"]=\""'$3'"\"" }'`
+
+  table -h -p "BEGIN {
+		$Domain
+	     }
+	     {
+		$4 = Domain[$5]
+		print
+	     }
+	"
+		

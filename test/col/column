@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+. ../Test
+
+jottable 100 X > control.tmp
+
+Test "Column Options -i -" 
+    jottable 100 X | column -i - | DiffFiles - control.tmp
+Test "Column Options -i file" 
+    column -i control.tmp | DiffFiles - control.tmp
+
+Test "Column Options -o -"
+    jottable 100 X | column -o - | DiffFiles - control.tmp
+Test "Column Options -o file" 
+    jottable 100 X | column -o output.tmp
+    DiffFiles output.tmp control.tmp
+
+
+Test "Column Options -n"
+    reckon 'for ( i = 1; i <= 100; i++ ) { print i, i }' 	\
+  | fldtotable Number X > control.tmp
+    jottable 100 X > jotted.tmp
+    column -n      < jotted.tmp >  numbered.tmp
+
+    DiffFiles numbered.tmp control.tmp
+
+
+Test "Column Options -2" 
+    reckon 'for ( i = 1; i <= 100; i++ ) { print i; print i; }'	\
+  | fldtotable X > control.tmp
+    jottable 100 X > jotted.tmp
+    column -2      < jotted.tmp >  doubled.tmp
+
+  DiffFiles doubled.tmp control.tmp 
+
+
+    echo "Table1
+
+    " > T1.tmp
+    jottable 10  4 X >> T1.tmp
+    echo "Table2
+
+    " > T2.tmp
+    jottable 10  5 Y >> T2.tmp
+    echo "Table3
+
+    " > T3.tmp
+    jottable 10 10 X >> T3.tmp
+
+    (
+      cat T1.tmp; echo ""
+      cat T2.tmp; echo ""
+      cat T3.tmp
+    ) > TX.tmp
+
+
+Test "Column Options -t first file"
+    < TX.tmp column -t "Table1"    | DiffFiles - T1.tmp
+Test "Column Options -t second file"
+    < TX.tmp column -t "Table2"    | DiffFiles - T2.tmp
+Test "Column Options -t third and last file"
+    < TX.tmp column -t "Table3"    | DiffFiles - T3.tmp
+Test "Column Options -t every file"
+    < TX.tmp column -t "Table?"    | DiffFiles - TX.tmp
+
+Test "Column Options -t first and last file"
+    (
+      cat T1.tmp; echo ""
+      cat T3.tmp
+    ) > TD.tmp
+
+    < TX.tmp column -t "Table[13]" | DiffFiles - TD.tmp
+
+TestDone

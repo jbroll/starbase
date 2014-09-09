@@ -1,0 +1,96 @@
+#!/bin/sh
+#
+# Export DAOPHOT file from Starbase data tables
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+  HEADER=`header -u`
+  VALUES=`echo "$HEADER" | header -u -hV | listtotable`
+
+  echo "$VALUES"	\
+| column -hl -b -r	\
+	NL,3		\
+	NX,4		\
+	NY,4		\
+	LOWBAD%7.2f	\
+	HIGHBAD%7.1f	\
+	THRESH%7.2f	\
+	AP1%7.2f	\
+	PH_ADU%7.2f	\
+	RNOISE%7.2f	\
+	FRAD%7.2f	\
+| tr "	_" " /"
+
+echo
+
+    HEADLINE=`echo "$HEADER" | headline`
+
+    NL=`echo "$VALUES"   | headoff NL`
+    NF=`echo "$HEADLINE" | wc -w`
+    NM=`echo "$VALUES"   | headoff NM`
+
+    NL=`echo $NL`
+    NF=`echo $NF`
+
+    case $NL in
+	1)
+	 case $NF in
+	   6)
+		  fldtotable $HEADLINE		\
+		| headoff 			\
+			Star%6d			\
+			X%9.3f			\
+			Y%9.3f			\
+			Mag%9.3f		\
+			Sharp%9.3f		\
+			Round%9.3f		\
+		| tr -d "	"
+		;;
+	   9)
+		  fldtotable $HEADLINE		\
+		| headoff 			\
+			Star%6d			\
+			X%9.3f			\
+			Y%9.3f			\
+			Mag%9.3f		\
+			MagErr%9.3f		\
+			Sky%9.3f		\
+			NIter%9.3g		\
+			Chi%9.3f		\
+			Sharp%9.3f		\
+		| tr -d "	"
+		;;
+	    *)
+		echo "tabletodaophot: unknown header format: $NL  NFields: $NF" 1>&2
+		exit
+		;;
+	 esac
+	 ;;
+	3)
+	 case $NF in
+	   5)
+		  fldtotable $HEADLINE		\
+		| headoff 			\
+			Star%6d			\
+			X%9.3f			\
+			Y%9.3f			\
+			Mag%9.3f		\
+			Sky%9.3f		\
+		| tr -d "	"
+		;;
+	    *)
+		echo "tabletodaophot: unknown header format: $NL  NFields: $NF" 1>&2
+		exit
+		;;
+	 esac
+	;;
+	*)	echo "tabletodaophot: unknown header format: $NL  NFields: $NF" 1>&2
+		exit	;;
+    esac

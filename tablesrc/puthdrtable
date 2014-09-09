@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# puthdrtable	- Get header values from a table.
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+  Header="`header -u`"
+
+  echo "$Header"			\
+| mawk "/^$1/ { next; prev = 1 }
+	prev  { next; prev = 0 }
+	      { print }"		\
+| header -hv
+
+< $2					\
+  mawk '{ sub(/^/, "'$1'	") ; print }'
+
+  echo
+  echo "$Header" | tail -2
+
+  cat 

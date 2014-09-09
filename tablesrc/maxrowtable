@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+
+table -p -h "
+	!Init 	   { __line = \$0; __Max = $1; Init = 1 }
+	$1 > __Max { __line = \$0; __Max = $1 }
+	END { print __line }
+	"

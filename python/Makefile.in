@@ -1,0 +1,14 @@
+
+PROGS = xlsx2table
+
+all: $(PROGS) 
+
+xlsx2table: xlsx2table.py
+	xinc xlsx2table.py > xlsx2table
+	chmod +x xlsx2table
+
+install:
+	cp xlsx2table $(bindir)
+	rm $(bindir)/table2xlsx
+	ln -s $(bindir)/xlsx2table $(bindir)/table2xlsx
+

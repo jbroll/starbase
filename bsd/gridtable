@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# gridtable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin
+
+	jottable -g $*
+

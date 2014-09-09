@@ -1,0 +1,64 @@
+#!/bin/sh
+#
+
+if [ $# = 0 ] ; then
+    cat 1>&2 << EOF
+    usage: applysvdfittable fit.tab fit_column out_column assignments ...
+    											
+    	applysvdfittable allows the fitted model coefficients from the output
+    	of svdfittable to be applied to an input table.  The model and coefficients
+    	are extracted from fit.tab.
+
+	fit_column is the column which was output in the original fit table and 
+	has a C_ coefficient head value in the fit table.
+
+	The output column is the name of the column where the results will be placed.
+EOF
+
+    exit 1
+fi
+
+if [ $1 = "-D" ] ; then
+	debug=-D
+	shift
+fi
+
+fit=$1;  shift
+col=$1;  shift
+
+model=`hdrvaltable -h Model  < $fit`
+coeff=`hdrvaltable -h C_$col < $fit`
+
+if [ "$1" = "" ] ; then
+    compute=$col
+else 
+    compute=$1;  shift
+fi
+
+assign=`echo $* | sed -s "s/ /\n/g"`
+
+
+OFS="$IFS"
+IFS=","
+
+i=1
+for term in $model ; do
+	expr="$expr $plus C[$i] * $term"
+	i=`expr $i + 1`
+	plus=+
+done
+
+IFS="$OFS"
+
+
+program="
+	BEGIN {
+	    n = split(\"$coeff\", C, \" \")
+	} 
+	{ $assign
+	  $compute = $expr; print }
+"
+
+
+  column $compute -a 	\
+| table $debug -p -h "$program"

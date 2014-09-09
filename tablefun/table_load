@@ -1,0 +1,57 @@
+#
+# Read an /rdb table into the array T
+#
+# T["header"] 		= Header line
+# T["header", i] 	= parsed header names
+# T["header", <name>] 	= column number for this column name
+#
+# T["dashes"]		= Widths line
+# T["dashes", i]	= integer width of each column
+#
+# T["cols"]		= Number of columns in table
+# T["rows"]		= Number of rows in table
+# T[i, j]		= data from row i column j
+#
+function table_load(file, T	, i, n, j)
+{
+	table_header(file, T)
+	for ( i = 1; (n = table_row(file, R)) > 0; i++ ) {
+	    for ( j = 1; j <= n; j++ ) {
+		T[i, j] = R[j]
+	    }
+	}
+
+	T["rows"] = i - 1
+
+	close(file)
+
+	return T["rows"]
+}
+
+function table_row(file, R	, i, n, Line, line) {
+
+	getline Line < file
+
+	n = split(Line, line, "\t")
+	for ( i = 1; i <= n; i++ ) {
+		R[i] = line[i];
+	}
+
+
+	return n
+}
+
+function table_print(file, T, i, j)
+{
+	print T["header"]
+	print T["dashes"]
+
+	for ( i = 1; i <= T["rows"]; i++ ) {
+	  for ( j = 1; j <= T["cols"]; j++ ) {
+	    printf(T[i, j])
+	    if ( j != T["cols"] ) printf("\t")
+	  }
+	  printf("\n")
+	}
+}
+

@@ -1,0 +1,91 @@
+#!/bin/sh
+#
+# fitsbase
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 2007 John B. Roll jr.
+#
+PATH=.:/bin:/usr/bin
+export PATH
+
+IMHBASE="/tmp/imhbase.$$"
+
+trap "" 13
+trap "/bin/rm -f $IMHBASE" 0
+
+QQ="'"
+
+
+
+if [ $# -lt 1 ] ; then
+	stdin=1
+fi
+
+
+ extn=""
+ all="-a" 
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -e) shift; extn="[$1]"; all=""                     ;;
+    *) args="$args $1$extn"                           ;;
+  esac
+  shift
+ done
+
+process() {
+    if [ $x = 1 ] ; then echo "" >> $IMHBASE; fi
+      funhead $all -L $fits 	\
+    | table 'BEGIN {
+		    FS="	"
+	    }
+	    $1 == "HIERARCH" {
+		    split($2, line, "=")
+
+		    gsub(/^ +/, "", line[1])
+		    gsub(/ +$/, "", line[1])
+		    gsub(" ", "_", line[1])
+
+		    gsub("/.*$",  "", line[2])
+		    gsub(/^ *'$QQ'/, "", line[2])
+		    gsub(/'$QQ' *$/, "", line[2])
+		    gsub(/^ +/, "", line[2])
+		    gsub(/ +$/, "", line[2])
+
+		    printf "%s\t%s\n", line[1], line[2]
+	    }
+	    { print }'		\
+    | listtotable -t >> $IMHBASE
+    x=1
+}
+
+rm -f $IMHBASE
+x=0
+if [ "$stdin" = 1 ] ; then
+    while read fits ; do
+	process $fits
+    done
+else 
+    for fits in $args ; do
+	process $fits
+    done
+fi
+
+ Columns=`
+     < $IMHBASE			\
+       headline -t '*'		\
+     | tr "\011" "\012"		\
+     | fldtotable Column	\
+     | sorttable -u		\
+     | headoff`
+
+ Newumns=` echo $Columns | tr ".-" "__"`
+
+ fldtotable < /dev/null $Newumns
+
+ # Get all the rows from IMHBASE
+ #
+ headoff -t '*' < $IMHBASE $Columns
+
+ rm -f $IMHBASE
+ exit 0

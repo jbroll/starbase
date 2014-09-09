@@ -1,0 +1,235 @@
+#!/bin/sh
+#
+
+PATH=../../gnu:$PATH
+export PATH
+
+TestFun=../Test
+
+. $TestFun
+
+cat > ABC.tmp <<- EOF
+X
+-
+A
+B
+C
+D
+E
+F
+EOF
+
+cat > XYZ.tmp <<- EOF
+X
+-
+B
+A
+C
+E
+D
+F
+EOF
+
+jottable 10 1 10 X > T.tmp
+jottable 10 10 1 X > R.tmp
+
+    Test "ABC Sort"
+    sorttable X < XYZ.tmp | DiffFiles - ABC.tmp
+
+    Test "Easy numeric sort"
+    jottable 10 10 1 X | sorttable -n X | DiffFiles - T.tmp
+
+    Test "Easy numeric sort io 1"
+    jottable 10 10 1 X > N.tmp
+    sorttable -i N.tmp -o O.tmp -n X 
+    DiffFiles  O.tmp T.tmp
+
+    Test "Easy numeric sort io 2"
+    jottable 10 10 1 X > N.tmp
+    sorttable -i N.tmp -n X -o O.tmp
+    DiffFiles  O.tmp T.tmp
+
+    Test "Easy numeric sort io 3"
+    jottable 10 10 1 X > N.tmp
+    sorttable -n X -o O.tmp -i N.tmp
+    DiffFiles  O.tmp T.tmp
+
+
+
+
+    Test "Reverse Sort"
+    jottable 10 1 10 X | sorttable -n -r X | DiffFiles - R.tmp
+
+
+    Test "Reverse Sort -h"
+      jottable 10 10 1 X | compute "X + 0:00:00"	\
+    | sorttable -h X | DiffFiles - T.tmp
+
+
+    justify < T.tmp > J.tmp
+
+    Test "Sort justified input"
+    jottable 10 10 1 X | justify | sorttable -n X | DiffFiles - J.tmp
+
+cat > ABC.tmp <<- EOF
+X
+-
+A
+a
+B
+b
+C
+c
+D
+d
+E
+e
+F
+f
+EOF
+
+cat > XYZ.tmp <<- EOF
+X
+-
+B
+A
+C
+a
+E
+D
+d
+b
+F
+e
+c
+f
+EOF
+
+    Test "ABC Sort Fold"
+    sorttable X -f < XYZ.tmp | DiffFiles - ABC.tmp
+
+    Test "sort uniq"
+    ( jottable  5  5  1 X 
+      jottable  5 10  6 X | column -2 | headoff
+    ) | randtable | sorttable -n -u | DiffFiles - T.tmp
+
+    Test "sort Uniq only"
+    ( jottable 10 10  1 X 
+      jottable  5 20 25 X | column -2 | headoff
+    ) | randtable | sorttable -n -U | DiffFiles - T.tmp
+
+
+    Test "sort Dups only"
+    ( jottable 10 10  1 X | column -2
+      jottable  5 20 25 X | headoff
+    ) | randtable | sorttable -n -D | DiffFiles - T.tmp
+
+    column -2 < T.tmp > 2.tmp
+
+    Test "sort Dups all"
+    ( jottable 10 10  1 X | column -2
+      jottable  5 20 25 X | headoff
+    ) | randtable | sorttable -n -A | tee out | DiffFiles - 2.tmp
+
+    for size in 100 100000 ; do
+	jottable    $size 1       100000   - A N 	> 1.tmp
+	jottable -r $size 1000000 10000999 - B C D E F 	> 2.tmp
+	  pastetable 1.tmp 2.tmp 2.tmp 2.tmp 		\
+	| compute 'N = A % 4'				\
+						    	> S.tmp
+
+	jottable 4 0 N					> X.tmp
+	header 		< S.tmp				> E.tmp
+	headtable -4 	< S.tmp				> 4.tmp
+
+	for seed in 1 2 3 4 ; do
+	for cols in "" "B_1 C_1 D_1 A -a" "-a A" ; do
+	for opts in "" "-M 10" "-Z 5" "-M 10 -Z 5"; do
+
+	    < S.tmp					\
+	      column $cols				\
+	    | tee C.tmp				\
+	    | randtable -s $seed			\
+	    > R.tmp
+
+	    validate  'N == 0 { print; exit(0) } { next }' < R.tmp			> Z.tmp
+	    validate  'N == 1 { print; exit(0) } { next }' < R.tmp	| appendtable 	  Z.tmp
+	    validate  'N == 2 { print; exit(0) } { next }' < R.tmp	| appendtable 	  Z.tmp
+	    validate  'N == 3 { print; exit(0) } { next }' < R.tmp	| appendtable 	  Z.tmp
+
+	    column < Z.tmp `headline < S.tmp` | overwrite Z.tmp
+
+	    Test "Big $size Seed: $seed Opts: $opts Cols: $cols"
+	      sorttable -n $opts A		< R.tmp	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles S.tmp A.tmp
+
+	    Test "Big $size Seed: $seed Opts: -C $opts Cols: $cols"
+	      sorttable $opts -C -n N	< R.tmp	\
+	    | column N > Y.tmp
+	    DiffFiles X.tmp Y.tmp
+
+	    Test "Big $size Seed: $seed Opts: -u A $opts Cols: $cols"
+	      sorttable $opts -u -n A	< R.tmp	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles S.tmp A.tmp
+
+	    Test "Big $size Seed: $seed Opts: -u N $opts Cols: $cols"
+	      sorttable $opts -u -n N	< R.tmp	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles Z.tmp A.tmp
+
+	    Test "Big $size Seed: $seed Opts: -D A $opts Cols: $cols"
+	      sorttable $opts -D -n A	< R.tmp	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles E.tmp A.tmp
+
+	    Test "Big $size Seed: $seed Opts: -D N $opts Cols: $cols"
+	      sorttable $opts -D -n N	< R.tmp	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles Z.tmp A.tmp
+
+	    Test "Big $size Seed: $seed Opts: -A A $opts Cols: $cols"
+	      sorttable $opts -A -n A	< R.tmp	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles E.tmp A.tmp
+
+	    Test "Big $size Seed: $seed Opts: -A N $opts Cols: $cols"
+	      sorttable $opts -A -n N	< R.tmp	\
+	    | sorttable $opts    -n A	       	\
+	    | column `headline < S.tmp`		\
+	    > A.tmp
+	    DiffFiles S.tmp A.tmp
+	done
+	done
+	done
+    done
+
+    Test "sorttable X%2"
+    jottable 42 X -10 10.0 Y 42 1 | sorttable X%2 Y | DiffFiles - sorted%
+
+TestDone
+exit
+
+-q
+-c -m
+
+-z
+
+cat > Z1.tmp <<- EOF
+X	Y
+-	-
+1	1
+2.5	2
+1.5	3
+2	4
+3`	5
+EOF
+
+jottable 21 X -10 10

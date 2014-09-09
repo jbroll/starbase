@@ -1,0 +1,31 @@
+#!/data/mmti/bin/ksh
+#
+
+	. $ENVIRONMENT
+
+	        export PDEFAULTS
+        PDEFAULTS="rw
+rcol,s,a,X,,,RA Column
+dcol,s,a,Y,,,Dec Column
+lcol,s,a,Object,,,Label Column
+radcol,s,h,,,,Label Column
+append,b,h,no,,,Label Column
+mode,s,h,ql,,,
+"
+trap "" 13
+
+
+	parameters rcol dcol lcol radcol append
+
+	if [ "$radcol" = "" ] ; then
+	    radcol=5
+	fi
+
+	if [ "$append" = "no" ] ; then
+	     print "" | xpaset SAOtng regions delete 
+	fi
+
+      table -h "{
+	print \"#\",  $lcol ;
+	print \"circle(\" $rcol \",\" $dcol \",\" $radcol \")\" 
+    }" | xpaset SAOtng regions

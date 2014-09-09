@@ -1,0 +1,101 @@
+#!/bin/sh
+#
+# listtotable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:bin:/usr/bin;	export PATH
+
+trap "" 13
+
+list=0
+onetable=1
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -l) list=1						;;
+   -t) onetable=0 					;;
+    *) if [ "$ifile" = "" ] ; then
+	ifile=$1
+       else
+	echo "usage: listtotable [[-i] ifile] [-o ofile]" 1>&2
+	echo "" 1>&2
+	exit 1;
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+tawk '
+BEGIN {
+	FS="	"
+	X = 0
+	if ( '"$list"' == 0 ) { getline }
+}
+
+# Accumulate values
+#
+/^[ \t]*$/ { $0 = "" }	# Allow any "blank" line to delimit records!
+
+NF != 0 { 
+    X++
+    if ( !header ) {
+	N = $1
+	gsub(/^ */, "", N)
+	gsub(/ *$/, "", N)
+	C[X]  = $1
+    }
+
+    V[$1] = $2;
+    for ( i = 3; i <= NF; i++ ) {
+	V[$1] = V[$1] " " $i;
+    }
+    next
+}
+
+# Output and clear values
+#
+NF == 0 { if ( X ) { printvalues(); X = 0 } }
+END 	{ if ( X ) { printvalues(); X = 0 } }
+
+function printheader() {
+    if ( again++ ) { print "\f\nTable" again "\n" }
+
+    ncol = X
+    for ( i = 1; i < ncol; i++ ) { printf "%s\t", C[i] }
+    print C[i]
+
+    # print dashline
+    #
+    for ( i = 1; i < ncol; i++ ) {
+	for ( j = length(C[i]); j--; ) { printf "-" }
+	printf "\t"
+    }
+    for ( j = length(C[i]); j--; ) { printf "-" }
+    print ""
+
+    if ( '"$onetable"' ) {
+	header = 1
+    }
+}
+function printvalues() {
+    if ( !header ) printheader();
+
+    for ( i = 1; i < ncol; i++ ) {
+	printf "%s\t", V[C[i]]
+    }
+    print  V[C[ncol]]
+    delete V
+}'

@@ -1,0 +1,9 @@
+10/15/97
+
+1.  Updated imhhdr to comment out special code at the end to skip "COMMENT"
+buffers - it broke with the BTC data.  It looks like this "else" condition
+is no longer up to date with the "if" half and the COMMENT value
+appears after the filename and before all the keywords.
+				
+2.  Initialzed the 4 buffers (labptr,hdrptr,delptr, etc) after each
+salloc.  This was probably REALLY the issue up above.

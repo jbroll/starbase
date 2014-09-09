@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# xycoefftable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+
+    if [ $# != 10 ] ; then
+	echo "usage: xycoefftable colx1 coly1 colx2 coly2 A B D C E F"
+	exit 1
+    fi
+
+    x1=$1; shift
+    y1=$1; shift
+    x2=$1; shift
+    y2=$1; shift
+
+    A=$1; shift
+    B=$1; shift
+    C=$1; shift
+    D=$1; shift
+    E=$1; shift
+    F=$1; shift
+
+    column $x1 $y1 $x2 $y2 -a	\
+    | compute "
+	$x2 = $A + $x1 * $B + $y1 * $C
+	$y2 = $D + $x1 * $E + $y1 * $F
+    "
+

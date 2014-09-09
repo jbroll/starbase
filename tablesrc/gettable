@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# This is NoSQL's cat command modified for borne shell
+#
+PATH=.:/bin:/usr/bin;	export PATH
+
+  if [ $# = 0 ] ; then
+	echo "usage: gettable [-d <date>] table"
+	exit 1
+  fi
+
+  while [ $# -ge 1 ] ; do
+    case $1 in                    
+	-d)  shift; time="$1" 		;;
+	*)   table="$1"
+	     break	 		;;         
+    esac
+    shift
+  done
+
+  case "$table" in
+  ""|-*)
+	echo "gettable: missing table name" 1>&2
+	exit 1
+    ;;
+  esac
+
+  dir=`dirname $table`
+  tbl=`basename $table`
+
+  cd $dir || exit 2
+
+  if [ "$time" = "" ] ; then
+    if [ -f "$tbl" ] ; then
+      cat $tbl
+    else
+      co -q -p $tbl
+    fi
+  else
+    co -q -p -d$date $tbl
+  fi
+
+  exit $?

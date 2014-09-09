@@ -1,0 +1,22 @@
+
+Installation Notes
+
+If you have a binary distribution:
+
+	gzip -d < starbase3.3.2.tar.gz | tar xvf -
+	cd starbase3.3.2
+	make install prefix=installation_directory [arch=bin_directory_suffix]
+
+    To allow the binary distribution to find the slalink extensions
+    you have to set the environment variable "TABLELIB"
+
+    setenv TABLELIB installation_directory/lib
+
+
+If you have a source distribution:
+
+	gzip -d < starbase3.3.2.tar.gz | tar xvf -
+	cd starbase3.3.2
+	./configure --prefix=installation_directory --arch=bin_directory_suffix
+	make
+	make install

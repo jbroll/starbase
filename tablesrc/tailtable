@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# tailtable	- use the tail utility on an starbase data table.
+#
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+   -*) argv="$argv $1"					;;
+   +*) argv="$argv $1"					;;
+    *) if [ "$ifile" = "" ] ; then
+	ifile=$1
+       else
+	echo "usage: tailtable [-n] [[-i] ifile] [-o ofile]" 1>&2
+	echo "" 1>&2
+	exit 1;
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+ if header -u ; then :
+ else
+	exit 1
+ fi
+
+# GNU tail has a bug in it.
+# explicitly call
+ /usr/bin/tail $argv

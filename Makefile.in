@@ -1,0 +1,87 @@
+# Makefile for Starbase Data Tables
+#
+
+Package = starbase
+
+#file64 = "file64=-xarch=v9 -D_FILE_OFFSET_BITS=64"
+
+MAKEDEFS = bindir=$(bindir) libdir=$(libdir) incdir=$(incdir) $(file64)
+
+
+all:
+	mkdir -p bin
+	mkdir -p lib
+	mkdir -p include
+	cp utillib/*.h  include
+	cp tablelib/*.h include
+	cp tawk/xawk*.h include
+	if [ ! -f touched -a -f     tawk/parse.c ]      ; then touch     tawk/parse.c; 	    fi
+	if [ ! -f touched -a -f     tawk/getdate.c ]    ; then touch     tawk/getdate.c;    fi
+	if [ ! -f touched -a -f     tawk/array.c ]      ; then touch     tawk/array.c;      fi
+	if [ ! -f touched -a -f tablesrc/table_lex.c ]  ; then touch tablesrc/table_lex.c;  fi
+	if [ ! -f touched -a -f tablesrc/report_lex.c ] ; then touch tablesrc/report_lex.c; fi
+	if [ ! -f touched -a -f  utillib/getdate.c ]    ; then touch  utillib/getdate.c;    fi
+	touch touched
+	for dir in $(SUBDIRS); do 			\
+	  if [ -d $$dir ]; then  			\
+	    (cd $$dir; $(MAKE) $(MAKEDEFS) $@); 	\
+          fi; 						\
+	done
+
+parser:
+	-rm -f tawk/parse.c
+	-rm -f utillib/getdate.c
+	-rm -f tablesrc/table_lex.c
+	-rm -f tablesrc/report_lex.c
+	$(MAKE) $(MAKEDEFS) all
+
+install::
+	rm -f Commands
+	test -d $(bindir) || mkdir -p $(bindir)
+	test -d $(libdir) || mkdir -p $(libdir)
+	test -d $(incdir) || mkdir -p $(incdir)
+
+distclean :: clean
+	rm -rf bin lib include
+	rm -f make.log Makefile
+
+install distclean clean ::
+	for dir in $(SUBDIRS); do 			\
+          if [ -d $$dir ]; then  			\
+	    echo $(MAKE) $@ $(MAKEDEFS) in $$dir ; 	\
+	    (cd $$dir; $(MAKE) $(MAKEDEFS) $@ ) ; 	\
+          fi; 						\
+	done
+
+clean ::
+	rm -f touched
+
+html:
+	-rm -f tawk/parse.c
+	-rm -f utillib/getdate.c
+	-rm -f tablesrc/table_lex.c
+	-rm -f tablesrc/report_lex.c
+	gtags
+	htags
+	rm GPATH    GRTAGS   GSYMS    GTAGS
+	rm -r $MMTIHTML/starbase/SRC
+	mv HTML $MMTIHTML/starbase/SRC
+
+CONFIGARGS=`cat .save`
+
+release:
+	cp .config .save
+	./configure
+	make source
+	./configure
+	make binary
+	./configure $(CONFIGARGS)
+	rm .save
+
+
+rebuild:
+	make distclean
+	./configure --arch=$(MMTIOS)
+	make
+	make install
+

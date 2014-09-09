@@ -1,0 +1,52 @@
+# Makefile.in
+#
+# Starbase Data Tables	- An Ascii Database for UNIX
+# 
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#
+#  Starbase Data Tables is distributed without warranty under the terms of
+#   the GNU General Public License, version 2, 1991.
+#
+
+OBJECTS=coladd.o	\
+	colarg.o	\
+	colpat.o	\
+	colfmt.o	\
+	colnum.o	\
+	colpad.o	\
+	colset.o	\
+	colval.o	\
+	enum.o		\
+	extract.o	\
+	hdrfix.o	\
+	hdrfree.o	\
+	hdrval.o	\
+	header.o	\
+	load.o		\
+	rowfree.o	\
+	rowfmt.o	\
+	rowget.o	\
+	rowbuf.o	\
+	rowput.o	\
+	rowtrim.o	\
+	tabrange.o	\
+	xsearch.o	\
+	table.o		\
+	hash.o
+
+all: libtable.a
+
+install:
+	if [ ! -d $(libdir) ] ; then mkdir $(libdir) ; fi
+	if [ ! -d $(incdir) ] ; then mkdir $(incdir) ; fi
+	cp table.h $(incdir)/.
+	if [ -f libtable.a ] ; then 				\
+	    cp libtable.a $(libdir)/.;			\
+	else  							\
+	    cp ../lib/libtable.a $(libdir)/.;		\
+	fi ;							\
+
+libtable.a: $(OBJECTS)
+	rm -f $@
+	$(AR) cr $@ $(OBJECTS)
+	-$(RANLIB) $@

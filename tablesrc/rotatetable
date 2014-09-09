@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# rotatetable
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=.:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ if [ $# -lt 3 ] ; then
+        echo "usage: rotatetable xcol ycol angle [aboutx abouty]" 1>&2
+        exit 1
+ fi
+ 
+X=$1
+Y=$2
+angle=$3
+
+ if [ $# -eq 5 ] ; then 
+	TX=$4
+	TY=$5
+ else
+	TX=0
+	TY=0
+ fi
+
+table -h -p "
+    BEGIN {
+	A = d2r($angle); 
+	s = sin(A);
+	c = cos(A);
+    }
+
+{
+    _$X = $X-$TX
+    _$Y = $Y-$TY
+
+    $X = (_$X * c - _$Y * s)+ $TX;
+    $Y = (_$X * s + _$Y * c)+ $TY;
+
+    print
+}
+"

@@ -1,0 +1,10 @@
+# Row : Look in a ReadTable for a value in a column and
+# return the row number
+#
+function Row(T, val, col,	i)
+{
+	for ( i = 1; i <= T["rows"]; i++ )
+		if ( T[i, col] ~ " *" val " *" )
+			break;
+	return i;
+}

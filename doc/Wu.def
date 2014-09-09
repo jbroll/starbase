@@ -1,0 +1,7 @@
+HTML: 	 /data/www/projects/mmti/mmti/wu
+HTTP: 	 http://cfa-www.harvard.edu/mmti/mmti/wu
+Header:  /data/mmti/src/wu/header.html
+Footer:  /data/mmti/src/wu/footer.html
+Edit:	 http://cfa-www.harvard.edu/idoc-db/shellhtml/wu-edit?
+Top:	 ../mmti.html
+Package: starbase
