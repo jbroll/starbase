@@ -39,23 +39,24 @@ void table_rowfmt(table, row, select, nsel)
 		char	*str;
 
 	    if ( col > ncol || ((str = table_colval(row, col)) && !*str) ) {
-		for ( j = 0; j < table->fwidth[col]; j++ ) {
+		for ( j = 0; j < Min(sizeof(buffer), table->fwidth[col]); j++ ) {
 		    buffer[j] = ' ';
 		}
 		buffer[j] = '\0';
 	    } else {
 		switch ( table->ftype[col] ) {
 		 case 0:	
-		    sprintf(buffer, table->format[col]
+		    snprintf(buffer, sizeof(buffer), table->format[col]
 			    , table_colvali(row, col));
 		    break;
 		 case 'f':
 		 case 'g':
-		    sprintf(buffer, table->format[col]
+		    snprintf(buffer, sizeof(buffer), table->format[col]
 			    , table_colvald(row, col));
 		    break;
 		 case 's': 
-		    sprintf(buffer, table->format[col], table_colval(row, col));
+		    snprintf(buffer, sizeof(buffer)
+			   , table->format[col], table_colval(row, col));
 		    break;
 		 case ':':
 		 case ' ':

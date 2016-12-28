@@ -35,6 +35,8 @@ OBJECTS=coladd.o	\
 	hash.o
 
 all: libtable.a
+afl: 
+	$(MAKE) CC=afl-gcc C_DFLAGS=-g all
 
 install:
 	if [ ! -d $(libdir) ] ; then mkdir $(libdir) ; fi

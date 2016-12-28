@@ -1,8 +1,10 @@
 # Starbase Makefile
 #
- WD=/Users/john/src/starbase
- OS=Darwin
-CPU=i386
+ WD=/home/john/src/starbase
+ OS=Linux
+CPU=x86_64
+
+CC=afl-gcc
 
 # These are the default definitions for all starbase makefiles
 #
@@ -10,7 +12,6 @@ CPU=i386
 srcdir	= .
  
 AR 	= ar
-CC 	= cc
 INC     = $(WD)/tablesrc/xinc
 LEX     = flex
 LN_S    = ln -s
@@ -25,7 +26,7 @@ MAKEDEFS = bindir=$(bindir) libdir=$(libdir) incdir=$(incdir)
 
 Arch	  = `uname`-`uname -i`
 
-# This is the Apple - Darwin Makefile definitions file
+# This is the Linux - Makefile definitions file
 #
 
 OS_DEFS    = 	-DSTDC_HEADERS=1	\
@@ -35,6 +36,7 @@ OS_DEFS    = 	-DSTDC_HEADERS=1	\
 		-DHAVE_SYS_STAT_H=1 	\
 		-DHAVE_STDLIB_H=1 	\
 		-DHAVE_STRING_H=1 	\
+		-DHAVE_MALLOC_H=1 	\
 		-DHAVE_MEMORY_H=1 	\
 		-DHAVE_MEMCPY=1		\
 		-DHAVE_STRINGS_H=1 	\
@@ -49,27 +51,26 @@ OS_DEFS    = 	-DSTDC_HEADERS=1	\
 		-DHAVE_STRCHR=1 	\
 		-DHAVE_STRERROR=1 	\
 		-DHAVE_STRUCT_TM_TM_ZONE=1 	\
-		-DHAVE_TM_ZONE=1 	\
+		-DHAVE_TM_ZONE=1 		\
+		-D_LARGEFILE_SOURCE		\
 		-D_FILE_OFFSET_BITS=64	\
-		-Wno-parentheses -Wno-comment -Wno-unused
+		-DPRINTF_OFF_T="ld"
 
 OS_INCL    = -I. -I$(srcdir)/../tablelib -I$(srcdir)/../include
 OS_LDFLAGS =  $(file64)
 
-OS_LDLIBS  = 
-OS_CFLAGS  = -DSAO $(C_CFLAGS) $(C_DFLAGS) $(INCL) $(file64) $(DEFS) -DTABLELIB='"$(libdir)"'
+OS_LDLIBS  = -lm
+OS_CFLAGS  = -DSAO -fPIC $(C_CFLAGS) $(C_DFLAGS) $(INCL) $(file64) $(DEFS) -DTABLELIB='"$(libdir)"'
 
-OS_DFLAGS  =
+OS_DFLAGS  = 
 
-OS_DYLINK  =
-OS_DYLOAD  = -flat_namespace -bundle -undefined suppress
-OS_DYLIB   = -flat_namespace -undefined suppress
+OS_DYLINK  = -shared
+OS_DYLOAD  = -shared
 
 OS_XLIB    = -L/usr/X11R6/lib -lX11
 
-Arch	  = `uname`-`uname -p`
 
-prefix=/home/john
+prefix=/home/john/src/starbase
 arch=
 
 exec_prefix = $(prefix)

@@ -24,7 +24,9 @@ void table_dashes(file, n, ch)
 #define putcolumn(file, select, i, last)	{			\
 	int j = selcolumn(select, i);					\
 									\
-	if ( table && table->mode & TABLE_JUSTIFY ) {			\
+	if ( table &&							\
+	     table->mode & TABLE_JUSTIFY &&				\
+	     table->header->ncol >= j ) {				\
 		int 	owidth = table->owidth[j]; 			\
 		int 	mwidth = table->mwidth[j]; 			\
 		int	prec   = table->mprec ? table->mprec[j] : -1;	\
@@ -94,7 +96,7 @@ void table_hdrput(file, table, flags, justify, select, nsel)
 
      table_rowtrim(table->header, table->hwidth, NULL, table->header->ncol
 			, justify, select, nsel);
-     table_rowtrim(table->dashes, table->hwidth, NULL, table->dashes->ncol
+     table_rowtrim(table->dashes, table->hwidth, NULL, table->header->ncol
 			, justify, select, nsel);
     }
     for ( i = 1; i <= table->header->ncol; i++ )
@@ -127,17 +129,25 @@ void table_hdrput(file, table, flags, justify, select, nsel)
   /* Output the dashes line
    */
   if ( flags & TBLHDR_DASHLINE ) {
+      	int nojust;
 	int i;
 	int j;
 
-	if ( select == NULL ) nsel = table->dashes->ncol;
+	if ( select == NULL ) nsel = table->header->ncol;
 
 	for ( i = 1; i < nsel; i++ ) {
 	    j = selcolumn(select, i);
 
-	    if (  justify && justify[j] == TAB_NONE && table->owidth[j] >= 0
-	      || !justify && table->owidth[j] == 0 ) {
-		FPuts(file, table->dashes->column[j]);
+	    nojust = j > table->header->ncol || 
+		    justify && justify[j] == TAB_NONE ||
+		    !justify && table->owidth[j] == 0;
+
+	    if (  nojust ) {
+		if ( j <= table->dashes->ncol )
+		    FPuts(file, table->dashes->column[j]);
+		else
+		    PutC(file, '-');
+
 		if ( table->mode & TABLE_NICETAB )
 		    PutC(file, table->dashes->fields[j]);
 		else
@@ -147,9 +157,16 @@ void table_hdrput(file, table, flags, justify, select, nsel)
 		table_dashes(file, Abs(table->owidth[j]), ofs);
 	}
 	j = selcolumn(select, i);
-	if (  justify && justify[j] == TAB_NONE && table->owidth[j] >= 0
-	  || !justify && table->owidth[j] == 0 ) {
-	    FPuts(file, table->dashes->column[j]);
+	nojust = j > table->header->ncol ||
+		justify && justify[j] == TAB_NONE ||
+		!justify && table->owidth[j] == 0;
+
+	if (  nojust ) {
+	    if ( j <= table->dashes->ncol )
+		FPuts(file, table->dashes->column[j]);
+	    else
+		PutC(file, '-');
+
 	    PutC(file, ors);
 	} else
 	    table_dashes(file, Abs(table->owidth[j]), ors);

@@ -52,12 +52,18 @@ if [ "$prefix" = "" ] ; then
 	prefix=`pwd`
 fi
 
+if [ "$CC" = "" ] ; then
+	CC=cc
+fi
+
 makemake() {
     echo "# Starbase Makefile"			 > Makefile
     echo "#"					>> Makefile
     echo " WD=$WD"				>> Makefile
     echo " OS=$OS"				>> Makefile
     echo "CPU=$CPU"				>> Makefile
+    echo ""					>> Makefile
+    echo "CC=$CC"				>> Makefile
     echo ""					>> Makefile
     cat $CF/Makefile.Base			>> Makefile
     cat $CF/Makefile.$OS  			>> Makefile

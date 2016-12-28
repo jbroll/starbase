@@ -321,6 +321,7 @@ TableRow table_hdrdelval(table, val)
 	for ( ; i < table->nvalue - 1; i++ ) {
 		table->values[i] = table->values[i+1];
 	}
+	table->nvalue--;
 
 	return val;
 }
@@ -330,7 +331,7 @@ void table_hdrdel(table, name, row)
 	char		*name;
 	int		 row;
 {
-		TableRow	val = table_hdrfind(table, name, row);
+	TableRow	val = table_hdrfind(table, name, row);
 
 	if ( val != NULL ) table_rowfree(table_hdrdelval(table, val));
 }

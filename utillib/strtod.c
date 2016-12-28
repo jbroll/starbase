@@ -15,6 +15,8 @@ double log10();
 int	SAOdtype = 0;
 int	SAOdprec = 0;
 
+#define MAXBUFF 1024
+
 
 double	SAOstrtod(str, ptr)
 	char	 *str;
@@ -170,14 +172,14 @@ char *SAOconvert(buff, val, type, width, prec, flags)
  
                 char    ch1, ch2;
 
-		char	*ptr = buff;
- 
         if ( flags &    2  ) left =   1;
         if ( flags &    4  ) plus = "+";
         if ( flags &    8  ) plus = " ";
 	if ( flags &   16 ) type = ' ';
 	if ( flags &   32 ) zero = "0";
 	if ( flags & 0x80 ) unsi =   1;
+
+	width = Min(width, MAXBUFF);
 
         switch ( type ) {
          case 'b': {
@@ -199,12 +201,12 @@ char *SAOconvert(buff, val, type, width, prec, flags)
                 return buff;
 	 }
          case 'o':
-                sprintf(buff, "0o%o", (int) val);
+                snprintf(buff, MAXBUFF, "0o%o", (int) val);
                 return buff;
  
          case 'x':
-                if ( unsi ) sprintf(buff, "0x%x", (unsigned) val);
-                else        sprintf(buff, "0x%x", (int)      val);
+                if ( unsi ) snprintf(buff, MAXBUFF, "0x%x", (unsigned) val);
+                else        snprintf(buff, MAXBUFF, "0x%x", (int)      val);
                 return buff;
  
          case ':':      ch1 = ':';      ch2 = ':';      break;
@@ -233,18 +235,18 @@ char *SAOconvert(buff, val, type, width, prec, flags)
 	if ( prec == -2 ) {
 		if ( type  == 'm' )
 		     if ( seconds < 10.0 )
-			sprintf(buff, "%s%d%c0%g"
+			snprintf(buff, MAXBUFF, "%s%d%c0%g"
 			    , sign, (int) (minutes + degrees * 60), ch2, seconds);
 		     else
-			sprintf(buff, "%s%d%c%g"
+			snprintf(buff, MAXBUFF, "%s%d%c%g"
 			    , sign, (int) (minutes + degrees * 60), ch2, seconds);
 		else if ( seconds < 10.0 )
-			sprintf(buff, "%s%d%c0%2d%c0%g"
+			snprintf(buff, MAXBUFF, "%s%d%c0%2d%c0%g"
 			    , sign, (int) (degrees)
 			    , ch1 , (int) (minutes)
 			    , ch2, seconds);
 		      else
-			sprintf(buff, "%s%d%c%2d%c%g"
+			snprintf(buff, MAXBUFF, "%s%d%c%2d%c%g"
 			    , sign, (int) (degrees)
 			    , ch1 , (int) (minutes)
 			    , ch2, seconds);
@@ -255,8 +257,8 @@ char *SAOconvert(buff, val, type, width, prec, flags)
 
 		int	i;
 
-		char	buff0[256];
 		char	dfmt0[256];
+		char	*ptr;
 
                 if ( (((int)(seconds * p + .5))/ p) >= 60 ) {
                         seconds  = 0.0;
@@ -270,20 +272,22 @@ char *SAOconvert(buff, val, type, width, prec, flags)
 		ptr = buff;
 
 		if ( !left && width - (6 + prec + (prec != 0) + (d ? (int)log10((double)d)+1 : 1)) > 0 ) {
-		    sprintf(dfmt0, "%%%ds", width - (6 + prec + (prec != 0) + (d ? (int)log10((double)d)+1 : 1)) );
+		    snprintf(dfmt0, sizeof(dfmt0), "%%%ds", width - (6 + prec + (prec != 0) + (d ? (int)log10((double)d)+1 : 1)) );
 		} else {
-		    strcpy(dfmt0, "%s");
+		    strncpy(dfmt0, "%s", sizeof(dfmt0));
 		}
 		
                 if ( (((int)(seconds * p + .5))/ p) < 10.0 )
-		    sprintf(fmt, "%s%%d%c%%2.2d%c0%%.%df", dfmt0, ch1, ch2, prec);
+		    snprintf(fmt, sizeof(fmt), "%s%%d%c%%2.2d%c0%%.%df", dfmt0, ch1, ch2, prec);
 		else
-		    sprintf(fmt, "%s%%d%c%%2.2d%c%%.%df" , dfmt0, ch1, ch2, prec);
+		    snprintf(fmt, sizeof(fmt), "%s%%d%c%%2.2d%c%%.%df" , dfmt0, ch1, ch2, prec);
 
-                ptr = ptr + sprintf(ptr, fmt, plus, d, m, seconds);
+                ptr = buff + snprintf(ptr, MAXBUFF - 1, fmt, plus, d, m, seconds);
 
-		if ( left ) { for ( i = 0; i <= width - (ptr - buff); i++ ) { *ptr++ = ' '; } } 
-		*ptr = '\0';
+		if ( left ) { 
+		    for ( i = 0; i <= width - (ptr - buff) - 1; i++ ) { *ptr++ = ' '; } 
+		    *ptr = '\0';
+		} 
 	}
 
 	return buff;

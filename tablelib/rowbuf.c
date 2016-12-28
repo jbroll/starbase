@@ -12,7 +12,6 @@ typedef struct ParsBuffCtrl {
 	char	*buff;
 	char	*here;
 	int	 size;
-	int	 line;
 	int	 left;
 	int	 read;
 } *ParsBuffCntl;
@@ -63,7 +62,6 @@ struct _xFileClass xFileRowBuf = {
 };
 
 #define ROWBUFFSIZE	128*1000
-#define ROWBUFFLINE	     120
 
 void table_rowbuf_open(file, table)
 	File	  file;
@@ -81,7 +79,6 @@ void table_rowbuf_open(file, table)
 
     pars->here = pars->buff;
     pars->size = ROWBUFFSIZE;
-    pars->line = ROWBUFFLINE;
     pars->left = 0;
     pars->read = 1;
 }
@@ -96,22 +93,22 @@ TableRow table_parsbuff(file, row)
         int     ch;    /* The last character read      */
 	int	n;
 
+
     pars = xFile(file)->data;
 
     again:
-	if ( pars->left < pars->line ) {
+	if ( pars->left < pars->size ) {
 	    if ( pars->read ) {
 		memmove(pars->buff, pars->here, pars->left);
 		pars->read = Read(file, pars->buff + pars->left, 1, pars->size - pars->left);
 
-
 		pars->left = pars->left + pars->read;
 		pars->here = pars->buff;
+	    }
 
-		if ( pars->left && !pars->read ) {
-		    if ( pars->buff[pars->left-1] != '\n' ) {
-			pars->buff[pars->left++] = '\n';
-		    }
+	    if ( pars->left && !pars->read ) {
+		if ( pars->here[pars->left-1] != '\n' ) {
+		    pars->here[pars->left++] = '\n';
 		}
 	    }
 
@@ -133,7 +130,7 @@ TableRow table_parsbuff(file, row)
         /* Parse up the columns of the file
         */
         xrow->column[0] = "";
- 
+
         for ( n = 0, xrow->ncol = 1; ; xrow->ncol++ ) {
 	    if ( xrow->ncol >= xrow->acol )     /* col pointers bigger? */
 		    table_rowloc(xrow, xrow->abuf, xrow->acol * 2);
@@ -141,15 +138,12 @@ TableRow table_parsbuff(file, row)
 	    xrow->column[xrow->ncol] = &buff[n];
 
 	    for ( ; ; n++ ) {
-
 		if ( n >= pars->left ) { 	/* char buffer bigger? */
 		    int offs   = pars->here - pars->buff;
 
-		    pars->line = pars->left * 1.5;
 		    pars->size = pars->size * 1.5;
 
 		    if ( pars->size < 0 ) return NULL;
-
 
 		    ReAlloc(pars->buff, pars->size + 1);
 		    pars->here = pars->buff + offs;

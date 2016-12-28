@@ -1,0 +1,27 @@
+start_time        : 1481491032
+last_update       : 1481492241
+fuzzer_pid        : 17218
+cycles_done       : 1
+execs_done        : 1361037
+execs_per_sec     : 1147.94
+paths_total       : 290
+paths_favored     : 31
+paths_found       : 284
+paths_imported    : 0
+max_depth         : 5
+cur_path          : 173
+pending_favs      : 0
+pending_total     : 204
+variable_paths    : 0
+stability         : 100.00%
+bitmap_cvg        : 0.75%
+unique_crashes    : 0
+unique_hangs      : 0
+last_path         : 1481492175
+last_crash        : 0
+last_hang         : 0
+execs_since_crash : 1361037
+exec_timeout      : 500
+afl_banner        : pastetable
+afl_version       : 2.35b
+command_line      : afl-fuzz -x dictionary -t 500 -i in -o pastetable /home/john/src/starbase/bin/pastetable @@ @@ @@

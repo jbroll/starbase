@@ -3,9 +3,7 @@
 
 Package = starbase
 
-#file64 = "file64=-xarch=v9 -D_FILE_OFFSET_BITS=64"
-
-MAKEDEFS = bindir=$(bindir) libdir=$(libdir) incdir=$(incdir) $(file64)
+MAKEDEFS = bindir=$(bindir) libdir=$(libdir) incdir=$(incdir) $(flags)
 
 
 all:
@@ -27,6 +25,12 @@ all:
 	    (cd $$dir; $(MAKE) $(MAKEDEFS) $@); 	\
           fi; 						\
 	done
+
+afl: 
+	$(MAKE) CC=afl-gcc C_DFLAGS=-g all
+
+debug:
+	$(MAKE) flags=C_DLFLAGS=-g all
 
 parser:
 	-rm -f tawk/parse.c

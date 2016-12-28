@@ -62,6 +62,9 @@ INCPY =	radecbox
 
 all: $(PROGS)
 
+afl: 
+	$(MAKE) CC=afl-gcc C_DFLAGS=-g all
+
 install: 
 	for f in $(PROGS) ; do									\
 	    if [ -f $$f$(exeext) ] ; then 							\

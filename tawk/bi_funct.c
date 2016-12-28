@@ -363,7 +363,7 @@ CELL *bi_##name(sp)						\
    return sp ;							\
 }
 #else
-#define MathFun1(name, funct, errmsg)					\
+#define MathFun1(name, funct, errmsg)				\
 CELL *bi_##name(sp)						\
    register CELL *sp ;						\
 {								\

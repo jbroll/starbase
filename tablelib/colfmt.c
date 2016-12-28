@@ -39,8 +39,11 @@ int table_colfmt(table, col, format)
 	    table->format[i] = NULL;
     }
 
-    if ( table->format[col] ) Free(table->format[col]);
-    table->format[col] = format;
+    if ( table->format[col] ) {
+	Free(table->format[col]);
+    }
+
+    table->format[col] = strdup(format);
 
     table->fwidth[col] = width;
     table->fprec[col]  = prec;

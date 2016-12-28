@@ -63,8 +63,6 @@ void  *calloc();
 void  *realloc();
 void  free();
 #endif 
-int   tmatch();
-
 
 #define Min(x, y)	(((x) < (y)) ? (x) : (y))
 #define Max(x, y)	(((x) > (y)) ? (x) : (y))

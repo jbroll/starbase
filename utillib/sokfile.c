@@ -96,7 +96,7 @@ int FileINetParse(file, port, adrinet)
 	if ( port == -1 ) port  = 80;
     }
 
-    strcpy(hostname, file);
+    strncpy(hostname, file, sizeof(hostname));
 
 #ifdef msdos
     /* This is a DOS disk discriptor, not a machine name */

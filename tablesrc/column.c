@@ -23,6 +23,8 @@ char *treplace();
 #define RNAME		2
 #define FORMAT		3
 
+#define MAX_WIDE    10000
+
 static char *flag   =   ",:=%";
 static char *form[] = { "i", "f dlcrespx", "s", "S" };
 
@@ -61,10 +63,15 @@ typedef struct ColData {
 	int	temp;
 } ColData;
 
+#include "argv-fuzz-inl.h"
+
 int main(argc, argv)
 			int	 argc;
 			char	*argv[];
 {
+  AFL_INIT_ARGV();
+
+
   int columnate();
   int unbuffer = 0;
 
@@ -100,8 +107,12 @@ int main(argc, argv)
   cd.ofs  = ' ';
   cd.temp = 0;
 
-
   cd.ntab = 0;
+
+  if ( argc <= 0 ) {
+    fprintf(stderr, "column needs argv\n");
+    exit(1);
+  }
 
   if ( (cd.progname = strrchr(argv[0], '/')) )
         cd.progname++;
@@ -127,26 +138,55 @@ int main(argc, argv)
     if ( argv[i][0] == '-' ) 
       switch ( argv[i][1] ) {
 	case 'i':
-	  if ( (cd.ifile = (!strcmp("-", argv[i+1])) ? Stdin : Open(argv[i+1], "r")) == NULL ) {
-	    FPrint(Stderr, "%s: can't open input file: %s\n", cd.progname, argv[i+1]);
+	  if ( ++i >= argc ) { 
+	    fprintf(stderr, "column -i needs additional args\n");
+	    exit(1);
+	  }
+#ifdef __AFL_COMPILER
+	  if ( getenv("AFL_FUZZING") == NULL ) {
+#endif
+	  if ( (cd.ifile = (!strcmp("-", argv[i])) ? Stdin : Open(argv[i], "r")) == NULL ) {
+	    FPrint(Stderr, "%s: can't open input file: %s\n", cd.progname, argv[i]);
 	    perror(cd.progname);
 	    exit(1);
 	  }
-	  i++;
+#ifdef __AFL_COMPILER
+	  }
+#endif
 	  break;
 	case 'o':
-	  if ( (cd.ofile = (!strcmp("-", argv[i+1])) ? Stdout : Open(argv[i+1], "w")) == NULL ) {
-	    FPrint(Stderr, "%s: can't open output file: %s\n", cd.progname, argv[i+1]);
+	  if ( ++i >= argc ) { 
+	    fprintf(stderr, "column -o needs additional args\n");
+	    exit(1);
+	  }
+#ifdef __AFL_COMPILER
+	  if ( getenv("AFL_FUZZING") == NULL ) {
+#endif
+	  if ( (cd.ofile = (!strcmp("-", argv[i])) ? Stdout : Open(argv[i], "w")) == NULL ) {
+	    FPrint(Stderr, "%s: can't open output file: %s\n", cd.progname, argv[i]);
 	    perror(cd.progname);
 	    exit(1);
 	  }
+#ifdef __AFL_COMPILER
+	  }
+#endif
 	  i++;
+	  break;
+	case 'R': 
+	  if ( ++i >= argc ) { 
+	    fprintf(stderr, "column -R needs additional args\n");
+	    exit(1);
+	  }
+	  cd.nrow = atoi(argv[i]); 
 	  break;
     	case 'u': unbuffer = 1; break;
 	case 't':
+	  if ( ++i >= argc ) { 
+	    fprintf(stderr, "column -t needs additional args\n");
+	    exit(1);
+	  }
 	  cd.temp = 1;
-	  NewString(template, argv[i+1]);
-	  i++;
+	  NewString(template, argv[i]);
 	  break;
       }
   }
@@ -165,9 +205,6 @@ int main(argc, argv)
 
       Malloc(tbuffer, TABLE_FILEBUF);
       SetBuffer(cd.ofile, _IOFBF, tbuffer, TABLE_FILEBUF);
-
-      //  xwbuf_init(cd.ofile, 4, TABLE_FILEBUF);
-
   }
 
   if ( template ) {
@@ -307,7 +344,14 @@ int columnate(ifile, marker, table, cd)
       case 'k' : chek = 1;					break;
       case 'K' : chek = 0;					break;
       case 'n' : numb = 1;					break;
-      case 'N' : numb = 1; Number = argv[++i];			break;
+      case 'N' : 
+	if ( ++i >= argc ) { 
+	    fprintf(stderr, "column -N needs additional args\n");
+	    exit(1);
+	}
+	numb = 1; 
+	Number = argv[i];			
+	break;
       case 'v' : verb = 1; quit = 0;				break;
       case 'q' : verb = 0; 					break;
       case '2' : ptwo = 1;					break;
@@ -320,12 +364,20 @@ int columnate(ifile, marker, table, cd)
       case 's' : 	   just = 1; type = TAB_SKIP;		break;
       case 'x' : 	             type = 128;		break;
       case 'p' : 	   just = 1; type = TAB_NONE;		break;
-      case 'w' : 	   just = 1; wide = atoi(argv[++i]);	break;
+      case 'w' : 	   
+	if ( ++i >= argc ) { 
+	    fprintf(stderr, "column -w needs additional args\n");
+	    exit(1);
+	}
+        just = 1; 
+	wide = Min(MAX_WIDE, atoi(argv[i]));
+	break;
       /* Skip global options.
        */
       case 'u':							break;
       case 'i': i++;						break;
       case 'o': i++;						break;
+      case 'R': i++;						break;
       case 't': i++;						break;
 
       case 'H': {	/* Set / Delete header values	*/
@@ -333,8 +385,7 @@ int columnate(ifile, marker, table, cd)
 		int	col = 1;
 		char	*name;
 
-	i++;
-	if ( i >= argc ) { 
+	if ( ++i >= argc ) { 
 	    fprintf(stderr, "column -H needs additional args\n");
 	    exit(1);
 	}
@@ -352,6 +403,19 @@ int columnate(ifile, marker, table, cd)
 	    } else if ( check[HDRROWFLAG] ) {
 		    col = value[HDRROWFLAG].i;
 	    }
+	    if ( col <= 0 || col > 10000 ) {
+		FPrint(Stderr, "%s : header value index for %s must be positive and less than 10000\n"
+			, cd->progname
+			, name);
+		exit(1);
+	    }
+	    if ( row <= 0 ) {
+		FPrint(Stderr, "%s : header row index for %s must be positive \n"
+			, cd->progname
+			, name);
+		exit(1);
+	    }
+
 	    table_hdrset(table, name, row, col, value[HDRVALFLAG].s, 1);
 	} else {
 	    if ( check[HDRROWFLAG] ) {
@@ -374,9 +438,9 @@ int columnate(ifile, marker, table, cd)
 	int	list[512];
 	char	name[512];
 	
-	    /* Non-switch argument	*/
+	/* Non-switch argument	*/
 
-	    char	*col = argv[i];
+	char	*col = argv[i];
 
 	for ( k = 0; k < NCOLFLAGS; k++ ) check[k] = 0; 
 
@@ -392,7 +456,7 @@ int columnate(ifile, marker, table, cd)
 	    j = list[k];
 
 	    if ( check[RNAME] > 0 ) {
-		    char	rename[512];
+		    char	rename[1024];
 
 		    int	len = strlen(treplace(table_colnam(table, list[k]), name, value[RNAME].s, rename, 512));
 
@@ -401,7 +465,7 @@ int columnate(ifile, marker, table, cd)
 	    }
 
 	    if ( check[WIDTH] ) {
-		    table->owidth[j] = -value[WIDTH].i;
+		    table->owidth[j] = Max(-MAX_WIDE, -value[WIDTH].i);
 		    just = 1;
 	    } else  table->owidth[j] = -wide;
 
@@ -507,6 +571,12 @@ int columnate(ifile, marker, table, cd)
        */
       if ( nrow ) Malloc(xrow, sizeof(TableRow) * nrow);
 
+      if ( xrow == NULL ) {
+	    fprintf(stderr, "cannot allocate %d row pointers\n", nrow);
+	    exit(1);
+      }
+
+
       for ( nred = 0; nred < nrow && (xrow[nred] = table_rowget(ifile, table, NULL, justification2, selection2, ncol));
 	    nred++ ) {
 	    if ( chek && xrow[nred]->ncol != chek ) {
@@ -573,13 +643,22 @@ int columnate(ifile, marker, table, cd)
 	    PutC(ofile, '\f');
 	    if ( !hval 
 	     ||   hval == 2 
-             ||  (hval == 1 && table->values[0]->column[1][0] != '\0') ) {
+             ||  (hval == 1  
+	       && table->nvalue
+	       && table->values 
+	       && table->values[0]
+	       && table->values[0]->column
+	       && table->values[0]->column[1]
+	       && table->values[0]->column[1][0] != '\0') ) {
 		PutC(ofile, '\n');
 	    }
 	}
-	if ( !cd->ntab && marker
+	if ( !cd->ntab && marker 
+	  && table->nvalue
 	  && table->values
 	  && table->values[0]
+	  && table->values[0]->column
+	  && table->values[0]->column[1]
 	  && table->values[0]->column[1][0] == '\0' ) {
 	     skipval++;
 	     table->values++;

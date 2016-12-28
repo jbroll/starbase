@@ -5,6 +5,9 @@
    copyright 1991, 1993, 1995, 1999 John B. Roll jr.
  */
 
+#include <fnmatch.h>
+#define tmatch(string, template) (!fnmatch(template, string, FNM_EXTMATCH))
+
 #include <xos.h>
 
 #include "table.h"

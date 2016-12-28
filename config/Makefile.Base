@@ -4,7 +4,6 @@
 srcdir	= .
  
 AR 	= ar
-CC 	= cc
 INC     = $(WD)/tablesrc/xinc
 LEX     = flex
 LN_S    = ln -s

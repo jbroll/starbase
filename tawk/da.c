@@ -53,6 +53,7 @@ static struct sc
    _TEST, "test",
    _CAT, "cat",
    _ASSIGN, "assign",
+   _ASSIGN2, "assign2",
    _ADD_ASG, "add_asg",
    _SUB_ASG, "sub_asg",
    _MUL_ASG, "mul_asg",
@@ -308,6 +309,19 @@ da(start, fp)
 	 case _RET2:
 	    fprintf(fp, "ret2\n");
 	    p++;
+	 case _ASSIGNL:
+	    fprintf(fp, "assignL\t%d %d\n", p[1].op, p[2].op);
+	    p += 2;
+	    break;
+	 case _ASSIGN2: {
+		int nassign = -p++->op ;
+		FBLOCK *fbp     = (FBLOCK *) p++->ptr ;
+
+	    fprintf(fp, "assign2\t%d function %s returns %d items\n", 
+		    nassign, fbp->name, fbp->nrets);
+
+	    break;
+	    }
 	 default:
 	    {
 	       struct sc *q = simple_code ;
