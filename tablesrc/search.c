@@ -756,10 +756,17 @@ void *joinem(data, start, end, row, table, file)
 
 char *trim();
 
+#include "argv-fuzz-inl.h"
+
 int main(argc, argv)
 	int	argc;
 	char	*argv[];
 {
+  AFL_INIT_ARGV();
+  AFL_INIT_ARGS("/tmp/table.tab");
+  AFL_FUZZ_FILE("/tmp/table.tab");
+
+
 		int	n, i, j, k;
 		int	nsys = 0; 
 		int	asys = 0;
@@ -855,6 +862,13 @@ int main(argc, argv)
 		 case 'a' : setcnt = 2; 	continue;
 		 case 'X' : setcnt = 1; cross=1;continue;
 		 case 'o' : 
+		  if ( ++i >= argc ) { 
+		    fprintf(stderr, "column -o needs additional args\n");
+		    exit(1);
+		  }
+#ifdef __AFL_COMPILER
+		  if ( getenv("AFL_FUZZING") == NULL ) {
+#endif
 		    if ( (ofile = (!strcmp("-", argv[n+1]))
 			    ? Stdout : Open(argv[n+1], "w")) == NULL ) {
 			except(ex_search
@@ -862,6 +876,9 @@ int main(argc, argv)
 			    , argv[n+1], exc_oserror());
 		    }
 		    n++;
+#ifdef __AFL_COMPILER
+	  }
+#endif
 		    continue;
 		 default:
 		     for ( i = 0; CsysTypes[i].name != NULL; i++ ) {

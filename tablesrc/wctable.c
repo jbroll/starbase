@@ -49,6 +49,8 @@ void wcfile(fp, head, lines, words, chars, file)
     table_hdrfree(T);
 }
 
+#include "argv-fuzz-inl.h"
+
 int main(argc, argv)
 			int	 argc;
 			char	*argv[];
@@ -61,6 +63,8 @@ int main(argc, argv)
 	long	words = 0;
 	long	chars = 0;
 	long	head  = 1;
+
+    AFL_INIT_ARGV();
 
     for ( i = 1; i < argc; i++ ) {
 	if ( argv[i][0] == '-' ) {

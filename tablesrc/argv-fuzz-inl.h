@@ -19,7 +19,8 @@
 
    ...to the file containing main(), ideally placing it after all the 
    standard includes. Next, put AFL_INIT_ARGV(); near the very beginning of
-   main().
+   main().FL_INIT_SET0
+
 
    This will cause the program to read NUL-delimited input from stdin and
    put it in argv[]. Two subsequent NULs terminate the array. Empty
@@ -28,7 +29,6 @@
 
    If you would like to always preserve argv[0], use this instead:
    AFL_INIT_SET0("prog_name");
-
 */
 
 #ifndef _HAVE_ARGV_FUZZ_INL
@@ -36,56 +36,79 @@
 #ifdef __AFL_COMPILER
 
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define AFL_INIT_ARGV() do { argv = afl_init_argv(argv, &argc); } while (0)
 
 #define AFL_INIT_SET0(_p) do { \
-    argv = afl_init_argv(&argc); \
     argv[0] = (_p); \
     if (!argc) argc = 1; \
   } while (0)
 
+#define AFL_INIT_ARGS(_p) do { \
+    argv[argc++] = (_p); \
+  } while (0)
+
+#define AFL_FUZZ_FILE(filename) do { afl_fuzz_file(filename); } while (0)
+
 #define MAX_CMDLINE_LEN 100000
 #define MAX_CMDLINE_PAR 1000
 
+/* Read the argv unbuffered from fuzzed input
+*/
+static int afl_read_chunk(char *buffer, int max) {
+  buffer[0] = 0;
+  int prev = 1;
+  int   i;
+  for ( i = 0; i < MAX_CMDLINE_LEN - 2; i++) {
+    if ( read(0, &buffer[i], 1) != 1 ) break;
+    if ( buffer[i] == 0 && prev == 0 ) break;
+    prev = buffer[i];
+  }
+
+  buffer[i+1] = 0;
+
+  return i;
+}
+
 static char** afl_init_argv(char **argv, int* argc) {
 
-  static char  in_buf[MAX_CMDLINE_LEN];
-  static char* ret[MAX_CMDLINE_PAR];
+  static char  cmdbuff[MAX_CMDLINE_LEN];
+  char* cmdline = cmdbuff;
 
-  char* ptr = in_buf;
-  int   i;
-  int   rc  = 0;
+  static char* args[MAX_CMDLINE_PAR];
+  int   argn  = 0;
 
   if ( getenv("AFL_FUZZING") == NULL ) {
       return argv;
   }
 
-  /* Read the argv unbuffered from fuzzed input
-   */
-  in_buf[0] = 0;
-  int prev = 1;
-  for ( i = 0; i < MAX_CMDLINE_LEN - 2; i++) {
-    if ( read(0, &in_buf[i], 1) != 1 ) break;
-    if ( in_buf[i] == 0 && prev == 0 ) break;
-    prev = in_buf[i];
+  int cmdleng = afl_read_chunk(cmdline, 100000);
+
+  while (*cmdline) {
+
+    args[argn] = cmdline;
+    if (args[argn][0] == 0x02 && !args[argn][1]) args[argn]++;
+    argn++;
+
+    while (*cmdline) cmdline++;
+    cmdline++;
   }
 
-  in_buf[i+1] = 0;
+  *argc = argn;
 
-  while (*ptr) {
+  return args;
+}
 
-    ret[rc] = ptr;
-    if (ret[rc][0] == 0x02 && !ret[rc][1]) ret[rc]++;
-    rc++;
+static void afl_fuzz_file(char *filename) {
+  static char  buff[MAX_CMDLINE_LEN];
 
-    while (*ptr) ptr++;
-    ptr++;
-  }
-
-  *argc = rc;
-
-  return ret;
+  int bytes = afl_read_chunk(buff, MAX_CMDLINE_LEN);
+  int filed = open(filename, O_CREAT | O_RDWR, 0640);
+  bytes = write(filed, buff, bytes);
+  close(filed);
 }
 
 #undef MAX_CMDLINE_LEN
@@ -93,5 +116,8 @@ static char** afl_init_argv(char **argv, int* argc) {
 
 #else
 #define AFL_INIT_ARGV()
+#define AFL_INIT_ARGS()
+#define AFL_INIT_SET0()
+#define AFL_INIT_FILE(filename)
 #endif
 #endif /* !_HAVE_ARGV_FUZZ_INL */
