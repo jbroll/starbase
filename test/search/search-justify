@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+
+TestFun=/data/mmti/src/starbase/test/Test
+
+. $TestFun
+
+# Make a table to search
+#
+jottable 100 X Y Z   > tab.tmp
+jottable 5 3 7 X Y Z > inp.tmp
+
+for method in s b i ; do
+  for colate in "" -n ; do
+    for justify in -l -c -r ; do
+	Test "Search X one column -m$method justify keys $justify colate $colate"
+
+	  justify $justify X,3 Y,3 Z,3 < inp.tmp | overwrite out.tmp
+
+	  index -m$method $colate tab.tmp X
+
+	  search tab.tmp X < out.tmp 		\
+	| DiffFiles - inp.tmp
+
+	  rm tab.tmp.*
+    done
+  done
+done
+
+for method in s b i ; do
+  for colate in "" -n ; do
+    for justify in -l -c -r ; do
+	Test "Search X one column -m$method justify table $justify colate $colate"
+
+	  justify $justify X Y Z       < tab.tmp | overwrite tab.tmp
+	  justify $justify X,3 Y,3 Z,3 < inp.tmp | overwrite out.tmp
+
+	  index -m$method $colate tab.tmp X
+
+	  search tab.tmp X < inp.tmp 		\
+	| DiffFiles - out.tmp
+
+	  rm tab.tmp.*
+    done
+  done
+done
+
+for method in s b i ; do
+  for colate in "" -n ; do
+    for justify in -l -c -r ; do
+	Test "Search X one column -m$method justify both $justify colate $colate"
+
+	  justify $justify X Y Z       < tab.tmp | overwrite tab.tmp
+	  justify $justify X,3 Y,3 Z,3 < out.tmp | overwrite out.tmp
+
+	  index -m$method $colate tab.tmp X
+
+	  search tab.tmp X < out.tmp 		\
+	| DiffFiles - out.tmp
+
+	  rm tab.tmp.*
+    done
+  done
+done
+
+for method in s b i ; do
+  for colate in "" -n ; do
+    for justify in -l -c -r ; do
+	Test "Search -R one column -m$method justify $justify colate $colate"
+
+	  justify $justify X Y Z       < tab.tmp | overwrite tab.tmp
+	  justify $justify X,3 Y,3 Z,3 < inp.tmp | overwrite out.tmp
+
+	  index -m$method $colate tab.tmp X
+
+	  search tab.tmp -R X 3 7 		\
+	| DiffFiles - out.tmp
+
+	  rm tab.tmp.*
+    done
+  done
+done
+
+TestDone

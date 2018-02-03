@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+
+TestFun=/data/mmti/src/starbase/test/Test
+
+. $TestFun
+
+# Make a table to search
+#
+jottable 100   X Y Z | column -a H L | compute 'H = 3; L = 7' > tab.tmp
+jottable 5 3 7 X Y Z | column -a H L | compute 'H = 3; L = 7' > out.tmp
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -R one column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+
+      search tab.tmp -R X 3 7 		\
+    | DiffFiles - out.tmp
+
+      rm tab.tmp.*
+  done
+done
+
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -R two column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+      index -mi       $colate tab.tmp Y
+
+      search tab.tmp -R X 2 13 -R Y 3 7	\
+    | DiffFiles - out.tmp
+
+    Test "Search -R two column -m$method $colate - Hi    columns"
+
+    < tab.tmp				\
+      search tab.tmp -R X 2 13 -R Y 3 L	\
+    | DiffFiles - out.tmp
+
+    Test "Search -R two column -m$method $colate -    Lo columns"
+
+    < tab.tmp				\
+      search tab.tmp -R X 2 13 -R Y H 7	\
+    | DiffFiles - out.tmp
+
+    Test "Search -R two column -m$method $colate - Hi Lo columns"
+
+    < tab.tmp				\
+      search tab.tmp -R X 2 13 -R Y H L	\
+    | DiffFiles - out.tmp
+
+      rm tab.tmp.*
+  done
+done
+
+TestDone

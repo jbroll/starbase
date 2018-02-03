@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+
+TestFun=/data/mmti/src/starbase/test/Test
+
+. $TestFun
+
+
+gridtable 10 X Y Z > tab.tmp
+
+index -mb -n tab.tmp X
+index -mi -n tab.tmp Y
+
+Test "Filebytes and Search"
+
+search -p tab.tmp -V Y 5 > bytes.tmp
+
+< bytes.tmp		\
+| filebytes tab.tmp	\
+> rows.tmp
+
+search -p tab.tmp -V Y 5 | DiffFiles - bytes.tmp
+
+
+Test "Filebytes invert"
+
+( filebytes    tab.tmp < bytes.tmp
+  filebytes -i tab.tmp < bytes.tmp | headoff
+) | sorttable -n X Y Z | DiffFiles - tab.tmp
+
+
+Test "Filebytes delete"
+
+gridtable 10  X Y Z > tab.tmp
+header < tab.tmp > head.tmp
+search -p tab.tmp -V Y 5 | filebytes -b tab.tmp
+search    tab.tmp -V Y 5 | DiffFiles - head.tmp
+
+
+Test "Filebytes delete indexed"
+
+gridtable 100  X Y Z > xtab.tmp
+index -mi -n xtab.tmp X
+index -mi -n xtab.tmp Y
+
+search xtab.tmp -V Y 3 -V Z 5 > Z.tmp
+search xtab.tmp -V Y 3 -V X 5 > X.tmp
+
+header < xtab.tmp > head.tmp
+search -p xtab.tmp -V Y 5 | filebytes -b xtab.tmp
+search    xtab.tmp -V Y 5 | DiffFiles -  head.tmp
+
+Test "Filebytes search deleted"
+search xtab.tmp -V Y 3 -V Z 5 | DiffFiles - Z.tmp
+
+Test "Filebytes search index deleted"
+search xtab.tmp -V Y 3 -V X 5 | DiffFiles - X.tmp
+
+
+TestDone

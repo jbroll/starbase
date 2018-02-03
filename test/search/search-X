@@ -1,0 +1,10 @@
+
+
+. ../Test
+
+Test "search -X"
+
+< foo ./search -s -j foo X | justify
+./search -j -X foo X | justify
+
+

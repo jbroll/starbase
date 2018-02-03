@@ -1,0 +1,124 @@
+#!/bin/sh
+#
+
+TestFun=/data/mmti/src/starbase/test/Test
+
+. $TestFun
+
+for method in s b i  ; do
+      rm -f gsc.cat.*
+      index -m$method -h gsc.cat RA
+
+      echo "\
+RA
+--
+12"	> gsc.12.tmp
+
+
+for mode   in "" -j  ; do
+for key    in "" :RA ; do
+    Test "Search -S1h one column -m$method $key $mode"
+
+    < gsc.12.tmp					\
+      search $mode gsc.cat -S1h RA$key .1		\
+    | DiffFiles - gsc.S1h$mode
+done
+done
+done
+
+TestDone
+exit
+
+
+for m1 in s S b i ; do
+for m2 in s S b i ; do
+      if [ $m1 = b -a $m2 = b ] ; then continue; fi
+
+      rm -f gsc.cat.*
+      if [ $m2  = b ] ; then
+	  if [ $m2 != S ] ; then index -m$m2 -h gsc.cat DEC; fi
+	  if [ $m1 != S ] ; then index -m$m1 -h gsc.cat  RA; fi
+      else
+	  if [ $m1 != S ] ; then index -m$m1 -h gsc.cat  RA; fi
+	  if [ $m2 != S ] ; then index -m$m2 -h gsc.cat DEC; fi
+      fi 
+
+    Test "Search radecbox  row  .6 m = $m1 $m2"
+
+      radecbox  gsc.cat 12 12 .6 RA DEC search=row | sorttable ID 	> rows.$m1.$m2.tmp
+      DiffFiles gsc.boxx.6 rows.$m1.$m2.tmp
+
+    Test "Search radecbox  fast .6 m = $m1 $m2"
+
+      radecbox  gsc.cat 12 12 .6 RA DEC search=fast | sorttable ID 	> fast.$m1.$m2.tmp
+      DiffFiles gsc.boxx.6 fast.$m1.$m2.tmp
+
+    Test "Search radeccirc row  .6 m = $m1 $m2"
+
+      radeccirc gsc.cat 12 12 .6 RA DEC search=row | sorttable ID 	> rows.$m1.$m2.tmp
+      DiffFiles gsc.circ.6 rows.$m1.$m2.tmp
+
+    Test "Search radeccirc fast .6 m = $m1 $m2"
+
+      radeccirc gsc.cat 12 12 .6 RA DEC search=fast | sorttable ID 	> fast.$m1.$m2.tmp
+      DiffFiles gsc.circ.6 fast.$m1.$m2.tmp
+done
+done
+
+for method in s b i ; do
+      rm -f gsc.cat.*
+      index -m$method -h gsc.cat RA
+      index -mi       -h gsc.cat DEC
+
+for mode   in "" -j  ; do
+    Test "Search -S2 two column -m$method whole cat $mode"
+
+      echo "\
+RA	DEC
+--	---
+12	12" \
+    | search $mode gsc.cat -S2 RA DEC 2 	\
+    | DiffFiles - gsc.circ$mode
+
+    Test "Search -S2 two column -m$method rect box"
+
+      echo "\
+RA	DEC
+--	---
+12	12" \
+    | search $mode gsc.cat -S2 RA DEC 1	\
+    | DiffFiles - gsc.rect$mode
+done
+done
+
+
+
+Test "Search radecbox fast"
+
+  radeccirc gsc.cat 12 12 4 RA DEC fast	\
+| DiffFiles - gsc.circ
+
+
+Test "Search radeccirc row"
+
+  radecbox gsc.cat 12 12 4 RA DEC row	\
+| DiffFiles - gsc.cat
+
+Test "Search radeccirc fast"
+
+  radecbox gsc.cat 12 12 4 RA DEC fast 	\
+| DiffFiles - gsc.cat
+
+Test "Search radeccirc core"
+  radeccirc gsc.core 12 12 4 RA DEC fast \
+| DiffFiles - gsc.core
+
+Test "Search radeccirc one range"
+
+  radeccirc gsc.try 12 12 4 RA DEC fast > tab.tmp
+  index -h -mi gsc.try DEC
+  radeccirc gsc.try 12 12 4 RA DEC fast \
+| DiffFiles - tab.tmp
+
+
+TestDone

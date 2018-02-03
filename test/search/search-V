@@ -1,0 +1,99 @@
+#!/bin/sh
+#
+
+TestFun=/data/mmti/src/starbase/test/Test
+
+. $TestFun
+
+# Make a table to search
+#
+jottable 100 X Y Z > tab.tmp
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -V one column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+
+      Clock
+
+      search tab.tmp -V X 4 		\
+    | DiffFiles - search-V.out
+
+      rm tab.tmp.*
+  done
+done
+
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -V two column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+      index -mi       $colate tab.tmp Y
+
+      Clock
+
+      search tab.tmp -V X 4 -V Y 4	\
+    | DiffFiles - search-V.out
+
+      rm tab.tmp.*
+  done
+done
+
+
+# Make a table to search
+#
+gridtable 100 X Y Z > tab.tmp
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -V one column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+
+      Clock
+
+      search tab.tmp -V X 4 		\
+    | DiffFiles - search-V.Xgrid
+
+      rm tab.tmp.*
+  done
+done
+
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -V two column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+      index -mi       $colate tab.tmp Y
+
+      Clock
+
+      search tab.tmp -V X 4 -V Y 4	\
+    | DiffFiles - search-V.XYgrid
+
+      rm tab.tmp.*
+  done
+done
+
+
+for method in s b i ; do
+  for colate in -n -h ; do
+    Test "Search -V three column -m$method $colate"
+
+      index -m$method $colate tab.tmp X
+      index -mi       $colate tab.tmp Y
+      index -mi       $colate tab.tmp Z
+
+      Clock
+
+      search tab.tmp -V X 4 -V Y 4 -V Z 4	\
+    | DiffFiles - search-V.XYZgrid
+
+      rm tab.tmp.*
+  done
+done
+
+TestDone

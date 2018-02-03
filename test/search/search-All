@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+rm -f Test.log
+
+./search-S
+./search-C
+./search-V
+./search-R
+./search-I
+./filebytes-T

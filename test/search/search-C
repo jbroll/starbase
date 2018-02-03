@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+
+TestFun=/data/mmti/src/starbase/test/Test
+
+. $TestFun
+
+gridtable 10 X Y Z > grid.tmp
+
+Input="\
+X	Y	Z
+--	--	--
+5	5	5"
+
+for method in s b i ; do
+      rm -f grid.tmp.*
+      index -m$method -n grid.tmp X
+
+for mode   in "" -j  ; do
+for key    in "" :X ; do
+    Test "Search -C1 one column -m$method $key"
+
+      echo "$Input"				\
+    | search $mode grid.tmp -C1 X$key 2		\
+    | DiffFiles - grid.C1$mode
+done
+done
+done
+
+for method in s b i ; do
+      rm -f grid.tmp.*
+      index -m$method -n grid.tmp X
+      index -mi       -n grid.tmp Y
+
+for mode   in "" -j  ; do
+for key    in "" :X ; do
+    Test "Search -C2 two column -m$method $key"
+
+      echo "$Input"				\
+    | search grid.tmp -C2 X$key Y 2		\
+    | DiffFiles - grid.C2
+done
+done
+done
+
+
+for method in s b i ; do
+      rm -f grid.tmp.*
+      index -m$method -n grid.tmp X
+      index -mi       -n grid.tmp Y
+      index -mi       -n grid.tmp Z
+
+for mode   in "" -j  ; do
+for key    in "" :X ; do
+    Test "Search -C3 three column -m$method $key"
+
+      echo "$Input"				\
+    | search grid.tmp -C3 X$key Y Z 2		\
+    | DiffFiles - grid.C3
+done
+done
+done
+
+
+TestDone
