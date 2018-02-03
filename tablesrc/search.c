@@ -763,9 +763,7 @@ int main(argc, argv)
 	char	*argv[];
 {
   AFL_INIT_ARGV();
-  AFL_INIT_ARGS("/tmp/table.tab");
-  AFL_FUZZ_FILE("/tmp/table.tab");
-
+  AFL_INIT_FILE("/tmp/table.tab");
 
 		int	n, i, j, k;
 		int	nsys = 0; 
