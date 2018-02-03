@@ -32,7 +32,10 @@ OBJECTS=coladd.o	\
 	tabrange.o	\
 	xsearch.o	\
 	table.o		\
-	hash.o
+	hash.o		\
+	slafit_c.o	\
+	slafit.o	\
+	xyfit.o
 
 all: libtable.a
 afl: 

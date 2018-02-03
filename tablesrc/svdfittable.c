@@ -10,7 +10,7 @@
 #include <xfile.h>
 #include <math.h>
 #include <table.h>
-#include <slalib.h>
+#include <slafit.h>
 
 #include <unistd.h>
 

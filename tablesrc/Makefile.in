@@ -17,6 +17,7 @@ PROGS = column table sorttable indexsorttable index fixtotable 	\
 	tabletofits 						\
 	clock							\
 	wctable smoothtable					\
+	svdfittable xyfittable					\
 	xyshift
 
 

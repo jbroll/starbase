@@ -9,7 +9,7 @@
 #include <xos.h>
 #include <math.h>
 #include <table.h>
-#include <slalib.h>
+#include <slafit.h>
 
 void fitxy();
 void avgxy();
