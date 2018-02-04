@@ -14,7 +14,7 @@ MAKEFILES="
 	./Makefile
 "
 
-SUBDIRS="utillib tablelib tablesrc tablefun tawk nlfit gnu bsd"
+SUBDIRS="utillib tablelib tablesrc tablefun tawk nlfit gnu bsd python"
 
 
 if [ -d ./radar ] ; then

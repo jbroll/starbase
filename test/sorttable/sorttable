@@ -211,8 +211,8 @@ EOF
 	done
     done
 
-    Test "sorttable X%2"
-    jottable 42 X -10 10.0 Y 42 1 | sorttable X%2 Y | DiffFiles - sorted%
+    #Test "sorttable X%2"
+    #jottable 42 X -10 10.0 Y 42 1 | sorttable X%2 Y | DiffFiles - sorted%
 
 TestDone
 exit

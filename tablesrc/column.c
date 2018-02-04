@@ -566,7 +566,7 @@ int columnate(ifile, marker, table, cd)
 
   if ( chek ) chek = icol;
 
-  if ( body ) {
+  if ( nrow && body ) {
       /* Read in the first NROWs of the table
        */
       if ( nrow ) Malloc(xrow, sizeof(TableRow) * nrow);
@@ -575,7 +575,6 @@ int columnate(ifile, marker, table, cd)
 	    fprintf(stderr, "cannot allocate %d row pointers\n", nrow);
 	    exit(1);
       }
-
 
       for ( nred = 0; nred < nrow && (xrow[nred] = table_rowget(ifile, table, NULL, justification2, selection2, ncol));
 	    nred++ ) {
