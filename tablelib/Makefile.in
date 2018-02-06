@@ -55,3 +55,6 @@ libtable.a: $(OBJECTS)
 	rm -f $@
 	$(AR) cr $@ $(OBJECTS)
 	-$(RANLIB) $@
+
+slafit.o : f2c.h
+

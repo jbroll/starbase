@@ -16,6 +16,7 @@
 
 static integer c__3 = 3;
 static integer c__4 = 4;
+static doublereal c_b16 = 6.283185307179586476925287;
 
 /* Subroutine */ int sla_svd__(integer *m, integer *n, integer *mp, integer *
 	np, doublereal *a, doublereal *w, doublereal *v, doublereal *work, 
@@ -1714,4 +1715,53 @@ L20:
     }
     return 0;
 } /* sla_invf__ */
+
+doublereal sla_drange__(doublereal *angle)
+{
+    /* System generated locals */
+    doublereal ret_val;
+
+    /* Builtin functions */
+    double d_mod(doublereal *, doublereal *), d_sign(doublereal *, doublereal 
+	    *);
+
+/* + */
+/*     - - - - - - - */
+/*      D R A N G E */
+/*     - - - - - - - */
+
+/*  Normalize angle into range +/- pi  (double precision) */
+
+/*  Given: */
+/*     ANGLE     dp      the angle in radians */
+
+/*  The result (double precision) is ANGLE expressed in the range +/- pi. */
+
+/*  P.T.Wallace   Starlink   23 November 1995 */
+
+/*  Copyright (C) 1995 Rutherford Appleton Laboratory */
+
+/*  License: */
+/*    This program is free software; you can redistribute it and/or modify */
+/*    it under the terms of the GNU General Public License as published by */
+/*    the Free Software Foundation; either version 2 of the License, or */
+/*    (at your option) any later version. */
+
+/*    This program is distributed in the hope that it will be useful, */
+/*    but WITHOUT ANY WARRANTY; without even the implied warranty of */
+/*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the */
+/*    GNU General Public License for more details. */
+
+/*    You should have received a copy of the GNU General Public License */
+/*    along with this program (see SLA_CONDITIONS); if not, write to the */
+/*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, */
+/*    Boston, MA  02111-1307  USA */
+
+/* - */
+    ret_val = d_mod(angle, &c_b16);
+    if (abs(ret_val) >= 3.141592653589793238462643) {
+	ret_val -= d_sign(&c_b16, angle);
+    }
+    return ret_val;
+} /* sla_drange__ */
 

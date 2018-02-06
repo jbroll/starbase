@@ -98,7 +98,7 @@ int EditVerify(edit, irow, orow)
 
 	FPrint(Stderr, "edittable: Verify row edit\n");
 	FPrint(Stderr, "	Editing file: %s\n", edit->search->Table);
-	FPrint(Stderr, "");
+	FPrint(Stderr, "\n");
 
 
 	if ( edit->ihead ) {
@@ -130,7 +130,7 @@ int EditVerify(edit, irow, orow)
 	    }
 	}
 
-	FPrint(Stderr, "");
+	FPrint(Stderr, "\n");
 	FPrint(Stderr, "	Edits:\n");
 	for ( i = 0; i < edit->nedit; i++ ) {
 	    if ( edit->edits[i].value ) {
@@ -149,7 +149,7 @@ int EditVerify(edit, irow, orow)
 	    FPrint(Stderr, "\n");
 	}
 
-	FPrint(Stderr, "");
+	FPrint(Stderr, "\n");
 	FPrint(Stderr, "edittable: edit this row? (y) ");
 	ch = GetC(tty);
 
@@ -175,7 +175,7 @@ void ExecVerify(edit)
 
 	FPrint(Stderr, "edittable: Verify execution\n");
 	FPrint(Stderr, "	Editing file: %s\n", edit->search->Table);
-	FPrint(Stderr, "");
+	FPrint(Stderr, "\n");
 
 
 	if ( edit->ihead ) {
@@ -202,7 +202,7 @@ void ExecVerify(edit)
 	    }
 	}
 
-	FPrint(Stderr, "");
+	FPrint(Stderr, "\n");
 	FPrint(Stderr, "	Edits:\n");
 	for ( i = 0; i < edit->nedit; i++ ) {
 		FPrint(Stderr, "		%s	= %s\n"
@@ -212,7 +212,7 @@ void ExecVerify(edit)
 				: table_colnam(edit->ihead, edit->edits[i].icolumn));
 	}
 
-	FPrint(Stderr, "");
+	FPrint(Stderr, "\n");
 	FPrint(Stderr, "edittable: continue with edit? (y) ");
 	ch = GetC(tty);
 

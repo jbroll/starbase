@@ -275,6 +275,7 @@ int bnheader(ofile, table, name, column, ncols, ntot)
 	char		*name;
 	Column		 column;
 	int		 ncols;
+	int 		 ntot;
 {
 	int	i, k = 0;
 	int	rec = 0;
