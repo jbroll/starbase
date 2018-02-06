@@ -48,6 +48,7 @@ install::
 distclean :: clean
 	rm -rf bin lib include
 	rm -f make.log Makefile
+	rm -f Commands .config
 
 install distclean clean ::
 	for dir in $(SUBDIRS); do 			\

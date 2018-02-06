@@ -14,6 +14,12 @@
 
 #include <unistd.h>
 
+void transpose(double *a, double *b, int nrow, int ncol) {
+	for (int i = 0; i < nrow; ++i)
+		for (int j = 0; j < ncol; ++j)
+			b[j * nrow + i] = a[i * ncol + j];
+}
+
 typedef struct _TData {
 	File	  f;
 	TableHead head;
@@ -359,7 +365,7 @@ int main(argc, argv)
 	}
 	a += ncol;
     }
-    memcpy(A, Design,  nmodel * nrow * ncol * sizeof(double));
+    transpose(Design, A, nmodel * nrow, ncol);
 
     slaSvd(nmodel * nrow, ncol, nmodel * nrow, ncol, A, W, V, Work, &j);
     slaSvdcov(ncol, ncol, ncol, W, V, Work, CVM);

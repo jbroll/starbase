@@ -6,7 +6,11 @@
  */
 
 #include <fnmatch.h>
+#ifdef FNM_EXTMATCH
 #define tmatch(string, template) (!fnmatch(template, string, FNM_EXTMATCH))
+#else
+#define tmatch(string, template) (!fnmatch(template, string, 0))
+#endif
 
 #include "table.h"
 #ifdef __STDC__

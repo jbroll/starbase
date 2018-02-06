@@ -9,7 +9,7 @@ xlsx2table: xlsx2table.py
 
 install:
 	cp xlsx2table $(bindir)
-	rm $(bindir)/table2xlsx
+	rm -f $(bindir)/table2xlsx
 	ln -s $(bindir)/xlsx2table $(bindir)/table2xlsx
 
 distclean::
