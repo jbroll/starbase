@@ -155,7 +155,7 @@ int main(argc, argv)
 	int	  cross = 0;
 	int	  zero  = 0;
 
-	char	  stdmodel_str[2048];
+	char	 *stdmodel_str;
 	char	 *term[128];
 	int	  terms;
 
@@ -196,15 +196,16 @@ int main(argc, argv)
 	usage("No independant variable specified");
     }
 
-    if ( order ) {
-	model[0] = stdmodel(stdmodel_str, term, &terms, model[0], order, cross);
-    }
     if ( nmodel == 0 ) {
 	FPrint(stderr, "No model specified\n");
 	exit(1);
     }
 
     for ( j = 0; j < nmodel; j++ ) {
+	if ( order ) {
+	    Malloc(stdmodel_str, 2047);
+	    model[j] = stdmodel(stdmodel_str, term, &terms, model[j], order, cross);
+	}
 	int Ncol = 0;
 
 	for ( i = 0, Ncol = 0; model[j][i]; i++ ) {
@@ -334,8 +335,6 @@ int main(argc, argv)
 		adata[0]       = &r_data;
 		actions[1]     = e_routine;
 		adata[1]       = NULL;
-
-		//r_routine(polls[0].f, &r_data);
 
 	    /* Read back the design matrix, while watching
 	       for output on stderr.
@@ -565,7 +564,7 @@ char *stdmodel(stdmodel_str, term, terms, model, order, cross)
 	    for ( i = 1; i <= order; i++ ) {
 		strcat(stdmodel_str, ", ");
 
-		if ( i > 1 ) 	sprintf(stdterm, "%s^%d", term[t], i);
+		if ( i > 1 ) 	sprintf(stdterm, "(%s)^%d", term[t], i);
 		else		sprintf(stdterm, "%s", term[t]);
 
 		strcat(stdmodel_str, stdterm);
