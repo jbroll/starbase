@@ -94,6 +94,27 @@ int e_routine(f, e_data)
     }
 }
 
+void usage(char *message) {
+    File out = message == NULL ? stdout : stderr;
+
+    if (message != NULL) {
+        FPrint(out, "error: %s\n\n", message);
+    }
+
+    FPrint(out, "svdfittable [options] -m <model> <var> [<var> ...]\n");
+    FPrint(out, "\n");
+    FPrint(out, "	-m <model>\n");
+    FPrint(out, "	-f <format_spec>\n");
+    FPrint(out, "	-p		# print design program and exit\n");
+    FPrint(out, "	-d		# print design matrix and exit\n");
+    FPrint(out, "	-x		# generate cross term model\n");
+    FPrint(out, "	-n		# generate npoly term model\n");
+    FPrint(out, "	-z		# set small singular values to zero\n");
+    FPrint(out, "\n");
+
+    exit(message == NULL ? 0 : 1);
+}
+
 int main(argc, argv)
         int     argc;
         char    *argv[];
@@ -140,7 +161,6 @@ int main(argc, argv)
 
 	char	*format = "%.15g";
 
-
     Malloc(yname, sizeof(char *) * yall);
     Malloc(model, sizeof(char *) * mall);
 
@@ -155,6 +175,8 @@ int main(argc, argv)
 		case 'm' : i++;  model[nmodel++] = argv[i]; lmodel += strlen(argv[i]);	continue;
 		case 's' : break;
 		case 'z' : 	zero++;				continue;
+		case 'h' : usage(NULL);
+		default:   usage("unknown option");
 	    }
 	    continue;
 	}
@@ -171,12 +193,11 @@ int main(argc, argv)
     }
 
     if ( ycol == 0 ) {
-	FPrint(stderr, "No independant variable specified\n");
-	exit(1);
+	usage("No independant variable specified");
     }
 
     if ( order ) {
-	model[0] = stdmodel(stdmodel_str, term, &terms, model, order, cross);
+	model[0] = stdmodel(stdmodel_str, term, &terms, model[0], order, cross);
     }
     if ( nmodel == 0 ) {
 	FPrint(stderr, "No model specified\n");
