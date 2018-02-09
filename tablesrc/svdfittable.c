@@ -371,8 +371,8 @@ int main(argc, argv)
     slaSvdcov(ncol, ncol, ncol, W, V, Work, CVM);
 
     if ( zero ) {
-	int wmax = 0;
-	int wmin;
+	double wmax = 0;
+	double wmin;
 
       for ( i = 0; i < ncol; i++ ) { if ( W[i] > wmax ) { wmax = W[i]; } }
 
