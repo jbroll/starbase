@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# tabletolist
+#
+# Starbase Data Tables  - An Ascii Database for UNIX
+#
+#   copyright 1991, 1993, 1995, 1999 John B. Roll jr.
+#   
+PATH=/Users/john/bin:/bin:/usr/bin;	export PATH
+
+trap "" 13
+
+ while [ $# -ge 1 ] ; do
+  case $1 in 
+   -i) shift; ifile=$1					;;
+   -o) shift; ofile=$1					;;
+    *) if [ "$ifile" = "" ] ; then
+	ifile=$1
+       else
+	echo "usage: tabletojson [[-i] ifile] [-o ofile]"
+	exit 1;
+       fi
+       ;;
+  esac
+  shift
+ done
+
+ if [ "$ifile" != "" ] ; then
+	exec < $ifile
+ fi
+ if [ "$ofile" != "" ] ; then
+	exec > $ofile
+ fi
+
+tawk '
+BEGIN {  FS="	"
+	OFS="	"
+	ncol = table_header(V, C, D)
+
+	printf("[")
+}
+{
+  	comma = ""
+  	printf("%s\n{", rowcomma)
+	for ( i = 1; i <= ncol; i++ ) {
+		printf(comma "\"" C[i] "\": " "\"" $i "\"")
+		comma = ", "
+	}
+  	printf("}")
+	rowcomma = ","; nl = "\n"
+}
+END { printf("%s]", nl) }
+
+function table_header(V, C, D,		header, dashes)
+{
+	getline	header
+	getline	dashes
+	if ( dashes !~ /(-+\t)*(-+)/ ) {
+	     do {
+		header = dashes	
+	     } while ( getline dashes > 0 && dashes !~ /(-+\t)*(-+)/ )
+	}
+
+	n = split(header, C, /\t/)
+	n = split(dashes, D, /\t/)
+
+	return n
+} '
