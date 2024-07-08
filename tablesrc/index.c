@@ -73,7 +73,7 @@ int main(argc, argv)
 	char   *zipper = NULL;
 
 	char	buffer[25];
-	char	command[1024];
+	char	command[4096];
 	char	extra[1024];
 
 	char	*tbuffer;
@@ -233,7 +233,7 @@ int main(argc, argv)
 		Tstart = Seek(file, 0, 1);
 		Tend   = Seek(file, 0, 2);
 		Seek(file, Tstart, 0);
-		sprintf(buffer, "%lld", (long long) Tend); 
+		snprintf(buffer, sizeof(buffer), "%lld", (long long) Tend); 
 		Width = strlen(buffer);
 		if ( Width < 6 ) Width = 6;
 
@@ -248,7 +248,7 @@ int main(argc, argv)
 	    usage();
 	}
 
-	sprintf(indxname, "%s.%s%s%s%c%c", filename
+	snprintf(indxname, sizeof(indxname), "%s.%s%s%s%c%c", filename
 		, Colmname
 		, col2name == NULL ? "" : "."
 		, col2name == NULL ? "" : Col2name
@@ -258,7 +258,7 @@ int main(argc, argv)
 		, search);	
 
 	if ( search == 'i' ) {
-		sprintf(command, "sorttable %s %s%s %s %s %s %s %s %s %s %s %s"
+		snprintf(command, sizeof(command), "sorttable %s %s%s %s %s %s %s %s %s %s %s %s"
 				, debug == 1 	? "-X" : ""
 			        , memory != NULL    ? "-M "  : ""
 			        , memory != NULL    ? memory : ""
@@ -321,21 +321,21 @@ int main(argc, argv)
 
 
     if ( search == 'b' ) {
-	    char	command[1024];
+	    char	command[4096];
 	    char	tmpname[1024];
 	    int		pid = getpid();
 
 	Close(file);
-	sprintf(tmpname, "%d.%s", pid, "index");
+	snprintf(tmpname, sizeof(tmpname), "%d.%s", pid, "index");
 
 	if ( reindex ) {
-	    sprintf(command, "indexsorttable %s %s %s > %s"
+	    snprintf(command, sizeof(command), "indexsorttable %s %s %s > %s"
 			    , debug == 1 	? "-D" : ""
 			    , filename
 			    , colmname
 			    , tmpname);
 	} else {
-	    sprintf(command, "sorttable %s %s%s %s %s %s %s %s %s %s < %s > %s"
+	    snprintf(command, sizeof(command), "sorttable %s %s%s %s %s %s %s %s %s %s < %s > %s"
 			    , debug == 1 	? "-X" : ""
 			    , memory != NULL    ? "-M "  : ""
 			    , memory != NULL    ? memory : ""

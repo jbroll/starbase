@@ -159,7 +159,7 @@ char *SAOconvert(buff, val, type, width, prec, flags)
 	int	 prec;
 	int	 flags;		/* minus, plus, space, pound, zero */
 {
-                char    fmt[32];
+                char    fmt[512];
                 int     left = 0;
                 char   *sign = "";
                 char   *plus = "";
