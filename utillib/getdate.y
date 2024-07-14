@@ -89,6 +89,8 @@ double juldate();
 #define yylex   getdate_yylex
 #define yyerror getdate_yyerror
 #define yylval  getdate_yylval
+#define yychar  getdate_yychar
+#define yynerrs getdate_yynerrs
 
 #define HOUR(x)		((int)(x) * 60)
 #define SECSPERDAY	(24L * 60L * 60L)
