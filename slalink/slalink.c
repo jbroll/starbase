@@ -82,7 +82,7 @@ typedef void Rettype;
 
 #define TROPOLAPSERATE 0.0065   /* Value suggested by slalib */
 #define EPSILON  1e-9           /* value suggested by slalib */
-#define MMTTEMP (273+10)           /* 50F */ 
+#define MMTTEMP (273+10)        /* 50F */ 
 #define MMTHUMID (0.5)
 #define MMTPRESSURE 737 /* mbar, from Smithsonian Meteorological Table 63*/
 

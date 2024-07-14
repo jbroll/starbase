@@ -1,6 +1,7 @@
 
 import sys,os,re, subprocess, tempfile
 
+
 from threading import Thread
 
 """
@@ -16,34 +17,34 @@ from threading import Thread
 
 
 try:
-    import starbase_data                        # Try to load a Cython data reader.  Its Faster
+    import starbase_data			# Try to load a Cython data reader.  Its Faster
     Starbase_readdata = starbase_data.readdata
 
 except ImportError:
-    def Starbase_readdata(file, types) :        # This is the same code just not Cython compiled
-            data = []
+    def Starbase_readdata(file, types) :	# This is the same code just not Cython compiled
+	    data = []
 
-            for row in file.readlines() :
-                r = []
-                for i, val in enumerate(row.rstrip("\r\n").split("\t")) :
-                    try:
-                        value = types[i](val.strip())
+	    for row in file.readlines() :
+		r = []
+		for i, val in enumerate(row.rstrip("\r\n").split("\t")) :
+		    try:
+			value = types[i](val.strip())
 
-                    except ValueError:
-                        value = val
+		    except ValueError:
+			value = val
 
-                    r.append(value)
+		    r.append(value)
 
-                data.append(r)
+		data.append(r)
 
-            return data
+	    return data
 
 Starbase_deftype = float
 def Starbase_hdrtype(value) : 
-    try:                return Starbase_deftype(value)
-    except ValueError:  return value
+    try: 		return Starbase_deftype(value)
+    except ValueError:	return value
 
-        
+	
 def Starbase_vector(value, type) : return value
 
 try:
@@ -52,7 +53,7 @@ try:
     def Starbase_vector(value, type) : return np.array(value, dtype=type)
 except ImportError:
     pass
-        
+	
 
 class Starbase(object):
     """
@@ -82,13 +83,13 @@ class Starbase(object):
         >>> tab[0][0]                   # get value at 0, 0
         1
 
-        #
-        # A different default type can be set with the "deftype" keyword.
-        #
+	#
+	# A different default type can be set with the "deftype" keyword.
+	#
         tab = Starbase("| jottable 10 x y z", deftype = float)
 
         x = tab[0].x + tab[0].y
-        print(x)
+        print x
         2
 
         >>> tab[2][1] = 5               # set value at 0, 0
@@ -127,7 +128,7 @@ class Starbase(object):
         # Iterating over the table returns each row of the table in turn:
         #
         >>> for row in tab :
-        ...     print(row)
+        ...     print row
         [1, 1, 1]
         [2, 2, 2]
         [3, 5, 3]
@@ -138,7 +139,7 @@ class Starbase(object):
         # Rows can be sliced and iterated over:
         #
         >>> for row in tab[0:2] :
-        ...     print(row)
+        ...     print row
         [1, 1, 1]
         [2, 2, 2]
 
@@ -146,7 +147,7 @@ class Starbase(object):
         # The row itself can be iterated of:
         #
         >>> for val in tab[2] :
-        ...     print(val)
+        ...     print val
         3
         5
         3
@@ -165,45 +166,45 @@ class Starbase(object):
         [1, 2]
 
 
-        >>> print(tab[(1, 2)])                          # doctest: +NORMALIZE_WHITESPACE
-	2	2	2
+	>>> print(tab[(1, 2)])				# doctest: +NORMALIZE_WHITESPACE
+        2	2	2
 	3	5	3
 
-        >>> print(tab[1:3])                             # doctest: +NORMALIZE_WHITESPACE
-	2	2	2
+	>>> print(tab[1:3])				# doctest: +NORMALIZE_WHITESPACE
+        2	2	2
 	3	5	3
 
-        >>> print(tab[1:3].X)
+	>>> print(tab[1:3].X)
         [2, 3]
 
-        >>> print(tab[[1, 3]].X)
+	>>> print tab[[1, 3]].X
         [2, 4]
 
 
-        # Select a few columns from the data
-        #
-        >>> tab[["X", "Y"]]
-        [[1, 1], [2, 2], [3, 5], [4, 4], [5, 8]]
+	# Select a few columns from the data
+	#
+	>>> tab[["X", "Y"]]
+	[[1, 1], [2, 2], [3, 5], [4, 4], [5, 8]]
 
-        >>> tab[["X", "Z"]]
-        [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
+	>>> tab[["X", "Z"]]
+	[[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
 
-        # Two columns from a single row
-        #
-        >>> tab[1][["X", "Y"]]
-        [2, 2]
+	# Two columns from a single row
+	#
+	>>> tab[1][["X", "Y"]]
+	[2, 2]
 
-        # Two columns from a slice of rows
-        #
-        >>> tab[2:4][["X", "Y"]]
-        [[3, 5], [4, 4]]
+	# Two columns from a slice of rows
+	#
+	>>> tab[2:4][["X", "Y"]]
+	[[3, 5], [4, 4]]
 
-        # Typical loop over rows in a table
-        #
-        >>> for (x, y) in tab[2:4][["X", "Y"]] :
-        ...  print(x, y)
-        3 5
-        4 4
+	# Typical loop over rows in a table
+	#
+	>>> for (x, y) in tab[2:4][["X", "Y"]] :
+	...  print x, y
+	3 5
+	4 4
 
         #
         # The values are stored as float by default.  An optional keyword
@@ -211,7 +212,7 @@ class Starbase(object):
         # makes using tables in expressions less painful.
         #
         >>> T = Starbase("| jottable 5 x y z", types = { "x" : float, "y" : int })
-        >>> print(T)                                                    # doctest: +NORMALIZE_WHITESPACE
+	>>> print T							# doctest: +NORMALIZE_WHITESPACE
 	x	y	z
 	-	-	-
 	1.0	1	1.0
@@ -227,24 +228,24 @@ class Starbase(object):
         # a starbase object from a bunch of python list or numpy
         # array data.
         #
-        >>> print(Starbase.arrays("XXX", [1, 2, 3], "Y", [3, 4, 5]))     # doctest: +NORMALIZE_WHITESPACE
-	XXX	Y
-	---	-
-	1	3
-	2	4
-	3	5
+        >>> print Starbase.arrays("XXX", [1, 2, 3], "Y", [3, 4, 5])     # doctest: +NORMALIZE_WHITESPACE
+        XXX     Y
+        ---     -
+        1       3
+        2       4
+        3       5
 
         # 
         # Keyword arguments are also supported, but the order of 
         # columns in the starbase table is determined by the 
         # python hash not the order passed to the constructor.
         #
-        >>> print(Starbase.arrays(X=[1, 2, 3], Y=[3, 4, 5]))             # doctest: +NORMALIZE_WHITESPACE
-	X	Y
-	-	-
-	1	3
-	2	4
-	3	5
+        >>> print Starbase.arrays(X=[1, 2, 3], Y=[3, 4, 5])             # doctest: +NORMALIZE_WHITESPACE
+        Y       X
+        -       -
+        3       1
+        4       2
+        5       3
 
         # 
         # The Starbase table may be printed directly.  This can safely be used
@@ -252,18 +253,18 @@ class Starbase(object):
         # tables, the ">" operator will iterativly print the table to a file
         # descriptor and may be faster.
         #
-        >>> print(tab)                  # print table                   # doctest: +NORMALIZE_WHITESPACE
-        label	label string
-	X	Y	Z
-	-	-	-
-	1	1	1
-	2	2	2
-	3	5	3
-	4	4	4
-	5	8	5
+        >>> print tab                   # print table                   # doctest: +NORMALIZE_WHITESPACE
+        label   label string
+        X       Y       Z
+        -       -       -
+        1       1       1
+        2       2       2
+        3       5       3
+        4       4       4
+        5       8       5
 
         >>> fp = open('/tmp/output', 'w')
-        >>> print(tab, file=fp)            # print to open file fp
+        >>> print >> fp, tab            # print to open file fp
         
         #
         >>> tab > sys.stdout            # write table to sys.stdout     # doctest: +NORMALIZE_WHITESPACE
@@ -302,7 +303,7 @@ class Starbase(object):
 
         # Union of two tables
         #
-        >>> print(t + t)
+        >>> print (t + t)
         x
         -
         1.0
@@ -314,7 +315,7 @@ class Starbase(object):
 
         # Difference of two tables
         #
-        >>> print((tab > "|< sorttable -u X") % "X=x" - t)        # doctest: +NORMALIZE_WHITESPACE
+        >>> print (tab > "|< sorttable -u X") % "X=x" - t        # doctest: +NORMALIZE_WHITESPACE
         label   label string
         x
         -
@@ -357,34 +358,34 @@ class Starbase(object):
             self.__initialized = 1
 
         def __str__(self) :
-            if ( type(self.__indx) == list or type(self.__indx) == tuple ) :
-                rows = [self.__tabl._Starbase__data[row] for row in self.__indx]
-            else :
-                rows =  self.__tabl._Starbase__data[self.__indx]
+	    if ( type(self.__indx) == list or type(self.__indx) == tuple ) :
+		rows = [self.__tabl._Starbase__data[row] for row in self.__indx]
+	    else :
+		rows =  self.__tabl._Starbase__data[self.__indx]
 
-            return "\n".join(("\t".join((str(item) for item in row)) for row in rows))
+	    return "\n".join(("\t".join((str(item) for item in row)) for row in rows))
 
         def __getitem__(self, indx) :
             if ( type(indx) == str ) :
                 indx = self.__tabl._Starbase__indx[indx]
 
-            if ( type(self.__indx) == int ) :
-                if ( type(indx) == list or type(indx) == tuple ) :
-                    return [self.__tabl._Starbase__data[self.__indx][self.__tabl._Starbase__indx[i]] for i in indx]
-                else :
-                    return self.__tabl._Starbase__data[self.__indx][indx]
-            else :
-                if   ( type(self.__indx) == slice ) :
-                    rows = self.__tabl._Starbase__data.__getitem__(self.__indx)
-                elif ( type(self.__indx) == list or type(self.__indx) == tuple ) :
-                    rows = [self.__tabl._Starbase__data[row] for row in self.__indx]
-                else :
-                    rows = None
+	    if ( type(self.__indx) == int ) :
+		if ( type(indx) == list or type(indx) == tuple ) :
+		    return [self.__tabl._Starbase__data[self.__indx][self.__tabl._Starbase__indx[i]] for i in indx]
+		else :
+		    return self.__tabl._Starbase__data[self.__indx][indx]
+	    else :
+		if   ( type(self.__indx) == slice ) :
+		    rows = self.__tabl._Starbase__data.__getitem__(self.__indx)
+		elif ( type(self.__indx) == list or type(self.__indx) == tuple ) :
+		    rows = [self.__tabl._Starbase__data[row] for row in self.__indx]
+		else :
+		    rows = None
 
-                if ( type(indx) == list or type(indx) == tuple ) :
-                    return [[row[self.__tabl._Starbase__indx[i]] for i in indx] for row in rows]
-                else :
-                    return [row[indx] for row in rows]
+		if ( type(indx) == list or type(indx) == tuple ) :
+		    return [[row[self.__tabl._Starbase__indx[i]] for i in indx] for row in rows]
+		else :
+		    return [row[indx] for row in rows]
             
         def __setitem__(self, indx, value) :
             if ( type(indx) == str ) :
@@ -399,8 +400,8 @@ class Starbase(object):
             return self.__tabl._Starbase__data[self.__indx].__iter__()
 
         def __setattr__(self, indx, value) :
-            if ( "_StarbaseRow__initialized" not in self.__dict__ \
-              or indx in self.__dict__ ) :
+            if ( not self.__dict__.has_key("_StarbaseRow__initialized") \
+              or self.__dict__.has_key(indx) ) :
                 self.__dict__[indx] = value
                 return
 
@@ -437,8 +438,8 @@ class Starbase(object):
         # Read lines until the dashline is found
         #
         while ( not dashes                                                                      \
-                 or dashes != len([s for s in self.__headline if re.match(r'\w+', s.strip())]) ) :
-            if ( re.match(r'\w+', self.__headline[0].strip()) ) :
+                 or dashes != len([s for s in self.__headline if re.match('\w+', s.strip())]) ) :
+            if ( re.match('\w+', self.__headline[0].strip()) ) :
                 self.__head[self.__headline[0].strip()] = len(self.__line)
 
             self.__line.append(self.__headline)
@@ -455,7 +456,7 @@ class Starbase(object):
             col = col.strip()
 
             self.__indx[col] = i
-            self.__type.append(types[col] if ( col in types ) else deftype)
+            self.__type.append(types[col] if ( types.has_key(col) ) else deftype)
             i += 1
 
         # Read the data in, converting to types
@@ -497,13 +498,13 @@ class Starbase(object):
             i += 2
 
         arry = [val for val in vals]
-        self.__data = list(zip(*arry))
+        self.__data = zip(*arry)
 
         self.__initialized = 1
         return self
 
     def __len__(self) :
-        return len(self.__data)
+	return len(self.__data)
 
     def __str__(self) :
         # Cast the table as a string.
@@ -518,27 +519,27 @@ class Starbase(object):
 
     def __contains__(self, indx):
         if ( type(indx) == str ) :
-            return indx in self.__head
-        
+	    return indx in self.__head
+	
     def __getitem__(self, indx) :
         if ( type(indx) == str ) :
-            if indx in self.__indx :
-                return Starbase_vector(Starbase.StarbaseRow(self, slice(None))[indx]
-                        , self.__type[self.__indx[indx]])
-            else :
-                return Starbase_vector(
-                        [Starbase_hdrtype(val) for val in Starbase.StarbaseHdr(self.__line[self.__head[indx]])]
-                        , Starbase_deftype
-                    )
+	    if indx in self.__indx :
+		return Starbase_vector(Starbase.StarbaseRow(self, slice(None))[indx]
+			, self.__type[self.__indx[indx]])
+	    else :
+		return Starbase_vector(
+			[Starbase_hdrtype(val) for val in Starbase.StarbaseHdr(self.__line[self.__head[indx]])]
+			, Starbase_deftype
+		    )
 
-        if ( (type(indx) == list or type(indx) == tuple) and type(indx[0]) == str ) :
-            return Starbase.StarbaseRow(self, slice(None))[indx]
-            
+	if ( (type(indx) == list or type(indx) == tuple) and type(indx[0]) == str ) :
+	    return Starbase.StarbaseRow(self, slice(None))[indx]
+	    
         return Starbase.StarbaseRow(self, indx)
 
     def __setitem__(self, indx, value) :
         if ( type(indx) == str ) :
-            if ( indx not in self.__head ) :
+            if ( not self.__head.has_key(indx) ) :
                 self.__head[indx] = len(self.__line)
                 self.__line.append([indx])
     
@@ -561,20 +562,20 @@ class Starbase(object):
         self.__data[indx] = [typ(val) for (typ, val) in zip(self.__type, value)]
 
     def __getattr__(self, indx) :
-        return self.__getitem__(indx)
+	return self.__getitem__(indx)
 
     def __setattr__(self, indx, value) :
-        if ( "_Starbase__initialized" not in self.__dict__        \
-          or indx in self.__dict__ ) :
+        if ( not self.__dict__.has_key("_Starbase__initialized")        \
+          or self.__dict__.has_key(indx) ) :
             self.__dict__[indx] = value
             return
 
         self.__setitem__(indx, value)
 
     def __pow__(self, other):
-        if other == "headline" : return self.__headline
+	if other == "headline" : return self.__headline
 
-        return None
+	return None
 
     def __binop(self, other, command) : 
         fd, file1 = tempfile.mkstemp()
@@ -588,16 +589,16 @@ class Starbase(object):
         return Starbase(command + " " + file1 + " " + file2)
 
     def __add__(self, other) :
-        return self.__binop(other, "| uniontable")
+        return self.__binop(other, "|< uniontable")
 
     def __or__(self, other) :
-        return self.__binop(other, "| uniontable")
+        return self.__binop(other, "|< uniontable")
 
     def __sub__(self, other) :
-        return self.__binop(other, "| diffrtable")
+        return self.__binop(other, "|< diffrtable")
 
     def __and__(self, other) :
-        return self.__binop(other, "| intertable")
+        return self.__binop(other, "|< intertable")
 
     def __mod__(self, columns) :
         if ( type(columns) == list or type(columns) == tuple ) :
@@ -617,25 +618,23 @@ class Starbase(object):
     def __gt__(self, file) :
         if ( type(file) == str ) :
             if ( file[0:1] == "|" ) :
-                if ( file[0:2] == "|<" ) :
-                    read = True
-                    file = file[1:]
-                else :
-                    read = False
+		if ( file[0:2] == "|<" ) :
+		    read = True
+		    file = file[1:]
+		else :
+		    read = False
 
-                p = subprocess.Popen(file[1:], shell=True, bufsize=1        \
-                        , stdin=subprocess.PIPE                             \
-                        , stdout=subprocess.PIPE                            \
-                        , stderr=subprocess.STDOUT                          \
-                        , close_fds=True                                    \
-                        , universal_newlines=True)
+		p = subprocess.Popen(file[1:], shell=True, bufsize=1        \
+			, stdin=subprocess.PIPE                             \
+			, stdout=subprocess.PIPE                    \
+			, stderr=subprocess.STDOUT, close_fds=True)
 
-                writer = Starbase.StarbasePipeWriter(self, p.stdin)
+		writer = Starbase.StarbasePipeWriter(self, p.stdin)
 
                 writer.start()
 
                 if read : reply = Starbase(p.stdout)
-                else    : reply = None
+    		else    : reply = None
 
                 writer.join()
 
@@ -644,12 +643,12 @@ class Starbase(object):
             file = open(file, "w")
 
         for line in self.__line :
-            print("\t".join(line), file=file)
+            print >> file, "\t".join(line)
 
-        print("\t".join(self.__headline), file=file)
-        print("\t".join(self.__dashline), file=file)
+        print >> file, "\t".join(self.__headline)
+        print >> file, "\t".join(self.__dashline)
         for row in self.__data :
-            print("\t".join((str(item) for item in row)), file=file)
+            print >> file, "\t".join((str(item) for item in row))
 
         return None
 
@@ -659,9 +658,9 @@ class Starbase(object):
         self > file
 
 
-if __name__ == '__main__':
-    # jottable 5 X Y Z > input.tab
-    #
-    import doctest
-    doctest.testmod()
+#if __name__ == '__main__':
+#    # jottable 5 X Y Z > input.tab
+#    #
+#    import doctest
+#    doctest.testmod()
 
