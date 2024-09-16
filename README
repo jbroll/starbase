@@ -18,9 +18,11 @@ exit
  subroutines to read/write and operate on data tables.
 
 
- Documentation is provided at:
+ Documentation was written in the early html era in a notation created at cfa
+ called "write up".  This format is similar to but incompatible with markdown.  The
+ existing docs will be slowly converted to Github flavored markdown and linked here:
 
-	http://www-cfa.harvard.edu/~john/starbase/starabase.html
+    https://jbroll.github.io/starbase/
 
 
 A top level configure script is provided.  Among other things, this creates
