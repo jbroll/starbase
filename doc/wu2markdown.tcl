@@ -1,4 +1,4 @@
-#!/usr/bin/env tclsh
+#!/usr/bin/env tclsh9.0
 
 # Initialize variables
 set header 1
@@ -63,16 +63,18 @@ proc process_line {line} {
 	}
 
     # Convert links
-    while {[regsub {@{([^\}]+),([^\}]+)}} $line {[\1](\2)} line]} {}
-    while {[regsub {@\[([^]]+),([^]]+)\]} $line {[\1](\2)} line]} {}
+    set line [regsub {@{([^\}]+),([^\}]+)}} $line {[\1](\2)}]
+    set line [regsub {@\[([^]]+),([^]]+)\]} $line {[\1](\2)}]
+    set line [regsub -all { @\[([^ \t]+)\]} $line {[\1](\1.html)}]
+    set line [regsub -all { @([^ \t]+)} $line { [\1](\1.html)}]
+    set line [string map { { index.html} { index-cmd.html} { starbase.html} { index.html} } $line] 
 
     # Convert inline formatting
     if {!$in_code_block} {
         set line [regsub -all {\*\*\*([^*]+)\*\*\*} $line {**\1**}]
         set line [regsub -all {~([^~]+)~} $line {*\1*}]
         set line [regsub -all {#([^ ]+)} $line {`\1`}]
-        set line [regsub -all { @\[([^ \t]+)\]} $line {[\1](\1.html)}]
-        set line [regsub -all { @([^ \t]+)} $line { [\1](\1.html)}]
+
     }
 
     # Print the processed line

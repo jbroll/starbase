@@ -8,10 +8,10 @@ efforts at implimenting the concepts outlined in the
 
 
 - [No SQL](  http://www.linux.it/~carlos/nosql/) by Carlo Strozzi, Italian Linux Society. 
-- [/RDB]( http://www.rdb.com) from [Revolutionary Software]( http://www.zuvaya.com/rsw/index.html)
+- [/RDB]( http://www.rdb.com) from [[Revolutionary]([Revolutionary.html) Software, http://www.zuvaya.com/rsw/index.html]
 - [/RDB-Hobbs]( http://cfa-www/~john/starbase/RDB-2.6d.tar.gz) from RAND.
 - [Unity]( http://www.bell-labs.com/project/wwexptools/unity/) from Bell Labs.
-- [dbops]( http://www.simtech-soft.com/dbops.shtml) from [simtech]( http://www.simtech-soft.com/)
+- [dbops]( http://www.simtech-soft.com/dbops.shtml) from [[simtech,]([simtech,.html) http://www.simtech-soft.com/]
 - [jink]( http://wwwtios.cs.utwente.nl/doc/jinx-doc/) A nice interactive table editor is available [here]( http://archive.cs.ruu.nl/pub/PERL).
 - [reldb]( http://sources.isc.org/apps/database/reldb.txt) by Gunnar Stefansson.
 - [|Stat]( http://www.acm.org/~perlman/stat/) by Gary Perlman.

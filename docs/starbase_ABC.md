@@ -38,7 +38,7 @@ Starbase Programs Alphabetical Listing
 - [headoff]( headoff.html) - remove the header of a starbase data table and output the data part.
 - [headtable]( headtable.html) - use the head utility on an ascii tab table.
 - [histtable]( histtable.html) - compute the histogram of a column in a table.
-- [index]( index.html) - index a starbase data table for fast access using the search command.
+- [index]( index-cmd.html) - index a starbase data table for fast access using the search command.
 - [indexsorttable]( indexsorttable.html) - output a table in the odrer of and indexed column.
 - [intertable]( intertable.html) - compute the intersection of two starbase data table.
 - [jiggletable]( jiggletable.html) - add a random gausian distribution to a column.

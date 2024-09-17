@@ -37,8 +37,8 @@ DETAILS
 #!/bin/sh
 #
 
-   @search -s $* < $1           \
- | @sorttable -u `headline < $1` \
- | @sorttable -n SetNumber      \
- | @reseqtable
+   [search](search.html) -s $* < $1           \
+ | [sorttable](sorttable.html) -u `headline < $1` \
+ | [sorttable](sorttable.html) -n SetNumber      \
+ | [reseqtable](reseqtable.html)
 

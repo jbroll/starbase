@@ -70,8 +70,8 @@ done using the fast index program [search.](search..html)
 Then search at the same point with a 3 arc minute circle diameter circle.
 
 ```
-        john@@panic: @index -mb -h catalog.tab RA
-        john@@panic: @index -mi -h catalog.tab Dec
+        john@@panic: [index](index.html) -mb -h catalog.tab RA
+        john@@panic: [index](index.html) -mi -h catalog.tab Dec
         john@@panic: radeccirc catalog.tab ra=2:30:03.5 dec=34:45:00 radius=0:03:00
 
         john@@panic: radeccirc catalog.tab ra=2:30:03.5 dec=34:45:00 width=0:03:00

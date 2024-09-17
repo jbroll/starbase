@@ -1,81 +1,212 @@
-Outline: starbase.wu
+Outline: ../MMTISoftware.wu
+Prev:    ../MMTISoftware.html
+Next:    ../MMTISoftware.html
+Up:      ../MMTISoftware.html
+Title:   Starbase Data Tables
 
-NAME
-====
+Starbase Data Tables
+====================
 
-#index - index a starbase data table for fast access using the @search command.
+ #starbase - an ASCII relational database for UNIX.
 
-SYNOPSIS
-========
+ #Starbase is a set of filter programs and an ascii table format for UNIX.
+ The current release contains over 95 programs for manipulating data tables.
+ The ascii database concepts are outlined in the book
+ @{Unix Relational Database Management, http://www.rdb.com/}
+ by Manis, Schaffer and Jorgensen.  This implementation
+ has been written at the
+ @{Smithsonian Astrophysical Observatory, http://cfa-www.harvard.edu/sao-home.html}
+ and contains many extensions for use with scientific and astrophysical data
+ sets.
 
-+
-    #index -m[sbihr] [-n] [-h] [-r] [-L] ~table~ ~column~
--
+   * Top Level @{README, README.html}
+   * @{Download, Download.html} Starbase Data Tables
+   * A Paper I wrote: @{Starbase: A User Centered Database for Astronomy, starbase.pdf}
+
+   * Summary Pages
+
+      * @{Introductory FAQ, FAQ.html} - By Ray Plante
+      * @{Astronomical Extensions Implemented at SAO, tawk.html}
+      * @{Starbase Programs Alphabetical Listing, starbase_ABC.html}
+      * @{Starbase Wiki, http://cfa-www.harvard.edu/wiki/starbase-wiki/}
+      * @{Starbase File Format, starbase.5.html}
+
+      * Starbase Source Code @{Browser, SRC/mains.html}
+      * @{Starbase "C" Function Interface, starbase.3.html}
+      * @{The Starbase BUGS list, BUGS}
+
+      * @{Other systems, Others.html} that are similar to #starbase.
+
+   * Starbase Programs Functional Listing
+
+     Row Programs:
+
+      * @{compute, compute.html}   	- compute new values for starbase data table
+      * @{row, row.html}   		- select rows from a starbase data table.
+      * @{select, row.html}   		- select rows from a starbase data table.
+      * @{validate, validate.html} 	- validate the rows of a table.
+					  columns.
+      * @{check, check.html} 		- check for column errors in a starbase database.
+
+     Column Programs:
+
+      * @{column, column.html} 		- project columns from a starbase data table.
+      * @{project, column.html} 	- project columns from a starbase data table.
+      * @{trim, trim.html} 		- trim columns of an starbase data table.
+
+     Header Access:
+
+      * @{dashline, dashline.html}	- print the dashline from a starbase data table.
+      * @{headoff, headoff.html}	- remove the header from a starbase data table.
+      * @{header, header.html}		- print the header from a starbase data table.
+      * @{headline, headline.html}	- print the headline from a starbase data table.
+
+     Database - Sets, Relations, Searching, Sorting and Indexing:
+
+      * @{appendtable, appendtable.html} - append rows to the end of a table
+      * @{classifytable, classifytable.html} - group together rows in a table into similar classes.
+      * @{cprodtable, cprodtable.html}	- create the cartesian product of N tables.
+      * @{diffrtable, diffrtable.html}	- subtract to starbase data tables.
+      * @{domaintable, domaintable.html} - convert the domain of a column from one set to another
+      * @{edittable, edittable.html}	- Table driven indexed editing of a starbase data table.
+      * @{index, index.html} 		- index a starbase data table for fast access
+      * @{indexsorttable, indexsorttable.html} - output a table in the odrer of and indexed column.
+					  using the search command.
+      * @{intertable, intertable.html}	- intersect two starbase data tables.
+      * @{jointable, jointable.html}	- join two starbase data tables on matching key columns.
+      * @{pastetable, pastetable.html}	- join N tables by row number.
+      * @{search, search.html} 		- quickly search an indexed starbase data table.
+      * @{sorttable, sorttable.html}	- sort a starbase data table by specified columns.
+      * @{uniontable, uniontable.html}	- produce the union of two starbase data tables.
+	    
+     Astronomical Programs:
+
+      * @{precess, precess.html}	- precess coordinates
+
+      * @{fk45z, fk45z.html}		- convert ra, dec columns from fk4 to
+					  fk5 assuming zero proper motion.
+      * @{fk54z, fk54z.html}		- convert ra, dec columns from fk5 to
+					  fk4 assuming zero proper motion.
+      * @{fk425, fk425.html}            - convert ra, dec columns from fk4 to
+					  fk5 with proper motion, paralax and
+					  recession velocity.
+      * @{fk524, fk524.html}		- convert ra, dec columns from fk5 to
+					  fk4 with proper motion, paralax and
+					  recession velocity.
+
+      * @{galeq, galeq.html}		- convert ra, dec columns from galactic to fk5.
+      * @{eqgal, eqgal.html}		- convert ra, dec columns from fk5 to galactic.
+      * @{ge1950, ge1950.html}		- convert ra, dec columns from galactic to fk4.
+      * @{eg1950, eg1950.html}		- convert ra, dec columns from fk4 to galactic.
+
+      * @{s2tptable, s2totable.html}	- spherical to tangent plane conversion
+      * @{tp2stable, tp2stable.html}	- tangent plane to spherical conversion
+      * @{radecbox, radecbox.html}	- select an ra, dec box from a catalog table.
+      * @{radeccirc, radeccirc.html}	- select an ra, dec circle from a catalog table.
+      * @{xytotng, xytotng.html}        - place circle regions at X, Y points on saotng
+      					  image display.
+
+     Beyond Compute:
+
+      * @{coproctable, coproctable.html} - run a coprocess on the rows of a table.
+      * @{jiggletable, jiggletable.html} - add a random gausian distribution to a column.
+      * @{radialsort, radialsort.html} - sort the rows of a table in by the distance from a point.
+      * @{resampletable, resampletable.html} -  resample numeric columns in a table.
+      * @{reseqtable, resampletable.html} - resequence a numeric column in a table to a monotonicly ascending sequence
+      * @{rotatetable, rotatetable.html}   - rotate two columns of a table representing cartesian coordinates.
+      * @{rttoxytable, rttoxytable.html} - convert a pair of columns in polar coordinates to cartesain coordinates.
+      * @{scaletable, scaletable.html}   - scale two columns of a table representing cartesian coordinates.
+      * @{shifttable, shifttable.html}   - add an offset to columns.
+      * @{xytorttable, xytorttable.html} - convert a pair of columns in cartesain coordinates to polar coordinates.
 
 
-DESCRIPTION
-===========
+     Fitting:
 
- #index creates a sorted index file (or sorts the table itself) so that 
- the @search command may be used to access rows of the table more quickly
- than the sequential access provided by #row.
+      * @{simplexfittable, simplexfittable.html} - coefficient fit of a an expression to a dependent column.
+      * @{svdfittable, svdfittable.html} - fit any set of columns to with linear coefficients on arbitrary basis functions.
+      * @{xyfittable, xyfittable.html}   - fit two pair of columns with a linear model of translation, scale, rotation and optional shear.
 
-OPTIONS
-=======
+     @{Combining Lab Data Tables, datasets.html}:
 
- * -m[sbihr]	Search method to index for.  #Index creates an index for use
-		with a particular search method.
+      * @{avg3dtable, avg3dtable.html} - stack several similar tables, compute the average value in each cell
+      * @{compute3dtable, compute3dtable.html} - stack several similar tables, evaluate statements for each cell
+      * @{expr3dtable, exprte3dtable.html} - stack several similar tables, evaluate the expression for each cell
+      * fun3dtable      - run a 3d function over a stack of similar datasets
+      * @{rms3dtable, rms3dtable.html} - stack several similar tables, compute the rms for each cell
+      * @{sub3dtable, sub3dtable.html} - stack two similar tables, compute the difference for each cell
+      * @{sum3dtable, sum3dtable.html} - stack several similar tables, compute the sum for each cell
 
-		* s	sequential (no op)
-		* b	primary key index on column
-		* i	secondary key index on column
-		* h	hash index
-		* r	row index
+     Statistics:
 
-		Hash and Row indexing are untested and Do NOT work.
-		
- * -n		sort index in numeric order.  The default is dictionary order.
- * -h		sort index in astronomical numeric order.  This option 
-		enables the use of RA, Dec values formated in sexagesimal.
- * -r		reverse the index ordering (search -r is broken, don't use this).
- * -L		record the record locations in the index file.  This option
-		allows faster access with index files.  The index file contains
-		extra information and will be larger.
+      * @{statstable, statstable.html}	- compute basic stats about the columns of a table.
 
-EXAMPLES
-========
+      * @[agvtable, statstable.html]	- compute the average of each column of a table.
+      * @[prectable, statstable.html]	- compute the precision of each column of a table.
+      * @[mintable, statstable.html]	- compute the max of each column of a table.
+      * @[maxtable, statstable.html]	- compute the min of each column of a table.
+      * @[medtable, statstable.html]	- compute the median of each column of a table.
+      * @[rmstable, statstable.html]	- compute the rms of each column of a table.
+      * @[rngtable, statstable.html]	- compute the range of each column of a table.
+      * @[sumtable, statstable.html]	- compute the sum of each column of a table.
+      * @[tottable, statstable.html]	- compute the total of each column of a table.
+      * @[total,    statstable.html]	- compute the total of each column of a table.
+
+      * @{histtable, histtable.html}	- compute the histogram of a column in a table.
 
 
-	Example of primary indexing.  Make a numeric primary index of file foo
-	on column A.
+     Table Input
 
--
-	john@panic: index -mb -n foo.mmethod A
--
+      * @{cvstattable, cvstattable.html} - display CVS stat as a table.
+      * @{daophototable, daophototable.html} - convert a daophot table to starbase
+      * @{fitsbase, fitsbase.html} 	- create a starbase database from fits files
+      * @{fitshdr, fitshdr.html} 	- create a starbase table for each input fits file
+      * @{fixtotable, fixtotable.html}	- convert a fixed column ascii table into a
+					  starbase data table.
+      * @{fldtotable, fldtotable.html}	- convert a field column ascii table into a
+					  starbase data table.
+      * @{gridtable, gridtable.html}    - create a table with columns representing cartesian coordinates.
+      * @{jottable, jottable.html}	- print a table of sequential or random data
+      * @{listtotable, listtotable.html} - convert an /rdb list format file to a starbase
+					  data table.
+      * @{sextotable, sextotable.html}  - inport a sextractor table to starbase.
 
-	Make three indicies for the file ZYX.tab.  The X column is the primary
-	index and the file XYZ.tab will be sorted in X order by the index
-	command.  The other two index commands make secondary of "indirect" 
-	indexes.  They will create auxillery files that will be used by search.
--
+     Table Output
 
-	john@panic: index -mb -n XYZ.tab X
-	john@panic: index -mi -n XYZ.tab Y
-	john@panic: index -mi -n XYZ.tab Z
--
-	Make indexes for RA Dec and Magnitude searching.  The -h option should
-	be used for RA, Dec column if they are in HH MM SS.SSS format.
+      * @{justify, justify.html} 	- justify columns of a starbase data table.
+      * @{extracttable, extracttable.html} - execute a program for each matching table in the input 
+      * @{formattable, formattable.html} - justify a table according to predefined arguments given in the table header
+      * @{report, report.html} - create a report from a table.
+      * @{tabletodaophot, tabletodaophot.html} - convert a table to a DAOphot table.
+      * @{tabletofits, tabletofits.html} - convert a table to a FITS binary table.
+      * @{tabletohtml, tabletohtml.html} - convert a table to HTML.
+      * @{tabletolist, tabletolist.html} - convert a starbase data table to /rdb list
+      * @{tabletom4, tabletom4.html} 	- write a set of m4 substitution commands.
+      * @{tabletosed, tabletosed.html} 	- write a set of sed substitution commands.
+					  format.
 
--
-	john@panic: index -mb -h coords.tab RA
-	john@panic: index -mi -h coords.tab Dec
-	john@panic: index -mi -n coords.tab Mag
--
-'
+     Utilities
 
-SEE ALSO
-========
+      * @{headtable, headtable.html}	- use the head utility on a starbase data table.
+      * @{randtable, headtable.html}	- pick random rows from a starbase data table.
+      * @{tactable, tactable.html}	- use the tac utility on a starbase data table.
+      * @{tailtable, tailtable.html}	- use the tail utility on a starbase data table.
+      * @{wctable, wctable.html}	- use the wc utility on a starbase data table.
 
-  * @search	- quickly search an indexed starbase data table.
-include starbase.seealso
+     File Substitution:
+
+      * @{grestable, grestable.html}	- table driven general regular expression
+					  substitution.
+      * @{tabletosed, tabletosed.html}	- convert a table to sed substitutions.
+      * @{trantable, trantable.html}	- table driven token substitution.
+      * @{tabletom4, tabletom4.html}	- convert a table to m4 substitutions.
+
+     Associated Programs and Documentation:
+
+      * @{calc, calc.html}		- a command line calculator.
+      * @{filebytes, filebytes.html}    - output a specified byte range from a file
+      * @{mawk, mawk.html}		- an implementation of the awk programming
+					  language by Mike Brennan (brennan@@boeing.com).
+      * @{tawk, tawk.html}		- awk language extensions implemented at SAO.
+      * @{reckon, reckon.html}		- execute a block of awk program statements.
+      * @{table, table.html} 		- a program for manipulating starbase data tables.
 

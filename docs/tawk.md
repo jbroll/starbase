@@ -40,7 +40,7 @@ EXTENSIONS
    function with a new format specifier "@".
 
 ```
-        john@panic: @reckon 'printf("%2.2@\n", 21.5)'
+        john@panic: [reckon](reckon.html) 'printf("%2.2@\n", 21.5)'
         21:30:00
 ```
 
@@ -65,7 +65,7 @@ Binary          0b000
 
 ```
 
-   john@panic: @calc 12.5+0:00:00
+   john@panic: [calc](calc.html) 12.5+0:00:00
    12:30:00.000
 ```
 
@@ -119,13 +119,13 @@ Binary          0b000
         and degrees are converted to Julian r2000, d2000 coordiantes.  Catalog
         data for proper motion, paralax and velocity may optionally be
         provided and will be returned.  See
-        [slaFk425](slalib/slaFk425.3.html) and [slaFk45z](slalib/slaFk45z.3.html).
+        [slaFk425](slalib/slaFk425.3.html) and [{slaFk45z,slalib/slaFk45z.3.html}.]({slaFk45z,slalib/slaFk45z.3.html}..html)
 
         With `fk524` and `fk54z` the Julian r2000, d2000 coordinates in hours
         and degrees are converted to Besellian r1950, d1950 coordiantes.
         Catalog data for proper motion, paralax and velocity may optionally be
         provided and will be returned.  See
-        [slaFk524](slalib/slaFk524.3.html) and [slaFk54z](slalib/slaFk54z.3.html).
+        [slaFk524](slalib/slaFk524.3.html) and [{slaFk54z,slalib/slaFk54z.3.html}.]({slaFk54z,slalib/slaFk54z.3.html}..html)
 
    * Tangent Plane Coordinates
 
@@ -278,7 +278,7 @@ KECK1           ?                                          2.714         0.346  
 ```
 
         Return the siderial time at place for the given datestring.
-        See  [slaGmst](slaGmst.3.html), [slaEqeqx](slalib/slaEqeqx.3.html).
+        See  [slaGmst](slaGmst.3.html), [{slaEqeqx,slalib/slaEqeqx.3.html}.]({slaEqeqx,slalib/slaEqeqx.3.html}..html)
 
    * Alt Az pointing direction
 

@@ -228,5 +228,5 @@ Search Specification Options:
 SEE ALSO
 ========
 
-  * @index      - index a starbase data table for fast access using the search command.
+  * [index](index.html)      - index a starbase data table for fast access using the search command.
 {% include starbase-seealso.md %}
