@@ -1,18 +1,16 @@
 
-NAME
-====
 
 compute - compute column values for the rows of a starbase data table
 
 SYNOPSYS
-========
+--------
 
 ```
         compute 'statements' < tablefile
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `compute` executes a list of awk statements on each row of a starbase data
 table.  Each statement is separated from the next by a semi-colon or newline.
@@ -23,12 +21,12 @@ table.  Each statement is separated from the next by a semi-colon or newline.
 {% include mawk-inc.md %}
 
 OPTIONS
-=======
+-------
 
 {% include tabstd-opts.md %}
 
 CONVFMT and OFMT
-================
+----------------
 
 When computing numeric columns with more than 6 significant figures it may
 be necessary to set the formatting values that compute uses to convert numeric
@@ -46,7 +44,7 @@ This is usually done on the command line with the -v option:
 
 
 EXAMPLES
-========
+--------
 
 `
     Assign the a new value to the "dist" column in a table.  Since compute

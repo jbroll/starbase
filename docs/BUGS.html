@@ -1,0 +1,677 @@
+<pre>
+
+
+    Is it fixed?
+
+    Fixed implies a permenent condition which I cannot guarantee captain,
+    I would rather say that it is well patched.  	    
+
+					     -- Commander Data
+
+
+
+131. pivottable may sort forever when asked for the median	Patched 3.4.5
+
+130. Invalid FITS header in talble to fits			Patched	3.4.5
+
+129. updatetable typo'ed					Patched 3.3.12
+
+128. pivottable fails if a column is named "N"			Patched 3.3.12
+
+127. column formatting - buffer not initialized.		Patched 3.3.11
+
+    The following bug appeared in "column" a while back, and I am
+    finally reporting it.  If I take a dummy input file
+	x	y	z
+	-	-	-
+	1	100	200
+	2
+	3	100	200
+
+    and then format the columns with x%.1f y%.1f z%.1f I get
+
+	x       y	z
+	-       -	-
+	1.0     100.0	200.0
+	2.0     2.	2.
+	3.0     100.0	200.0
+
+    Notice how the empty entries in row 2 have been erroneously filled in with
+    the previous entry (columns y and z are for some reason set to the value
+    of column x).
+
+    What used to happen is that the empty entries would be set to 0.0
+    for %1.f, although it might make as much sense to be left empty.
+
+
+
+126. If a table with a column named "e" is used with 		Patched 3.3.11
+     "row" or one of its links and the input selection
+     expression contains a literal number in scientific
+     notation (ie 10e-1), the "e" in the exponential notation
+     is replaced with the column value causing very difficult
+     to find errors.
+
+125. The new add column feature in table invoked by +COL	Patched 3.3.11
+     was getting tripped by ++var
+
+124. When justifying more than 64000 lines  			Patched 3.3.11
+     the temp file is handled incorrectly and
+     only 64000 lines of output are produced.
+
+	#77 from below resurfaced!
+
+123. statstable - Added -l option to label stats when called	Patched 3.3.11
+     as one of the sub stat links.
+
+122. tabletofits - Uninitialized local causes segv.		Patched 3.3.11 
+
+121. statstable, mediantable - statistical value were		Patched 3.3.11
+     only reported to the precision of the most precise
+     value in the input column.  The median of odd numbers
+     of rows was computed incorrectly.
+     
+120. When sorting (indexing) a pair of columns with		Patched 3.3.10
+     a modulus modifier the two bins adjacent to zero
+     would be sorted in the same bin.
+
+119. Column and friends - When comparing column names 		Patched 3.3.10
+     given on the command line to those in the table 
+     leading and trailing '_' characters were ignored
+     along with spaces.
+
+	This was obviously coded in purposfully but
+	is a bug.
+
+118. table_loadva still contained 32 bit file offsets!		Patched 3.3.10
+
+117. The API to table_loadva was used inconsistantly in		Patched 3.3.10
+     internal calls.  When fixed up two arguments were 
+     swapped.
+    
+
+116. Tawk replaces @ with the _Stack even when called 		Patched 3.3.9
+     wo/stack enabled.
+
+115. Tawk truncates seconds in conversion of mjd to unix	Patched 3.3.9
+     seconds.
+
+114. Release to Eric, documenting the fix for sorttable -q	Patched 3.3.8
+
+113. TABLEFUNCTIONS cannot be nulled out by a script.		Patched 3.3.7
+     The compiled in default is always searched.
+
+	This issue effected radebox, radexcirc and all of the 
+	units and coordinate system scripts.
+	
+112. radecbox never checks to see if it is actaully 		Patched 3.3.7
+     called as radeccirc.
+ 
+111. edittable is documented as reporting the number of		Patched 3.3.7
+     rows edited when the -v switch is given.  The code was 
+     there but the counter was never incremented.
+
+110. column rename was damaged when the pattern matching	Patched 3.3.7
+     code was added.
+
+109. search code to find records across the wrap point		Patched 3.3.3
+     in a paired indexed table was hopelessly typoed.
+
+     More of #101 below.
+
+108. jointable - when the join column is the last column of	Patched 3.3.3
+	table 1 and table 2 contains only one column the
+	field separators are not output in the header.
+
+	This is similar to #68 and #60.  Added tests.
+
+107. column - when adding a new column the forced width 	Unpatched
+	formatting ",##" doesn't work.
+
+Release 3.3.2
+
+106. search - dual indexed columns with negative value  	Patched 3.3.2
+	When searching in a paired indexed table with negative
+	range values the modulus expression on the lower bin
+	bound would round towards zero, this would cause the
+	lowest bin to be skipped. (#98 below)
+
+	This was still broken for the bin just below 0!
+
+105. header eats up the table by accident!			Patched 3.3.2
+
+     This breaks headtable, tailtable and others
+
+104. search will propigate corrupt data without warning		Patched 3.2 11
+     when the input key table has to few/to many columns in
+     a row.  This can shift all columns in joined data
+     output.
+
+103. table - row, compute and friends				Patched 3.2.11
+     When a double quote (") was encountered immedietly
+     following a column name the quote character was
+     missed.  This caused any following column name to
+     be missed.
+
+     This may fix bug #65 reported below.
+
+102. search segv on short tables while computing averge		Patched 3.2.10
+     row length in bytes.
+
+101. search code to find records across the wrap point		Patched 3.2.9
+     in a paired indexed table was hopelessly typoed.
+
+100. Some starbase scripts change PATH to include		Patched 3.2.9
+     the release directory but do not explicitly
+     re-export the new PATH value.  This fails 
+     under solaris /bin/sh.
+
+	This is the same bug as #76 below
+
+ 99. search - a remaining long long file offset			Patched 3.2.9
+	variable was declaired as int.  Caused
+	search to fail of very large files.
+
+ 98. search - dual indexed columns with negative value  	Patched 3.2.9
+	When searching in a paired indexed table with negative
+	range values the modulus expression on the lower bin
+	bound would round towards zero, this would cause the
+	lowest bin to be skipped. 
+
+ 97. table, compute and friends					Patched 3.2.9
+
+	The sign of number of numbers between 0 and -1 is dropped
+	when converting to sexagasmal format (0:00:00). This
+	was reintrobuced when fixing #93.  Cases are now in
+	the test suite.
+
+ 96. search trims the input key table to force 			Patched 3.2.9
+     proper trimming of the key value in compare.
+     This solution was too drastic and created
+     non-obvious result tables when the key table
+     and the search table are the same and -j is
+     used.
+
+     	This appears to be the 4th time I've fixed
+	this (#83, #43, #30).
+
+ 95. mjd refuses to convert dates with				Patched 3.2.9
+     seconds value > 59 (should be > 60)
+
+ 94. Timezone is incorrectly defaulted to GMT on the 		Patched 3.2.9
+     first call to unx() and the local zone on
+     subsequent calls.
+
+ 93. Disconnected minus sign.					Patched 3.2.9
+     Same as #66 below.  Fix implimented there was insufficient
+
+     Added tests in test/tawk/saostrtod
+
+ 92. search -- -C[123] and -S[123] options ignore		Pathced 3.2.9
+     numeric indicies created with index -n but 
+     see indicees created with index -h
+
+ 91. search -- an uninitialized value in the axis		Pathced 3.2.9
+     structure caused a failure of the -C[123] option
+     under linux.
+
+ 90. fitsbase -- "\f" is not interpolated to ^L by		Pathced 3.2.9
+     default under linux,
+
+ 89. index -- uninitialized variable in zones code		Pathced 3.2.5
+     causes random segv.
+
+ 88. search -S2 and friends should warn users if		Patched 3.2.5
+     index files are not numeric
+
+ 87. search -S2 and friends no longer work if there		Patched 3.2.5
+     are no index files.
+
+ 86. row, compute and friends segv on quoted strings 		Patched 3.2.3
+     longer than 400 bytes.  Increased limit to 8192.
+     The larger limit was lost when porting to mawk 1.3.3
+
+	This is the same bug as #40 below.
+
+ 85. svdfittable outputs garbage rows results when fed		Patched 3.2.3
+     tables with rows of differing numbers of columns
+
+ 84. column segv with -hV -t and the second of two		Patched 3.2.2
+     headers is the only output.
+
+ 83. search fails when input search keys contain 		Patched 3.2.2
+     trailing spaces.
+
+     	This appears to be the 3rd time I've fixed this (#43, #30).
+
+ 82. sorttable crashed on linux for files > 1Meg		Patched 3.2.2
+
+ 	linux setbuffer (glibc) brain damaged.
+
+ 81. Only row and column based filters recognize		Fix not planned
+     formfeed delimited tables.  Only column accepts
+     the -t option.
+			
+ 80. sorttable -c can report the wrong line number 		Patched 3.1.8
+     when it finds disorder.
+
+ 79. searching with a table of one record crashes		Patched 3.1.8
+
+ 78. median in statstable fails for tables with 1 row		Patched 3.1.8
+
+ 77. When justifying more than 64000 lines from a 		Patched 3.1.8
+     pipe the temp file is handled incorrectly and
+     only 64000 lines of output are produced.
+     
+ 76. PATH set but not exported in shell scripted		Patched 3.1.8
+     commands
+
+ 75. report doesn't output a \ when it sees \\			Patched 3.1.8
+
+ 74. slalink - eqgal eg1950					Patched 3.1.7
+
+ 	functions return input coords instead of results 
+ 	
+ 73. table, compute and friends					Patched 3.1.7
+
+	The sign of number of numbers between 0 and -1 is dropped
+	when converting to sexagasmal format (0:00:00).
+
+ 73. table, row and friends ...					Fix not planned
+
+ 	Cannot use column names in reqular expressions.  They
+	are incorrectly substituted with column numbers.
+
+ 72. statstable, meantable ...					Patched 3.1.3
+
+ 	-w switch broken
+
+ 71. search segv.						Patched 3.1.2
+ 
+ 	STRICTTAB not the default when calling rowget wo/ a header.
+
+ 70. column segv. when deleteing and adding columns.		Patched 3.1.2
+
+      column < infile -a Num:x DATE_TIME:x DDelta:x slope delta AdjCnt C1 C2 T1 T2 Err
+      can crash column.
+
+	Column selection code contained a typo, using the wrong index when 
+	filling in the selected column numbers.
+
+ 69. table							Patched 3.1.2
+
+ 	segv possible if any included file is of zero size.
+
+ 68. jointable							Patched 3.1.2
+
+	When table 2 contains only the join column
+	an extra field sepatator is output in the header.
+
+
+ 67. sorttable -i doesn't work at all.				Patched 3.1.1
+
+ 66. Disconnected minus sign.					Patched 3.1.1
+
+    From bmcleod@angus.harvard.edu  Fri Jun  1 21:04:12 2001
+    To: john@angus.harvard.edu
+    Subject: table formatting problem -- disconnected minus sign
+
+    bmcleod angus 108> printf "X\n-\n-1\n" | table -h '{printf "%5.2@", X}'
+    -    1:00:00.00bmcleod angus 109> 
+
+
+ 65. Extreme strange behavoir in column replacement		Patched 3.2.11
+
+	This appears to be a confusing manifestation of
+	bug #103 above.
+
+     # Extreme strange behavoir
+     #
+     table -D -h '{ print '"$1"'"="'" $2 "' }'
+
+     The lexer does the wrong thing here?
+
+
+ 64. jointable would mangle the data in file2 after		Patched 2.7.8
+     reaching and eof on file1.  Only noticed with 
+     -a2 option.
+
+ 63. tawk would convert the string "5ddd" to the		Patched 2.7.8
+     number 5 instead of 0. (Unpatched later).
+
+
+ 62. fk54z fk45z						Patched 2.7.0
+
+	bepoch parameter to low level slalib routines is a
+	modern epoch value not an mjd.
+
+ 61. fixtotable							Patched 2.6.11
+
+	Segv with more than 4 extracted coumns.
+
+ 60. jointable							Patched 2.6.9
+
+	When table 2 contains only the join column
+	no record sepatators are output in the header.
+
+ 59. statstable refused to compute for columns which		Patched 2.6.9
+     contained scientific notation.
+
+ 58. medtable was a copy of rmstable, selecting the		Patched 2.6.9
+     RMS row instead of the Median row.
+
+ 57. column mixes up the output columns when asked		Patched 2.6.8
+     select and format a table in the same invokation
+
+ 56. search without -j leaked the results union on 		Patched 2.6.8
+     each keytable row.  For largish inputs this would
+     slow the program to a crawl.
+
+ 55. pastetable could segv if the number of rows		Patched 2.6.8
+     in the input tables were different by more
+     than one.
+
+ 54. listtotable did not trim leading and trailing		Patched 2.6.8
+     spaces from the field names and generated
+     ugly dashlines.
+
+ 53. pastetable failed to output header values if they 		Patched 2.6.8
+     are available in the first file to paste.
+
+ 52. In column the absolute width of added columns 
+     cannot be set with the -w switch.
+
+ 51. obscure bug in search can cause segv.			Patched 2.6.8
+
+ 50. statstable min and range.					Patched 2.6.7
+
+	min is computed incorrectly for negative numbers.
+
+ 49. column strikeout						Patched 2.6.7
+
+	Striking out columns with -x can cause a segv.
+
+ 48. Free unallocated column format vectors.			Patched 2.6.6
+
+	This was causing plottable and column to trap.
+
+ 47. Fix typo in sorttable that made it unusable		Patched 2.6.5
+
+
+--- Release 2.6.0 Here
+
+ 46. The mjd function would not recognize mjd numbers.		Patched 2.5
+
+ 45. Proper expansion of the TABLEFUNCTIONS path.		Patched 2.5
+
+	The util routine FileList only expaneded a single directory.
+	It was supposed to be a path of directories.
+
+ 44. Cannot justify a number to the left or center		Patched 2.5
+     and cannot force text justification of a numeric column.
+
+ 43. search was not skipping over leading spaces.		Patched 2.5
+
+     This resulted in a mismatch in the search and sort colating sequences.
+	
+ 42. cal function returns ? as the day value for		Patched 2.5
+     dates before 1970.
+
+	Since cal is based on strftime it seems that dates before the UNIX
+	epoch are too confusing to get the day value right.  The default 
+	date format has been changes so that is doesn't include the day 
+	of the week.
+
+ 41. diffrtable uses poor code to create a dashline.   		 Patched 2.5
+
+	intertable suffered from the same problem
+
+ 40. tawk fixed length for quoted strings encountered.		Patched 2.5
+
+	There is a fixed length buffer for parsing quoted strings
+	in the mawk compiler.  This value was 400 now 4096.
+
+ 39. sorttable [-u -U -d -D] and large inputs.			Patched 2.5
+
+	For large input files, (>100,000 lines) and unique line output
+	produces incorrect output.
+
+	Fixes for Bug #27 broke several other things.
+
+
+ 38. fk54 -- incorrect calling sequence to slalib		Patched 2.5
+
+
+ 37. floating point overflow on tawk
+
+	Text in a column that "looks" like a number but is actually just
+    	text is converted anyway and can cause floating point overflows.
+
+
+ 36. mdj() tawk builtin function.				Patched 2.5
+
+	mjd returns values 365 days to large for days in the month of
+	febuary.
+
+	Bug in slacldj fixed in newer releases of sla.
+
+ 35. cal() tawk builtin function.				Patched 2.5
+
+	calling cal() crashes the program.
+
+
+ 34. sort -n and -h						Patched 2.5
+
+	"+" in front of a number is treated as TEXT.
+
+
+ 33. radecbox, radeccirc					Patched 2.5
+
+	Negative declinations are not included in searches.
+
+	The declination axis is incorrectly identified as a circular coordinate
+	system to search.  Negative values are "wrapped" around 360 degrees.
+
+
+ 32. fixtotable	- table_colarg();				Patched 2.5
+
+	Using a column flag more than once causes a segv while printing
+	the error message!
+
+ 31. index							Patched 2.5
+
+	index -mi with invalid table input SEGV.
+
+ 30. search							Patched 2.5
+
+	Search should trim fields of leading and training whitespace before 
+	doing the compare.
+
+ 29. row 							Patched 2.3d
+
+	Row does not concatenate its arguments into a program as the 
+	/rdb version does.
+
+ 28. search on HP-UX						Patched 2.3d
+
+	search fails on HP-UX returning too few rows.  This was an obvious
+	codding error in the sorting compare function in range.c.  I don't
+	know why search seemed to work on other machines (different qsort
+	implimentations?).
+
+ 27. sorttable [-u -U -d] and large inputs.			Patched 2.3d
+
+	For large input files, (>100,000 lines) and unique line output
+	_sort dumps core.
+
+	The saved line buffer was being tested before initialised on the
+	first iteration.  
+
+	For large inputs the -U and -d options produce incorrect results.
+
+	The uniqueness of a line was being evaluated on a buffer by buffer
+	basis instead of over the entire sort.
+
+ 26. radecbox and radeccirc					Patched 2.3d
+
+	negative declinations are not searched.
+
+	obvious coding error in the parameter range checking call.
+
+	stupid code -n table coppies all "option" arguments to the front of 
+	the argument list before calling tawk.  This caused the negative
+	dec to be interpreted as the tawk program, a single number evaluation.
+
+ 25. jointable							Patched 2.3d
+
+	If the join column in the two tables were not in the same
+	column number the join fails
+
+ 24. jointable							Patched 2.3d
+
+	When the last column of a table being joined ends in a space an 
+	extra column was inserted into the output.
+
+ 23. table_colarg routine					Patched 2.3d
+
+	String column values are not NULL terminated on return.
+
+ 22. search							Patched 2.3d
+
+	Greater than and less than comparisons are reversed for string column.
+
+ 21. sorttable and jointable call sort and join			Patched 2.3d
+
+	Installing modified versions of familiar system programs was a bad
+	idea.  The starbase versions of sort and join have been renamed to
+	_sort and _join.
+
+ 20. fldtotable							Patched 2.3d
+
+	When the field number begins with 9 there are many extra spaces output
+	in the database column.  The field start and stop columns where not
+	being cast from strings to numbers.  Incrementing a string "9" is a
+	string "10" which is still less than the number 9.  The string would
+	continue to increment until "90".
+
+	Inputs are now explicitly cast to numbers.
+
+ 19. jointable							Patched 2.5
+
+	When two table with a column of the same name are joined (not the
+	join column) the columns are not renamed Col_1 and Col_2 as they 
+	are in the pastetable, cprodtable and search programs.
+
+ 18. table programs						Patched 2.3b
+
+	Header value identifiers containing "_" characters were not
+	included as values in the generated awk program.
+
+ 17. jointable							Patched 2.3b
+
+	jointable sometimes corupts the last field in a file.
+
+	The field "trim" feature was testing uninitialized data.
+
+ 16. sorttable -h.						Patched	2.3b
+
+	sorttable fails when sorting on sexagesmal values in more than one 
+	column.
+
+	Code for the "optimized" first field case was accidently coppied
+	into the normal sexagasmal compare branch.  When more than one
+	field of sexagasmal is compared, the cached first field value
+	is corupted.
+
+ 15. Table.  header array value initializarion.			Patched 2.3b
+
+	A newline was inserted in the awk program after the header
+	value instead of a comma.
+
+	Introduced during the addition of column array feature.
+	Released because of a lack of testing.
+
+ 14. Table.  uninitialized pointer tfp.				Patched 2.2
+
+ 13. Search -- alpha						Patched 2.3d
+
+	even under the DEC compiler there is a bug in search.
+
+	The code does not seem to be very 64 bit friendly.  This bug
+	appears to be the same as #28 above.
+
+ 12. Complete melt down of all SAO written code on the alpha!
+
+	This was a result of a bug in gcc-2.7.0.  Declairation for malloc
+	that are not in actual source file are ignored???
+
+	Work around is to use the DEC compiler, which is faster anyway.
+
+ 11. listtotable/ tabletolist					Patched 2.3c
+
+     These program where woefully under tested.  There should now be some 
+     expectation that they will work as in /rdb.
+
+ 10. tawk							Patched 2.2
+
+     In a function declairation without an explicite return statement
+     the number of return values goes uninitialized and the program 
+     issues a warning.
+
+     Initialize the nrets member of the active_funct structure with 0.
+
+  9. Missing Documentation:
+
+	These are all programs added in this release (2.24).
+
+	validate						Patched 2.5
+	intertable						Patched 2.5
+	diffrtable						Patched 2.5
+	uniontable						Patched 2.5
+	tabletolist
+	listtotable
+	prec							Program deleted
+	grestable
+	tabletosed
+	trantable
+	tabletom4
+
+  8. Search							Patched 2.2
+
+    Routine table_rangerows used many times in the search program passes
+    the wrong "end" range value to the function it calls.
+
+  7. Configuration,  libdir needed for install.
+
+  6. Configuration,  man instalation.				Patched 2.2
+
+    man/html/help directories populated in distribution.
+
+  5. Configuration, lex/yacc nedded to compile.			Patched 2.2
+
+  4. Search					 		Patched 2.2
+
+    Searching 2d spherical coordinate system.
+
+	The routine which computes the search box multiplies by the
+	cosine of the declination instead of dividing.
+
+  3. Sort					 		Patched 2.2
+
+    Major bug in sort.  All sorting and indexing is suspect.
+
+	An optimization introduced in the 2.21 internal release
+	caused sort not to sort at all.  The problem did not 
+	make it into any released versions.
+
+  2. Search
+
+    Search on a hash index does not work.  Never tested when written.
+    this should take a couple of hours to fixup.
+
+  1. Column rename						Patched 2.5
+
+    Rename broken on machines where sizeof(int) != sizeof(char *).
+
+	poor programming practice.
+<pre>

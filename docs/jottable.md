@@ -1,18 +1,16 @@
 
-NAME
-====
 
 jottable - print a table of sequential or random data
 
 SYNOPSYS
-========
+--------
 
 ```
     `jottable` *column* [-cnr] [-s] [-p] [-w *string*] [*reps* [*begin* [*end* [*s*]]]]
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `jottable` is used to print out increasing, decreasing, random, or redundant
 data column of data, usually numbers.
@@ -68,7 +66,7 @@ The following options are available:
 
 
 EXAMPLES
-========
+--------
 
   The command
 ```
@@ -117,7 +115,7 @@ as in
 ```
 
 Copyright
-=========
+---------
 ```
 
 - Copyright (c) 1993
@@ -154,7 +152,7 @@ Copyright
 
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}
 

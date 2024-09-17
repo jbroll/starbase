@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrval  - access a header value.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,13 +14,13 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table header.
   * `"char` *name" - name of header value.
   * `"int` i" - array index of value.
 
 DESCRIPTION
-===========
+-----------
  Access the header value `name` as an integer, double or string. If the value
  is an array the i'th value in the array is returned.
  
@@ -30,7 +28,7 @@ DESCRIPTION
  be modified in any way.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

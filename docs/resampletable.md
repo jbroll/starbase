@@ -1,18 +1,16 @@
 
-NAME
-====
 
 resample - resample numeric columns in a table
 
 SYNOPSYS
-========
+--------
 
 ```
     `resample` *controltable* *keycol*[:*controlkeycol*] *col1* ... [*coln*] [< *input*]
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `resampletable` is used to resample numeric columns in a table to a set of
 points specified by a column in a control table.  The resampling is done using
@@ -24,7 +22,7 @@ the input file, the output value is linearly extrapolated using the end
 values.
 
 OPTIONS
-=======
+-------
 
      * *controltable* - The name of the table that will control the resampling
 
@@ -38,7 +36,7 @@ OPTIONS
      * *col* ... - Names of columns in the input table that will be resampled.
 
 EXAMPLE
-=======
+-------
 
 ```
     % cat newxtab
@@ -69,6 +67,6 @@ EXAMPLE
 
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}

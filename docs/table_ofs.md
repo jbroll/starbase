@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_ofs  - change the output field separator.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,18 +14,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` t" - Table header pointer
   * `"int` newofs" - New output field separator
 
 DESCRIPTION
-===========
+-----------
  The output field separator is a single character that [table_row](table_row.html)
  places between the column values when it prints a row. The
  previous output field separator is returned.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

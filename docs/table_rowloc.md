@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_rowloc  - low level table row descriptor allocation.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,22 +14,22 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableRow` row" - the row to be reallocated.
   * `"int` nbuf" - the new size of row buffer.
   * `"int` ncol" - the new size of column vector.
 
 DESCRIPTION
-===========
+-----------
  ReAllocate the buffers for row to have nbuf characters in the buffer
  and ncol entries in the column vector.
 
 RETURNS
-=======
+-------
  Returns the reallocated TableRow.
  #
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

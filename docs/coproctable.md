@@ -1,19 +1,17 @@
 
-NAME
-====
 
 `coproctable` - run a coprocess on the rows of a table.
 
 
 SYNOPSYS
-========
+--------
 
 ```
         coproctable [-h] pipeline [COL[=COL] COL[=COL]]
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `coprocess` table is `ALPHA` software.
 
@@ -22,7 +20,7 @@ and read back from the coprocess while other column are simply coppied from
 standard input to standard output.
 
 EXAMPLES
-========
+--------
 
 Here the X, Y coordinate columns of a table are passed to an iraf coprocess
 to be converted from X, Y to RA and Dec using the HST t_metric task.
@@ -65,7 +63,7 @@ to be converted from X, Y to RA and Dec using the HST t_metric task.
 
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}
 

@@ -1,25 +1,23 @@
 
-NAME
-====
 
 diffrtable - compute the difference of two starbase data table.
 
 SYNOPSYS
-========
+--------
 
 ```
         `diffrtable` *table1* *table2* [*columns*] [-o *ofile*]
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `diffrtable` computes the difference of two tables over a set of columns.  It
 subtracts the rows in table1 which are equal to rows in table2.  There is no
 way to specify different column names for each of the two tables.
 
 EXAMPLES
-========
+--------
 
 Difference of a table with itself is empty:
 
@@ -53,7 +51,7 @@ table1.
 ```
 
 SEE ALSO
-========
+--------
 
 - [intertable](intertable.html) - compute the intersection of two starbase data tables.
 - [uniontable](uniontable.html) - compute the union of two starbase data tables.

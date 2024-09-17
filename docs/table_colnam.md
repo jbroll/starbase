@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_colnam  - returns the name of the column number.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,16 +14,16 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table to lookup column in.
   * `"int` num" - number of the column to lookup.
 
 DESCRIPTION
-===========
+-----------
  Returns the column name or NULL if number is greater than ncol.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

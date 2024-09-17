@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_colpad  - pad column output for justification.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - output file.
   * `"char` *string" - string to pad.
   * `"int` mwidth" - width of output in characters.
@@ -26,7 +24,7 @@ PARAMETERS
   * `"int` type" - justification padding type.
 
 DESCRIPTION
-===========
+-----------
  Output string to the file in a column of width characters. If precision
  is
  non-zero, the output is right justified as a number with the "." precision
@@ -46,7 +44,7 @@ DESCRIPTION
 
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

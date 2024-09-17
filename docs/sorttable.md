@@ -1,18 +1,16 @@
 
-NAME
-====
 
 `sorttable` - sort a starbase data table on specified columns.
 
 SYNOPSYS
-========
+--------
 
 ```
         `sorttable` [options] < *table* [*keycolumn*[:flags]] [*keycolumn*[:flags]] ...
 ```
 
 DESCRIPTION
-===========
+-----------
 
    `sorttable` uses the unix sort program to sort a starbase data table.
 
@@ -27,7 +25,7 @@ DESCRIPTION
    to the global options.
 
 OPTIONS
-=======
+-------
 
 Program Options
 ---------------
@@ -81,7 +79,7 @@ Sort Options
 
 
 COLUMN FLAGS
-============
+------------
 
    Any of the above sort options may be supplied for specific columns
    by suffixing the column with a sort flag.  Sort flags are introduced
@@ -98,7 +96,7 @@ COLUMN FLAGS
 ```
 
 EXAMPLES
-========
+--------
 
 `
   Sort a table by Object name
@@ -118,7 +116,7 @@ EXAMPLES
 '
 
 SEE ALSO
-========
+--------
 
 
 - [jointable]( jointable.html) - join two starbase data tables on matching key columns.

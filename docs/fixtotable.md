@@ -1,25 +1,23 @@
 
-NAME
-====
 
 fixtotable - convert a file of fix format columns to a starbase data table.
 
 SYNOPSYS
-========
+--------
 
 ```
         `fixtotable` [-i *ifile*] [-o *ofile*] *column*[:*n*-[*m*]] [*column*[:*n*[-*m*]]] ...
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `fixtotable` converts fixed format files to starbase data tables.  The output
 table contains the columns named on the command line.  The contents of each
 column are the range of `character` columns indicated with each column name.
 
 OPTIONS
-=======
+-------
 
 
 - -i *file* Read input from *file* instead of the standard input.
@@ -31,7 +29,7 @@ OPTIONS
 
 
 EXAMPLES
-========
+--------
 
 Convert a fixed format file to a table with the following column definitions:
 Object name from column 1-25, RA from column 27-39, Dec from column 40-52 and 
@@ -43,7 +41,7 @@ a trailing comment from column 55 to the end of line.
 
 
 SEE ALSO
-========
+--------
 
 - [fldtotable](fldtotable.html) - convert a file of space delimited fields to a starbase data table.
 

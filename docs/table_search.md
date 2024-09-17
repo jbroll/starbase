@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_search  - set up to search a table using a fast access method
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,17 +14,17 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"char` *file" - Name of a table to search.
   * `"char` *col" - Name of the key column.
   * `"int` method" - Suggested method.
 
 DESCRIPTION
-===========
+-----------
  set up to search a table using a fast access method
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

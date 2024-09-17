@@ -1,11 +1,9 @@
 
-NAME
-====
 
 `statstable` - compute basic stats about the columns of a table.
 
 SYNOPSYS
-========
+--------
 
 ```
     `statstable` < *table*
@@ -21,7 +19,7 @@ SYNOPSYS
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `statstable` read the input file from the standard input and outputs a 
 table of basic statistics on the standard output.  It computes the 
@@ -47,7 +45,7 @@ statistic.
 
 
 EXAMPLES
-========
+--------
 
 ```
     john@panic: statstable < data.tab
@@ -64,6 +62,6 @@ EXAMPLES
 ```
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}

@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_extract  - extract a table from a multi table file.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,13 +14,13 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - table file name
   * `"TableSection` section" - Section descriptor
   * `"int` nsec" - Number of seciton descriptors
 
 DESCRIPTION
-===========
+-----------
  The named table is extracted from the multi table file using the tablex
  program. Optionally the extracted table may be further processed by
  a filter given in command.
@@ -30,7 +28,7 @@ DESCRIPTION
  `table_extract` returns the file handled opened by popen().
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

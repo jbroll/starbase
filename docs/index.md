@@ -1,6 +1,6 @@
 
 Starbase Data Tables
-====================
+--------------------
 
  `starbase` - an ASCII relational database for UNIX.
 
@@ -15,6 +15,7 @@ Starbase Data Tables
  sets.
 
    * Top Level [README]( README.html)
+   * Github code repository [jbroll/starbase]( https://github.com/jbroll/starbase)
    * [Download]( Download.html) Starbase Data Tables
    * A Paper I wrote: [Starbase: A User Centered Database for Astronomy]( starbase.pdf)
 
@@ -23,12 +24,10 @@ Starbase Data Tables
       * [Introductory FAQ]( FAQ.html) - By Ray Plante
       * [Astronomical Extensions Implemented at SAO]( tawk.html)
       * [Starbase Programs Alphabetical Listing]( starbase_ABC.html)
-      * [Starbase Wiki]( http://cfa-www.harvard.edu/wiki/starbase-wiki/)
       * [Starbase File Format]( starbase.5.html)
 
-      * Starbase Source Code [Browser]( SRC/mains.html)
       * [Starbase "C" Function Interface]( starbase.3.html)
-      * [The Starbase BUGS list]( BUGS)
+      * [The Starbase BUGS list]( BUGS.html)
 
       * [Other systems]( Others.html) that are similar to `starbase.`
 

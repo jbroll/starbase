@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_rowput  - output a table row.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - output file.
   * `"TableHead` table" - table header.
   * `"TableRow` row" - row to output.
@@ -26,11 +24,11 @@ PARAMETERS
   * `"int` nsel" - the number of selected columns.
 
 DESCRIPTION
-===========
+-----------
  The row is output on file with column selected and justified as indicated.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

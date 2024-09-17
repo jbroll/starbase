@@ -1,19 +1,17 @@
 
-NAME
-====
 
 `search` - search a table using a fast access method.
 
 
 SYNOPSIS
-========
+--------
 
 ```
     `search` *table* [options] < *keytable*
 ```
 
 DESCRIPTION
-===========
+-----------
 
 The `search` program may be used in combination with the [index](index.html) program to find
 data rows in large tables very quickly.  First the table must be indexed.
@@ -22,7 +20,7 @@ how it is run.  Search will use the created index to find rows in the table
 that match the given options.
 
 OPTIONS
-=======
+-------
 
 Program Options:
 ----------------
@@ -226,7 +224,7 @@ Search Specification Options:
 
 
 SEE ALSO
-========
+--------
 
   * [index](index.html)      - index a starbase data table for fast access using the search command.
 {% include starbase-seealso.md %}

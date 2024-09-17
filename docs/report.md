@@ -1,18 +1,16 @@
 
-NAME
-====
 
 report - create a report from a table.
 
 SYNOPSYS
-========
+--------
 
 ```
     `report` *template* < *table*
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `report` reads the template file and makes substitutions in it for each 
 row in the input table.  The template report is an ASCII file containing the
@@ -29,6 +27,6 @@ with the values from the input table.
 
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}

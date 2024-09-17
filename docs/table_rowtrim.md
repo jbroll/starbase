@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_rowtrim  - trim blanks out of a row structure.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableRow` row" - the row to trim.
   * `"int` *width" - width of each column.
   * `"int` *precision" - precision of each column.
@@ -27,7 +25,7 @@ PARAMETERS
   * `"int` nsel" - number of selections
 
 DESCRIPTION
-===========
+-----------
  Blank spaces in the values of the row are trimmed out inplace.
  The widths and numeric precision of the values in the row are
  recorded in the width and precision arrays. `table_trim` is a
@@ -35,7 +33,7 @@ DESCRIPTION
  table read when the table header mode was `TABLE_PARSE.`
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

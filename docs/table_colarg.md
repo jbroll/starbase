@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_colarg  - parse a table program column argument.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table to lookup column in.
   * `"char` *column" - column argument.
   * `"char` *flag" - string of allowed flags
@@ -26,7 +24,7 @@ PARAMETERS
   * `"int` *check" - array of returned flag switched
 
 DESCRIPTION
-===========
+-----------
  `table_colarg` parses any flags from the end of a column name argument given
  to a table program on the program command line and calls `table_col` to look
  up the column in the table header. `table_arg` may also be used to parse
@@ -34,12 +32,12 @@ DESCRIPTION
  `table_colnum` is not called and the return value is 0.
 
 RETURNS
-=======
+-------
  `table_colarg` returns the column number of the column or 0 if the column
  is not in
  the table.
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

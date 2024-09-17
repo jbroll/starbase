@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_mode  - set the table i/o mode.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,18 +14,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` t" - Not Documented.
   * `"int` m" - Not Documented.
   * `"int` x" - Not Documented.
 
 DESCRIPTION
-===========
+-----------
  The table mode may be set to TABLE_PARSE and
  TABLE_JUSTIFY. See [table_header.](table_header..html)
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

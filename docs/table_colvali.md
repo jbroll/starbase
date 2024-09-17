@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_colvali  - get the value from the column.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,16 +14,16 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableRow` r" - pointer to the table row.
   * `"int` c" - The column number to get the value for.
 
 DESCRIPTION
-===========
+-----------
  Return the value of the table column for row `r` as an integer.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

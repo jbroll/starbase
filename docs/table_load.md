@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_load  - load a table directly into a data structure.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` ifile" - File pointer to read table from.
   * `"TableHead` t" - Table header if already read in
   * `"TblDescriptor` T" - Table column descriptor.
@@ -28,14 +26,14 @@ PARAMETERS
   * `"int` *nrecs" - Number of records read.
 
 DESCRIPTION
-===========
+-----------
  `table_load` provides a top level routine for loading table data directly
  into
  a program data structure. The data structure is described by the TblDescriptor
  `T.`
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

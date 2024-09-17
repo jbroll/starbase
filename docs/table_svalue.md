@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_svalue  - search a table for a value using a fast access method
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableSearch` search" - Search descriptor returned from [table_search](table_search.html)
   * `"char` *value1" - Lower limit of desired range.
   * `"void` *(*func)(void)" - Function to call with each selected row.
@@ -27,11 +25,11 @@ PARAMETERS
       for each row selected
 
 DESCRIPTION
-===========
+-----------
  search a table for a value using a fast access method
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

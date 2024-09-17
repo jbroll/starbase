@@ -1,7 +1,7 @@
 SEE ALSO
-========
+--------
 
-- [column,](column,.html) [project](project.html) project columns from a starbase data table.
+- [column](column.html), [project](project.html) project columns from a starbase data table.
 - [justify](justify.html) justify columns of a starbase data table.
 - [trim](trim.html) trim columns of an starbase data table.
 - [check](check.html) check the format of a starbase data table.

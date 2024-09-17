@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_ncol  - return the number of column in a table row structure.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,15 +14,15 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` t" - Not Documented.
 
 DESCRIPTION
-===========
+-----------
  return the number of column in a table row structure.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

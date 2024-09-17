@@ -1,9 +1,9 @@
 
 Starbase Data Table File Format
-===============================
+-------------------------------
 
 DESCRIPTION
-===========
+-----------
 
 `starbase` uses an ascii file format used to store relational data base tables
 with a few magic characters deliniating columns and tables.  When the table
@@ -41,7 +41,7 @@ valid keyword identifiers are comments.  Header values can be accessed by name
 in expressions passed to the `starbase` programs.
 
 Example
-=======
+-------
 ```
     Table1
 

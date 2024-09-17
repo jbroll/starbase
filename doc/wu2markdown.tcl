@@ -17,6 +17,15 @@ proc process_line {line} {
     }
     set header 0
 
+    if { $line eq "NAME" } {
+        gets stdin
+        return
+    }
+
+    if { [regexp {^===+ *$} $line] } {
+        set line [string repeat - [string length $line]]
+    }
+
     # Handle code blocks
     if {$line eq "-"} {
         if {$in_code_block || $in_plus_code_block} {
@@ -65,8 +74,8 @@ proc process_line {line} {
     # Convert links
     set line [regsub {@{([^\}]+),([^\}]+)}} $line {[\1](\2)}]
     set line [regsub {@\[([^]]+),([^]]+)\]} $line {[\1](\2)}]
-    set line [regsub -all { @\[([^ \t]+)\]} $line {[\1](\1.html)}]
-    set line [regsub -all { @([^ \t]+)} $line { [\1](\1.html)}]
+    set line [regsub -all { @\[([^ \t,]+)\]} $line {[\1](\1.html)}]
+    set line [regsub -all { @([^ \t,]+)} $line { [\1](\1.html)}]
     set line [string map { { index.html} { index-cmd.html} { starbase.html} { index.html} } $line] 
 
     # Convert inline formatting

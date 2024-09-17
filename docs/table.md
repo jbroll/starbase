@@ -1,18 +1,16 @@
 
-NAME
-====
 
 table - run an awk program with a starbase data table as input.
 
 SYNOPSYS
-========
+--------
 
 ```
         table   'program' < tablefile
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `table` allows a complete awk language program to be run on a starbase data
 table input file.  The program may be processed for $column name
@@ -22,7 +20,7 @@ controlled with the -h switch.  Undefined function inclusion is always done
 but may be disabled by unsetting the TABLEFUNCTIONS environment variable.
 
 OPTIONS
-=======
+-------
 
 - -r Read in a starbase data table header.  The header is read from the
    standard input or from a reference file given with the -H option.
@@ -38,9 +36,9 @@ OPTIONS
 
 
 DETAILS
-=======
+-------
 
-`table` is the base program for table row manipulation.  [row,](row,.html) [select,](select,.html) [calc,](calc,.html)
+`table` is the base program for table row manipulation.  [row](row.html), [select](select.html), [calc](calc.html),
 @reckon, [compute](compute.html) and [validate](validate.html) are all implemented as links to `table.`
 
 {% include table-env.md %}

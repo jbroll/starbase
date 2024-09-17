@@ -1,18 +1,16 @@
 
-NAME
-====
 
 `fk45z`     - convert ra, dec columns from fk4 to fk5 assuming zero proper motion.
 
 SYNOPSYS
-========
+--------
 
 ```
         `fk45z` [-i *ifile*] [-o *ofile*] *rcol* *dcol*
 ```
 
 DESCRIPTION
-===========
+-----------
 
   Convert B1950.0 FK4 star data from the starbase data table 
   read from the standard input to J2000.0 FK5 assuming zero
@@ -28,13 +26,13 @@ DESCRIPTION
   See [slaFk45z]( slalib/slaFk45z.3.html)
 
 OPTIONS
-=======
+-------
 
   * -i *file* Read input from *file* instead of the standard input.
   * -o *file* Write output to *file* instead of the standard output.
 
 PARAMETERS
-==========
+----------
 
   * rcol
 
@@ -53,7 +51,7 @@ PARAMETERS
         frequently be 1950.0 and is the default.
 
 SEE ALSO
-========
+--------
 
 
 - [fk54z](fk54z.html)     - convert ra, dec columns from fk5 to fk4 assuming zero proper

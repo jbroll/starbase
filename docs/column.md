@@ -1,11 +1,9 @@
 
-NAME
-====
 
 `column` - project columns from a [starbase](starbase.html) data table
 
 SYNOPSYS
-========
+--------
 
 ```
 column  [-i input] [-o output] [options] [column] ...
@@ -13,7 +11,7 @@ project [-i input] [-o output] [options] [column] ...
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `column` is used to create, delete, format and choose columns in a table.
 
@@ -25,12 +23,12 @@ are given as arguments all the columns in the table are output.
 `column` and `project` are the same program.
 
 OPTIONS
-=======
+-------
 
 {% include column-opts.md %}
 
 EXAMPLES
-========
+--------
 
 `
     Ask for all the column from the standard input
@@ -160,7 +158,7 @@ EXAMPLES
 '
 
 Column Name Pattern Selection and Renaming
-==========================================
+------------------------------------------
 
   Columns can be selected by explicit name or by pattern matching.  This can be effectivly used
   to select columns that have similar prefix or suffix charateers.  Column name patterns use
@@ -169,7 +167,7 @@ Column Name Pattern Selection and Renaming
   in the new name with the '?' character.
 
 Examples
-========
+--------
 
   After a search -j operation, select all of the column from the keytable:
 

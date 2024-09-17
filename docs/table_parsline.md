@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_parsline  - parse a line from a table file.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,14 +14,14 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - the file to read the line from.
   * `"TableRow` row" - the row to fill in.
   * `"int` mode" - the parsing mode
   * `"int` n" - number of columns expected
 
 DESCRIPTION
-===========
+-----------
  Parse a line from file and return a TableRow structure.
  If row is NULL a new TableRow structure will be allocated and
  returned to the user. This is a low level routine used internally
@@ -34,7 +32,7 @@ DESCRIPTION
  #
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

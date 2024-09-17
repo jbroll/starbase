@@ -1,0 +1,667 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.52
+     from ../texi/tar.texi on 7 November 1998 -->
+
+<TITLE>GNU tar - Date input formats</TITLE>
+</HEAD>
+<BODY>
+
+<H1>Local getdate modifications for Starbase</H1>
+
+The version of getdate for starbase has been modified to conform to the FITS
+standard.  FITS header DATEOBJ keywords specify the date in dd/mm/yy format
+and getdate has been modified to accept this instead of the US convention of
+mm/dd/yy.
+
+<H1>Date input formats</H1>
+
+<P>
+<A NAME="IDX123"></A>
+<A NAME="IDX124"></A>
+
+</P>
+
+<BLOCKQUOTE>
+<P>
+Our units of temporal measurement, from seconds on up to months, are so
+complicated, asymmetrical and disjunctive so as to make coherent mental
+reckoning in time all but impossible.  Indeed, had some tyrannical god
+contrived to enslave our minds to time, to make it all but impossible
+for us to escape subjection to sodden routines and unpleasant surprises,
+he could hardly have done better than handing down our present system.
+It is like a set of trapezoidal building blocks, with no vertical or
+horizontal surfaces, like a language in which the simplest thought
+demands ornate constructions, useless particles and lengthy
+circumlocutions.  Unlike the more successful patterns of language and
+science, which enable us to face experience boldly or at least
+level-headedly, our system of temporal calculation silently and
+persistently encourages our terror of time.
+
+</P>
+<P>
+...  It is as though architects had to measure length in feet, width
+in meters and height in ells; as though basic instruction manuals
+demanded a knowledge of five different languages.  It is no wonder then
+that we often look into our own immediate past or future, last Tuesday
+or a week from Sunday, with feelings of helpless confusion.  ...
+
+</P>
+<P>
+--- Robert Grudin, <CITE>Time and the Art of Living</CITE>.
+</BLOCKQUOTE>
+
+<P>
+This section describes the textual date representations that GNU
+programs accept.  These are the strings you, as a user, can supply as
+arguments to the various programs.  The C interface (via the
+<CODE>getdate</CODE> function) is not described here.
+
+</P>
+<P>
+<A NAME="IDX125"></A>
+<A NAME="IDX126"></A>
+Although the date syntax here can represent any possible time since zero
+A.D., computer integers are not big enough for such a (comparatively)
+long time.  The earliest date semantically allowed on Unix systems is
+midnight, 1 January 1970 UCT.
+
+</P>
+
+
+
+<H2><A NAME="SEC99" HREF="tar_toc.html#TOC99">General date syntax</A></H2>
+
+<P>
+<A NAME="IDX127"></A>
+
+</P>
+<P>
+<A NAME="IDX128"></A>
+A <EM>date</EM> is a string, possibly empty, containing many items
+separated by whitespace.  The whitespace may be omitted when no
+ambiguity arises.  The empty string means the beginning of today (i.e.,
+midnight).  Order of the items is immaterial.  A date string may contain
+many flavors of items:
+
+</P>
+
+<UL>
+<LI>calendar date items
+
+<LI>time of the day items
+
+<LI>time zone items
+
+<LI>day of the week items
+
+<LI>relative items
+
+<LI>pure numbers.
+
+</UL>
+
+<P>
+We describe each of these item types in turn, below.
+
+</P>
+<P>
+<A NAME="IDX129"></A>
+<A NAME="IDX130"></A>
+<A NAME="IDX131"></A>
+<A NAME="IDX132"></A>
+<A NAME="IDX133"></A>
+A few numbers may be written out in words in most contexts.  This is
+most useful for specifying day of the week items or relative items (see
+below).  Here is the list: <SAMP>`first'</SAMP> for 1, <SAMP>`next'</SAMP> for 2,
+<SAMP>`third'</SAMP> for 3, <SAMP>`fourth'</SAMP> for 4, <SAMP>`fifth'</SAMP> for 5,
+<SAMP>`sixth'</SAMP> for 6, <SAMP>`seventh'</SAMP> for 7, <SAMP>`eighth'</SAMP> for 8,
+<SAMP>`ninth'</SAMP> for 9, <SAMP>`tenth'</SAMP> for 10, <SAMP>`eleventh'</SAMP> for 11 and
+<SAMP>`twelfth'</SAMP> for 12.  Also, <SAMP>`last'</SAMP> means exactly <EM>-1</EM>.
+
+</P>
+<P>
+<A NAME="IDX134"></A>
+When a month is written this way, it is still considered to be written
+numerically, instead of being "spelled in full"; this changes the
+allowed strings.
+
+</P>
+<P>
+<A NAME="IDX135"></A>
+<A NAME="IDX136"></A>
+Alphabetic case is completely ignored in dates.  Comments may be introduced
+between round parentheses, as long as included parentheses are properly
+nested.  Hyphens not followed by a digit are currently ignored.  Leading
+zeros on numbers are ignored.
+
+</P>
+
+
+
+<H2><A NAME="SEC100" HREF="tar_toc.html#TOC100">Calendar date item</A></H2>
+
+<P>
+<A NAME="IDX137"></A>
+
+</P>
+<P>
+A <EM>calendar date item</EM> specifies a day of the year.  It is
+specified differently, depending on whether the month is specified
+numerically or literally.  All these strings specify the same calendar date:
+
+</P>
+
+<PRE>
+1970-09-17           # ISO 8601.
+70-9-17              # This century assumed by default.
+70-09-17             # Leading zeros are ignored.
+9/17/72              # Common U.S. writing.
+24 September 1972
+24 Sept 72           # September has a special abbreviation.
+24 Sep 72            # Three-letter abbreviations always allowed.
+Sep 24, 1972
+24-sep-72
+24sep72
+</PRE>
+
+<P>
+The year can also be omitted.  In this case, the last specified year is
+used, or the current year if none.  For example:
+
+</P>
+
+<PRE>
+9/17
+sep 17
+</PRE>
+
+<P>
+Here are the rules.
+
+</P>
+<P>
+<A NAME="IDX138"></A>
+<A NAME="IDX139"></A>
+For numeric months, the ISO 8601 format
+<SAMP>`<VAR>year</VAR>-<VAR>month</VAR>-<VAR>day</VAR>'</SAMP> is allowed, where <VAR>year</VAR> is
+any positive number, <VAR>month</VAR> is a number between 01 and 12, and
+<VAR>day</VAR> is a number between 01 and 31.  A leading zero must be present
+if a number is less than ten.  If <VAR>year</VAR> is less than 100, then 1900
+is added to it to force a date in this century.  The construct
+<SAMP>`<VAR>month</VAR>/<VAR>day</VAR>/<VAR>year</VAR>'</SAMP>, popular in the United States,
+is accepted.  Also <SAMP>`<VAR>month</VAR>/<VAR>day</VAR>'</SAMP>, omitting the year.
+
+</P>
+<P>
+<A NAME="IDX140"></A>
+<A NAME="IDX141"></A>
+Literal months may be spelled out in full: <SAMP>`January'</SAMP>,
+<SAMP>`February'</SAMP>, <SAMP>`March'</SAMP>, <SAMP>`April'</SAMP>, <SAMP>`May'</SAMP>, <SAMP>`June'</SAMP>,
+<SAMP>`July'</SAMP>, <SAMP>`August'</SAMP>, <SAMP>`September'</SAMP>, <SAMP>`October'</SAMP>,
+<SAMP>`November'</SAMP> or <SAMP>`December'</SAMP>.  Literal months may be abbreviated
+to their first three letters, possibly followed by an abbreviating dot.
+It is also permitted to write <SAMP>`Sept'</SAMP> instead of <SAMP>`September'</SAMP>.
+
+</P>
+<P>
+When months are written literally, the calendar date may be given as any
+of the following:
+
+</P>
+
+<PRE>
+<VAR>day</VAR> <VAR>month</VAR> <VAR>year</VAR>
+<VAR>day</VAR> <VAR>month</VAR>
+<VAR>month</VAR> <VAR>day</VAR> <VAR>year</VAR>
+<VAR>day</VAR>-<VAR>month</VAR>-<VAR>year</VAR>
+</PRE>
+
+<P>
+Or, omitting the year:
+
+</P>
+
+<PRE>
+<VAR>month</VAR> <VAR>day</VAR>
+</PRE>
+
+
+
+<H2><A NAME="SEC101" HREF="tar_toc.html#TOC101">Time of day item</A></H2>
+
+<P>
+<A NAME="IDX142"></A>
+
+</P>
+<P>
+A <EM>time of day item</EM> in date strings specifies the time on a given
+day.  Here are some examples, all of which represent the same time:
+
+</P>
+
+<PRE>
+20:02:0
+20:02
+8:02pm
+20:02-0500      # In EST (Eastern U.S. Standard Time).
+</PRE>
+
+<P>
+More generally, the time of the day may be given as
+<SAMP>`<VAR>hour</VAR>:<VAR>minute</VAR>:<VAR>second</VAR>'</SAMP>, where <VAR>hour</VAR> is
+a number between 0 and 23, <VAR>minute</VAR> is a number between 0 and
+59, and <VAR>second</VAR> is a number between 0 and 59.  Alternatively,
+<SAMP>`:<VAR>second</VAR>'</SAMP> can be omitted, in which case it is taken to
+be zero.
+
+</P>
+<P>
+<A NAME="IDX143"></A>
+<A NAME="IDX144"></A>
+<A NAME="IDX145"></A>
+<A NAME="IDX146"></A>
+If the time is followed by <SAMP>`am'</SAMP> or <SAMP>`pm'</SAMP> (or <SAMP>`a.m.'</SAMP>
+or <SAMP>`p.m.'</SAMP>), <VAR>hour</VAR> is restricted to run from 1 to 12, and
+<SAMP>`:<VAR>minute</VAR>'</SAMP> may be omitted (taken to be zero).  <SAMP>`am'</SAMP>
+indicates the first half of the day, <SAMP>`pm'</SAMP> indicates the second
+half of the day.  In this notation, 12 is the predecessor of 1:
+midnight is <SAMP>`12am'</SAMP> while noon is <SAMP>`12pm'</SAMP>.
+
+</P>
+<P>
+<A NAME="IDX147"></A>
+<A NAME="IDX148"></A>
+The time may alternatively be followed by a timezone correction,
+expressed as <SAMP>`<VAR>s</VAR><VAR>hh</VAR><VAR>mm</VAR>'</SAMP>, where <VAR>s</VAR> is <SAMP>`+'</SAMP>
+or <SAMP>`-'</SAMP>, <VAR>hh</VAR> is a number of zone hours and <VAR>mm</VAR> is a number
+of zone minutes.  When a timezone correction is given this way, it
+forces interpretation of the time in UTC, overriding any previous
+specification for the timezone or the local timezone.  The <VAR>minute</VAR>
+part of the time of the day may not be elided when a timezone correction
+is used.  This is the only way to specify a timezone correction by
+fractional parts of an hour.
+
+</P>
+<P>
+Either <SAMP>`am'</SAMP>/<SAMP>`pm'</SAMP> or a timezone correction may be specified,
+but not both.
+
+</P>
+
+
+
+<H2><A NAME="SEC102" HREF="tar_toc.html#TOC102">Timezone item</A></H2>
+
+<P>
+<A NAME="IDX149"></A>
+
+</P>
+<P>
+A <EM>timezone item</EM> specifies an international timezone, indicated by
+a small set of letters.  Any included period is ignored.  Military
+timezone designations use a single letter.  Currently, only integral
+zone hours may be represented in a timezone item.  See the previous
+section for a finer control over the timezone correction.
+
+</P>
+<P>
+Here are many non-daylight-savings-time timezones, indexed by the zone
+hour value.
+
+</P>
+<DL COMPACT>
+
+<DT>+000
+<DD>
+<A NAME="IDX150"></A>
+<A NAME="IDX151"></A>
+<A NAME="IDX152"></A>
+<SAMP>`GMT'</SAMP> for Greenwich Mean, <SAMP>`UT'</SAMP> or <SAMP>`UTC'</SAMP> for Universal
+(Coordinated), <SAMP>`WET'</SAMP> for Western European and <SAMP>`Z'</SAMP> for
+militaries.
+<DT>+100
+<DD>
+<A NAME="IDX153"></A>
+<SAMP>`WAT'</SAMP> for West Africa and
+<SAMP>`A'</SAMP> for militaries.
+<DT>+200
+<DD>
+<A NAME="IDX154"></A>
+<SAMP>`AT'</SAMP> for Azores and <SAMP>`B'</SAMP> for militaries.
+<DT>+300
+<DD>
+<SAMP>`C'</SAMP> for militaries.
+<DT>+400
+<DD>
+<A NAME="IDX155"></A>
+<SAMP>`AST'</SAMP> for Atlantic Standard and <SAMP>`D'</SAMP> for militaries.
+<DT>+500
+<DD>
+<A NAME="IDX156"></A>
+<SAMP>`E'</SAMP> for militaries and <SAMP>`EST'</SAMP> for Eastern Standard.
+<DT>+600
+<DD>
+<A NAME="IDX157"></A>
+<SAMP>`CST'</SAMP> for Central Standard and <SAMP>`F'</SAMP> for militaries.
+<DT>+700
+<DD>
+<A NAME="IDX158"></A>
+<SAMP>`G'</SAMP> for militaries and <SAMP>`MST'</SAMP> for Mountain Standard.
+<DT>+800
+<DD>
+<A NAME="IDX159"></A>
+<SAMP>`H'</SAMP> for militaries and <SAMP>`PST'</SAMP> for Pacific Standard.
+<DT>+900
+<DD>
+<A NAME="IDX160"></A>
+<SAMP>`I'</SAMP> for militaries and <SAMP>`YST'</SAMP> for Yukon Standard.
+<DT>+1000
+<DD>
+<A NAME="IDX161"></A>
+<A NAME="IDX162"></A>
+<A NAME="IDX163"></A>
+<SAMP>`AHST'</SAMP> for Alaska-Hawaii Standard, <SAMP>`CAT'</SAMP> for Central Alaska,
+<SAMP>`HST'</SAMP> for Hawaii Standard and <SAMP>`K'</SAMP> for militaries.
+<DT>+1100
+<DD>
+<A NAME="IDX164"></A>
+<SAMP>`L'</SAMP> for militaries and <SAMP>`NT'</SAMP> for Nome.
+<DT>+1200
+<DD>
+<A NAME="IDX165"></A>
+<SAMP>`IDLW'</SAMP> for International Date Line West and <SAMP>`M'</SAMP> for
+militaries.
+<DT>-100
+<DD>
+<A NAME="IDX166"></A>
+<A NAME="IDX167"></A>
+<A NAME="IDX168"></A>
+<A NAME="IDX169"></A>
+<A NAME="IDX170"></A>
+<SAMP>`CET'</SAMP> for Central European, <SAMP>`FWT'</SAMP> for French Winter,
+<SAMP>`MET'</SAMP> for Middle European, <SAMP>`MEWT'</SAMP> for Middle European
+Winter, <SAMP>`N'</SAMP> for militaries and <SAMP>`SWT'</SAMP> for Swedish Winter.
+<DT>-200
+<DD>
+<A NAME="IDX171"></A>
+<A NAME="IDX172"></A>
+<SAMP>`EET'</SAMP> for Eastern European, USSR Zone 1 and <SAMP>`O'</SAMP> for militaries.
+<DT>-300
+<DD>
+<A NAME="IDX173"></A>
+<SAMP>`BT'</SAMP> for Baghdad, USSR Zone 2 and <SAMP>`P'</SAMP> for militaries.
+<DT>-400
+<DD>
+<SAMP>`Q'</SAMP> for militaries and <SAMP>`ZP4'</SAMP> for USSR Zone 3.
+<DT>-500
+<DD>
+<SAMP>`R'</SAMP> for militaries and <SAMP>`ZP5'</SAMP> for USSR Zone 4.
+<DT>-600
+<DD>
+<SAMP>`S'</SAMP> for militaries and <SAMP>`ZP6'</SAMP> for USSR Zone 5.
+<DT>-700
+<DD>
+<A NAME="IDX174"></A>
+<SAMP>`T'</SAMP> for militaries and <SAMP>`WAST'</SAMP> for West Australian Standard.
+<DT>-800
+<DD>
+<A NAME="IDX175"></A>
+<SAMP>`CCT'</SAMP> for China Coast, USSR Zone 7 and <SAMP>`U'</SAMP> for militaries.
+<DT>-900
+<DD>
+<A NAME="IDX176"></A>
+<SAMP>`JST'</SAMP> for Japan Standard, USSR Zone 8 and <SAMP>`V'</SAMP> for militaries.
+<DT>-1000
+<DD>
+<A NAME="IDX177"></A>
+<A NAME="IDX178"></A>
+<SAMP>`EAST'</SAMP> for East Australian Standard, <SAMP>`GST'</SAMP> for Guam
+Standard, USSR Zone 9 and <SAMP>`W'</SAMP> for militaries.
+<DT>-1100
+<DD>
+<SAMP>`X'</SAMP> for militaries.
+<DT>-1200
+<DD>
+<A NAME="IDX179"></A>
+<A NAME="IDX180"></A>
+<SAMP>`IDLE'</SAMP> for International Date Line East, <SAMP>`NZST'</SAMP> for
+New Zealand Standard, <SAMP>`NZT'</SAMP> for New Zealand and <SAMP>`Y'</SAMP> for
+militaries.
+</DL>
+
+<P>
+<A NAME="IDX181"></A>
+Here are many DST timezones, indexed by the zone hour value.  Also, by
+following a non-DST timezone by the string <SAMP>`DST'</SAMP> in a separate word
+(that is, separated by some whitespace), the corresponding DST timezone
+may be specified.
+
+</P>
+<DL COMPACT>
+
+<DT>0
+<DD>
+<SAMP>`BST'</SAMP> for British Summer.
+<DT>+400
+<DD>
+<SAMP>`ADT'</SAMP> for Atlantic Daylight.
+<DT>+500
+<DD>
+<SAMP>`EDT'</SAMP> for Eastern Daylight.
+<DT>+600
+<DD>
+<SAMP>`CDT'</SAMP> for Central Daylight.
+<DT>+700
+<DD>
+<SAMP>`MDT'</SAMP> for Mountain Daylight.
+<DT>+800
+<DD>
+<SAMP>`PDT'</SAMP> for Pacific Daylight.
+<DT>+900
+<DD>
+<SAMP>`YDT'</SAMP> for Yukon Daylight.
+<DT>+1000
+<DD>
+<SAMP>`HDT'</SAMP> for Hawaii Daylight.
+<DT>-100
+<DD>
+<SAMP>`MEST'</SAMP> for Middle European Summer, <SAMP>`MESZ'</SAMP> for Middle European
+Summer, <SAMP>`SST'</SAMP> for Swedish Summer and <SAMP>`FST'</SAMP> for French Summer.
+<DT>-700
+<DD>
+<SAMP>`WADT'</SAMP> for West Australian Daylight.
+<DT>-1000
+<DD>
+<SAMP>`EADT'</SAMP> for Eastern Australian Daylight.
+<DT>-1200
+<DD>
+<SAMP>`NZDT'</SAMP> for New Zealand Daylight.
+</DL>
+
+
+
+<H2><A NAME="SEC103" HREF="tar_toc.html#TOC103">Day of week item</A></H2>
+
+<P>
+<A NAME="IDX182"></A>
+
+</P>
+<P>
+The explicit mention of a day of the week will forward the date
+(only if necessary) to reach that day of the week in the future.
+
+</P>
+<P>
+Days of the week may be spelled out in full: <SAMP>`Sunday'</SAMP>,
+<SAMP>`Monday'</SAMP>, <SAMP>`Tuesday'</SAMP>, <SAMP>`Wednesday'</SAMP>, <SAMP>`Thursday'</SAMP>,
+<SAMP>`Friday'</SAMP> or <SAMP>`Saturday'</SAMP>.  Days may be abbreviated to their
+first three letters, optionally followed by a period.  The special
+abbreviations <SAMP>`Tues'</SAMP> for <SAMP>`Tuesday'</SAMP>, <SAMP>`Wednes'</SAMP> for
+<SAMP>`Wednesday'</SAMP> and <SAMP>`Thur'</SAMP> or <SAMP>`Thurs'</SAMP> for <SAMP>`Thursday'</SAMP> are
+also allowed.
+
+</P>
+<P>
+<A NAME="IDX183"></A>
+<A NAME="IDX184"></A>
+A number may precede a day of the week item to move forward
+supplementary weeks.  It is best used in expression like <SAMP>`third
+monday'</SAMP>.  In this context, <SAMP>`last <VAR>day</VAR>'</SAMP> or <SAMP>`next
+<VAR>day</VAR>'</SAMP> is also acceptable; they move one week before or after
+the day that <VAR>day</VAR> by itself would represent.
+
+</P>
+<P>
+A comma following a day of the week item is ignored.
+
+</P>
+
+
+
+<H2><A NAME="SEC104" HREF="tar_toc.html#TOC104">Relative item in date strings</A></H2>
+
+<P>
+<A NAME="IDX185"></A>
+<A NAME="IDX186"></A>
+
+</P>
+<P>
+<EM>Relative items</EM> adjust a date (or the current date if none) forward
+or backward.  The effects of relative items accumulate.  Here are some
+examples:
+
+</P>
+
+<PRE>
+1 year
+1 year ago
+3 years
+2 days
+</PRE>
+
+<P>
+<A NAME="IDX187"></A>
+<A NAME="IDX188"></A>
+<A NAME="IDX189"></A>
+<A NAME="IDX190"></A>
+<A NAME="IDX191"></A>
+<A NAME="IDX192"></A>
+<A NAME="IDX193"></A>
+The unit of time displacement may be selected by the string <SAMP>`year'</SAMP>
+or <SAMP>`month'</SAMP> for moving by whole years or months.  These are fuzzy
+units, as years and months are not all of equal duration.  More precise
+units are <SAMP>`fortnight'</SAMP> which is worth 14 days, <SAMP>`week'</SAMP> worth 7
+days, <SAMP>`day'</SAMP> worth 24 hours, <SAMP>`hour'</SAMP> worth 60 minutes,
+<SAMP>`minute'</SAMP> or <SAMP>`min'</SAMP> worth 60 seconds, and <SAMP>`second'</SAMP> or
+<SAMP>`sec'</SAMP> worth one second.  An <SAMP>`s'</SAMP> suffix on these units is
+accepted and ignored.
+
+</P>
+<P>
+<A NAME="IDX194"></A>
+The unit of time may be preceded by a multiplier, given as an optionally
+signed number.  Unsigned numbers are taken as positively signed.  No
+number at all implies 1 for a multiplier.  Following a relative item by
+the string <SAMP>`ago'</SAMP> is equivalent to preceding the unit by a
+multiplicator with value <EM>-1</EM>.
+
+</P>
+<P>
+<A NAME="IDX195"></A>
+<A NAME="IDX196"></A>
+<A NAME="IDX197"></A>
+The string <SAMP>`tomorrow'</SAMP> is worth one day in the future (equivalent
+to <SAMP>`day'</SAMP>), the string <SAMP>`yesterday'</SAMP> is worth
+one day in the past (equivalent to <SAMP>`day ago'</SAMP>).
+
+</P>
+<P>
+<A NAME="IDX198"></A>
+<A NAME="IDX199"></A>
+<A NAME="IDX200"></A>
+The strings <SAMP>`now'</SAMP> or <SAMP>`today'</SAMP> are relative items corresponding
+to zero-valued time displacement, these strings come from the fact
+a zero-valued time displacement represents the current time when not
+otherwise change by previous items.  They may be used to stress other
+items, like in <SAMP>`12:00 today'</SAMP>.  The string <SAMP>`this'</SAMP> also has
+the meaning of a zero-valued time displacement, but is preferred in
+date strings like <SAMP>`this thursday'</SAMP>.
+
+</P>
+<P>
+When a relative item makes the resulting date to cross the boundary
+between DST and non-DST (or vice-versa), the hour is adjusted according
+to the local time.
+
+</P>
+
+
+
+<H2><A NAME="SEC105" HREF="tar_toc.html#TOC105">Pure numbers in date strings</A></H2>
+
+<P>
+<A NAME="IDX201"></A>
+
+</P>
+<P>
+The precise intepretation of a pure decimal number is dependent of
+the context in the date string.
+
+</P>
+<P>
+If the decimal number is of the form <VAR>yyyy</VAR><VAR>mm</VAR><VAR>dd</VAR> and no
+other calendar date item (see section <A HREF="tar_7.html#SEC100">Calendar date item</A>) appears before it
+in the date string, then <VAR>yyyy</VAR> is read as the year, <VAR>mm</VAR> as the
+month number and <VAR>dd</VAR> as the day of the month, for the specified
+calendar date.
+
+</P>
+<P>
+If the decimal number is of the form <VAR>hh</VAR><VAR>mm</VAR> and no other time
+of day item appears before it in the date string, then <VAR>hh</VAR> is read
+as the hour of the day and <VAR>mm</VAR> as the minute of the hour, for the
+specified time of the day.  <VAR>mm</VAR> can also be omitted.
+
+</P>
+<P>
+If both a calendar date and a time of day appear to the left of a number
+in the date string, but no relative item, then the number overrides the
+year.
+
+</P>
+
+
+
+<H2><A NAME="SEC106" HREF="tar_toc.html#TOC106">Authors of <CODE>getdate</CODE></A></H2>
+
+<P>
+<A NAME="IDX202"></A>
+
+</P>
+<P>
+<A NAME="IDX203"></A>
+<A NAME="IDX204"></A>
+<A NAME="IDX205"></A>
+<A NAME="IDX206"></A>
+<A NAME="IDX207"></A>
+<CODE>getdate</CODE> was originally implemented by Steven M. Bellovin
+(<SAMP>`smb@research.att.com'</SAMP>) while at the University of North Carolina
+at Chapel Hill.  The code was later tweaked by a couple of people on
+Usenet, then completely overhauled by Rich $alz (<SAMP>`rsalz@bbn.com'</SAMP>)
+and Jim Berets (<SAMP>`jberets@bbn.com'</SAMP>) in August, 1990.  Various
+revisions for the GNU system were made by David MacKenzie, Jim Meyering,
+and others.
+
+</P>
+<P>
+<A NAME="IDX208"></A>
+<A NAME="IDX209"></A>
+This chapter was originally produced by Fran@,{c}ois Pinard
+(<SAMP>`pinard@iro.umontreal.ca'</SAMP>) from the <TT>`getdate.y'</TT> source code,
+and then edited by K. Berry (<SAMP>`kb@cs.umb.edu'</SAMP>).
+
+</P>
+<P><HR><P>
+</BODY>
+</HTML>

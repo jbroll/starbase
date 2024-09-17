@@ -1,18 +1,16 @@
 
-NAME
-====
 
     `histtable` - compute the histogram of a column in a table.
 
 SYNOPSYS
-========
+--------
 
 ```
 `histtable` [-min *min*] [-max *max*] [-n *bins*] *column*
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `histtable` computes the histogram of values for *column*.  The output is
 a table containing the columns "left", "right", "center" and "count".
@@ -21,7 +19,7 @@ bin.
 
 
 EXAMPLE
-=======
+-------
 
 ```
     john@panic : < foo ./histtable X
@@ -33,7 +31,7 @@ EXAMPLE
 ```
 
 SEE ALSO
-========
+--------
 
  It is also possible to compute a histogram of non-numeric values with
  the "-C" option to [sorttable](sorttable.html) .

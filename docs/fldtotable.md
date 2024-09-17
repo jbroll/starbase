@@ -1,6 +1,4 @@
 
-NAME
-====
 
 fldtotable - convert a whitespace delimited file of columns to an starbase data table.
 
@@ -9,14 +7,14 @@ fldtotable - convert a whitespace delimited file of columns to an starbase data 
 ```
 
 DESCRIPTION
-===========
+-----------
 
  `fldtotable` reads an ASCII whitespace (space or tab) delimited file of
  column data selecting the specified fields, adds a header and converts 
  the column delimiters to tabs.
 
 OPTIONS
-=======
+-------
 
 
 - -i *file* Read input from *file* instead of the standard input.
@@ -28,7 +26,7 @@ OPTIONS
 
 
 EXAMPLES
-========
+--------
 
 Convert a file of space delimited column to a table.  Object is in column 1
 RA is in column 2 Dec is in column 3 and a trailing comment is in column 6 to the 
@@ -49,7 +47,7 @@ then this command might have been used for the same file:
 ```
 
 SEE ALSO
-========
+--------
 
 - [fixtotable](fixtotable.html) - convert a file of fix format columns to a starbase data table.
 

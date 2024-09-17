@@ -1,0 +1,122 @@
+<HTML>
+<BODY>
+<PRE>
+
+</PRE>
+<H2>NAME</H2><PRE>
+     strftime - language specific strings
+
+
+</PRE>
+<H2>DESCRIPTION</H2><PRE>
+     Each locale has a printable file specifying  date  and  time
+     formatting information, <STRONG>/usr/lib/locale/</STRONG><EM>locale</EM><STRONG>/LC_TIME</STRONG> where
+     <EM>locale</EM> is the locale name.  These files specify:
+
+         1.  abbreviated month names (in order)
+
+         2.  full month names (in order)
+
+         3.  abbreviated weekday names (in order)
+
+         4.  full weekday names (in order)
+
+         5.  string to specify local time representation (<STRONG>%X</STRONG>)
+
+         6.  string to specify local date representation (<STRONG>%x</STRONG>)
+
+        default
+         7.  string to specify local date and time (<STRONG>%c</STRONG>) for <STRONG>strftime()</STRONG>
+
+         8.  AM (ante meridian) string
+
+         9.  PM (post meridian) string
+
+        default
+         10. string to specify local date and time (<STRONG>%C</STRONG>)  for  <STRONG>cftime()</STRONG>
+
+     Each  string is on a line by itself. All white space is sig-
+     nificant.  The order of the strings in the above list is the
+     same order in which they must appear in the file.
+
+
+</PRE>
+<H2>EXAMPLES</H2><PRE>
+     <STRONG>/usr/lib/locale/C/LC_TIME</STRONG>
+
+     <STRONG>Jan</STRONG>
+     <STRONG>Feb</STRONG>
+      <STRONG>.</STRONG> <STRONG>.</STRONG> <STRONG>.</STRONG>
+     <STRONG>January</STRONG>
+     <STRONG>February</STRONG>
+      <STRONG>.</STRONG> <STRONG>.</STRONG> <STRONG>.</STRONG>
+     <STRONG>Sun</STRONG>
+     <STRONG>Mon</STRONG>
+      <STRONG>.</STRONG> <STRONG>.</STRONG> <STRONG>.</STRONG>
+     <STRONG>Sunday</STRONG>
+     <STRONG>Monday</STRONG>
+      <STRONG>.</STRONG> <STRONG>.</STRONG> <STRONG>.</STRONG>
+     <STRONG>%H:%M:%S</STRONG>
+     <STRONG>%m/%d/%y</STRONG>
+     <STRONG>%a</STRONG> <STRONG>%b</STRONG> <STRONG>%d</STRONG> <STRONG>%H:%M:%S</STRONG> <STRONG>%Y</STRONG>
+     <STRONG>AM</STRONG>
+     <STRONG>PM</STRONG>
+     <STRONG>%a</STRONG> <STRONG>%b</STRONG> <STRONG>%e</STRONG> <STRONG>%T</STRONG> <STRONG>%Z</STRONG> <STRONG>%Y</STRONG>
+
+
+</PRE>
+<H2>FILES</H2><PRE>
+     <STRONG>/usr/lib/locale/locale/LC_TIME</STRONG>
+
+
+</PRE>
+<H2>SEE ALSO</H2><PRE>
+     <STRONG>ctime</STRONG>(3C), <STRONG>setlocale</STRONG>(3C), <STRONG>strftime</STRONG>(3C)
+
+
+</PRE>
+<H2>NOTES</H2><PRE>
+     Do not change files under the C locale, as this could  cause
+     undefined or nonstandard behavior.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

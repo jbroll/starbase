@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_ors  - change the output record separator.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,18 +14,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` t" - Not Documented.
   * `"int` newors" - Not Documented.
 
 DESCRIPTION
-===========
+-----------
  The output record separator is a single character that [table_row](table_row.html)
  places after the last column value when it prints a row. The
  previous output record separator is returned.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

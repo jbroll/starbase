@@ -1,12 +1,10 @@
 
-NAME
-====
 
 `calc` - a command line calcutator
 
 
 SYNOPSYS
-========
+--------
 
 ```
         calc    'expression'
@@ -14,7 +12,7 @@ SYNOPSYS
 
 
 DESCRIPTION
-===========
+-----------
 
 `calc` is a command line calculator.  It evaluates its arguments as a single
 awk language expression and prints the result on the standard output.
@@ -39,14 +37,14 @@ are escaped.
 ```
 
 OPTIONS
-=======
+-------
 
     * -s *filename* Set the calc stack file name (default ~/.calc).
     * -D Print out the awk program to be executed before forking.
 
 
 EXAMPLES
-========
+--------
 
 `
 Add a couple of number on the command line:
@@ -70,6 +68,6 @@ Add a number to the previous answer:
 {% include table-env.md %}
 
 SEE ALSO
-========
+--------
     * [mawk](mawk.html) An implementation of the awk programming language by Mike Brennan.
     * [tawk](tawk.html) Awk language extensions implemented at SAO.

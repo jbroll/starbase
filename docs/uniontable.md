@@ -1,25 +1,23 @@
 
-NAME
-====
 
 uniontable - compute the union of starbase data tables.
 
 SYNOPSYS
-========
+--------
 
 ```
         `uniontable` [-o *ofile] *table1* *table2* [*tablen~] ...
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `uniontable` computes the union of two or more tables.  It concatenates the
 rows of all the tables into one larger table.  All the rows and all the
 columns of all the tables in the union appear in the output table.
 
 EXAMPLES
-========
+--------
 
 Here is the union of three tables showing how columns are aligned bwtween 
 tables and rows are concatenated.
@@ -62,7 +60,7 @@ tables and rows are concatenated.
 ```
 
 SEE ALSO
-========
+--------
 
 - [diffrtable](diffrtable.html) - compute the difference of two starbase data tables.
 - [intertable](intertable.html) - compute the intersection of two starbase data tables.

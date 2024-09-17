@@ -1,12 +1,10 @@
 
 
-NAME
-====
  table_hdrvals  - `table_hdrvals` returns a copy of the column value made with with
  `strdup.`
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,18 +15,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table header.
   * `"char` *name" - name of header value.
   * `"int` i" - array index of value.
 
 DESCRIPTION
-===========
+-----------
  The user may modify this copy as needed and should free it with `free` when
  the value is no longer needed.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

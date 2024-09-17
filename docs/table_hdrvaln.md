@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrvaln  - `table_hdrvaln` returns the number of values in this header keyword.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,16 +14,16 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table header.
   * `"char` *name" - name of header value.
 
 DESCRIPTION
-===========
+-----------
  `table_hdrvaln` returns the number of values in this header keyword.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

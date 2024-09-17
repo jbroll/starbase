@@ -1,18 +1,16 @@
 
-NAME
-====
 
 intertable - compute the intersection of two starbase data table.
 
 SYNOPSYS
-========
+--------
 
 ```
         `intertable` *table1* *table2* [*columns*] [-o *ofile*]
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `intertable` computes the intersection of two tables over a set of columns.  ie
 only rows that are equal over the selected columns will appear in the output
@@ -20,7 +18,7 @@ table.  There is no way to specify different column names for each of the two
 tables.
 
 EXAMPLES
-========
+--------
 
 Intersection of a table with itself is itself:
 
@@ -50,7 +48,7 @@ where X == X.
 ```
 
 SEE ALSO
-========
+--------
 
 - [diffrtable](diffrtable.html) - compute the difference of two starbase data tables.
 - [uniontable](uniontable.html) - compute the union of two starbase data tables.

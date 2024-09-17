@@ -1,19 +1,17 @@
 
-NAME
-====
 
 
 `fk54z` - convert coordinates from FK5 to FK4
 
 SYNOPSYS
-========
+--------
 
 ```
         `fk54z` [-i *ifile*] [-o *ofile*] *rcol* *dcol*
 ```
 
 DESCRIPTION
-===========
+-----------
 
   Convert a J2000.0 FK5 star position from the starbase data table 
   read from the standard input to B1950.0 FK4 assuming
@@ -25,13 +23,13 @@ DESCRIPTION
   See [slaFk54z]( slalib/slaFk54z.3.html)
 
 OPTIONS
-=======
+-------
 
   * -i *file* Read input from *file* instead of the standard input.
   * -o *file* Write output to *file* instead of the standard output.
 
 PARAMETERS
-==========
+----------
 
   * rcol
 
@@ -49,7 +47,7 @@ PARAMETERS
         frequently be 1950.0 and is the default.
 
 PARAMETERS
-==========
+----------
 
   * rcol
 
@@ -68,7 +66,7 @@ PARAMETERS
         frequently be 1950.0 and is the default.
 
 SEE ALSO
-========
+--------
 
 
 - [fk45z](fk45z.html)     - convert ra, dec columns from fk4 to fk5 assuming zero proper

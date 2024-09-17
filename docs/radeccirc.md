@@ -1,19 +1,17 @@
 
-NAME
-====
 
 `radeccirc` - Search an starbase data table catalog for targets in an ra dec
              specified circle.  radeccirc file ra dec radius
 
 SYNOPSYS
-========
+--------
 
 ```
         `radecbox` *file* *ra* *dec* *radius*
 ```
 
 PARAMETERS
-==========
+----------
 
   * file
 
@@ -61,7 +59,7 @@ PARAMETERS
         and executed.
 
 EXAMPLES
-========
+--------
 
 Search a for all the stars withing a 3 arc minute circle radius at 2:30:03.5
 hours RA and 34:45:00 deg Dec.  If the catalog is indexes the search will be
@@ -78,7 +76,7 @@ Then search at the same point with a 3 arc minute circle diameter circle.
 ```
 
 SEE ALSO
-========
+--------
 
 
 - [radecbox](radecbox.html) - Search an starbase data table catalog for targets

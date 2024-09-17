@@ -1,6 +1,6 @@
 
 Starbase C Interface
-====================
+--------------------
 
 
 - [Alphabetical listing]( starbase.3.ABC.html)
@@ -87,6 +87,6 @@ Other
 
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}

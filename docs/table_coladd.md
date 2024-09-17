@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_coladd  - add a column to the table.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,18 +14,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table to add the column to.
   * `"char` *name" - name for the new column.
 
 DESCRIPTION
-===========
+-----------
  Add name column to the table.
  
  Returns the column number of the new column.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

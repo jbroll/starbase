@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrvali  - `table_hdrvali` returns the header value an integer.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,17 +14,17 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table header.
   * `"char` *name" - name of header value.
   * `"int` i" - array index of value.
 
 DESCRIPTION
-===========
+-----------
  `table_hdrvali` returns the header value an integer.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

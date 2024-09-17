@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrvald  - `table_hdrvald` the header value as a double.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,18 +14,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table header.
   * `"char` *name" - name of header value.
   * `"int` i" - array index of value.
 
 DESCRIPTION
-===========
+-----------
  The value is converted using `SAO_strtod`
  and recoginises sexgasmal ascii formats (HH:MM:SS.SSSS).
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

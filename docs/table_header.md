@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_header  - read the table header from a file.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,12 +14,12 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - file to read header from.
   * `"int` mode" - parse mode.
 
 DESCRIPTION
-===========
+-----------
  table_header reads in a header from file and allocates the header data
  structures. The mode parameter indicates how the table rows will be
  treated in later operations. TAB_PARSE will cause table_row() to
@@ -51,10 +49,10 @@ DESCRIPTION
 
 
 RETURNS
-=======
+-------
  `table_header` returns a pointer to a table header data structure.
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

@@ -1,18 +1,16 @@
 
-NAME
-====
 
 validate - validate and fix column values of a starbase data table
 
 SYNOPSYS
-========
+--------
 
 ```
         validate 'statements' < tablefile
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `validate` executes a list of awk pattern statement pairs on each row of a
 starbase data table.  Each statement is separated from the next by a
@@ -24,12 +22,12 @@ values of columns in a table.
 {% include mawk-inc.md %}
 
 OPTIONS
-=======
+-------
 
 {% include tabstd-opts.md %}
 
 EXAMPLES
-========
+--------
 
 `
     Check the rows of a table for consistancy.  X must be less than 7 and Y

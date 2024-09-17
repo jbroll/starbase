@@ -1,11 +1,9 @@
 
-NAME
-====
 
 edittable - Fast indexed editing of a starbase data table.
 
 SYNOPSYS
-========
+--------
 ```
 edittable.c
 

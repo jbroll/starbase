@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrfind  - `table_hdrV` returns the row structure that holds the header value
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,17 +14,17 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table header.
   * `"char` *name" - name of header value.
   * `"int` row" - row index of value.
 
 DESCRIPTION
-===========
+-----------
  `table_hdrV` returns the row structure that holds the header value
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

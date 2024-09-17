@@ -1,11 +1,9 @@
 
-NAME
-====
 
 `index` - index a starbase data table for fast access using the [search](search.html) command.
 
 SYNOPSIS
-========
+--------
 
 ```
     `index` -m[sbihr] [-n] [-h] [-r] [-L] *table* *column*
@@ -13,14 +11,14 @@ SYNOPSIS
 
 
 DESCRIPTION
-===========
+-----------
 
  `index` creates a sorted index file (or sorts the table itself) so that 
  the [search](search.html) command may be used to access rows of the table more quickly
  than the sequential access provided by `row.`
 
 OPTIONS
-=======
+-------
 
 
 - -m[sbihr]    Search method to index for.  `Index` creates an index for use
@@ -46,7 +44,7 @@ OPTIONS
 
 
 EXAMPLES
-========
+--------
 
 
         Example of primary indexing.  Make a numeric primary index of file foo
@@ -77,7 +75,7 @@ EXAMPLES
 '
 
 SEE ALSO
-========
+--------
 
   * [search](search.html)     - quickly search an indexed starbase data table.
 {% include starbase-seealso.md %}

@@ -1,19 +1,17 @@
 
-NAME
-====
 
 `radecbox` - Search an starbase data table catalog for targets in an ra dec
             specified box.
 
 SYNOPSYS
-========
+--------
 
 ```
         `radecbox` *file* *ra* *dec* *width*
 ```
 
 PARAMETERS
-==========
+----------
 
   * file
 
@@ -66,7 +64,7 @@ PARAMETERS
         and executed.
 
 EXAMPLES
-========
+--------
 
 Search a for all the stars withing a 3 arc minute square box at 2:30:03.5
 hours RA and 34:45:00 deg Dec.  If the catalog is indexes the search will
@@ -79,7 +77,7 @@ be done using the fast index program [search.](search..html)
 ```
 
 SEE ALSO
-========
+--------
 
 
 - [radeccirc](radeccirc.html) - Search an starbase data table catalog for targets in an

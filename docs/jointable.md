@@ -1,18 +1,16 @@
 
-NAME
-====
 
 jointable - join two starbase data tables on matching key columns.
 
 SYNOPSYS
-========
+--------
 
 ```
         `jointable` [-a`#n]` [-v`#n]` [-j *column*] [-1 *column* -2 *column*] *table1* *table2*
 ```
 
 OPTIONS
-=======
+-------
 
 
 - -j column    join on the column form both files.
@@ -34,7 +32,7 @@ OPTIONS
 
 
 DESCRIPTION
-===========
+-----------
 
 `jointable` joins two sorted starbase data tables on a key column in each
 table.  Two rows are joined when thier key column value is equil.  The tables
@@ -43,7 +41,7 @@ must be sorted in the same order.
 {% include join-rename.md %}
 
 EXAMPLES
-========
+--------
 
   Join two tables with object name columns.  The tables must be sorted first.
 
@@ -68,12 +66,12 @@ EXAMPLES
 ```
 
 NOTES
-=====
+-----
    Care must to taken when printing the unpairable line.  The column 
    names can become misaligned when using the -a2 switch.
 
 SEE ALSO
-========
+--------
 
 
 - [sorttable](sorttable.html)   - sort a starbase data table on specified columns.

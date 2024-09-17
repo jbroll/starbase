@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrnth  - returns the nth header keyword.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,16 +14,16 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table to lookup keyword in.
   * `"int` num" - number of the keyword to lookup.
 
 DESCRIPTION
-===========
+-----------
  #
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

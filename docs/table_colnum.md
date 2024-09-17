@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_colnum  - look up a column in a table header.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,18 +14,18 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table to lookup column in.
   * `"char` *name" - name of the column to lookup.
 
 DESCRIPTION
-===========
+-----------
  Look up name in the table and return its column number.
  
  Returns the column number of name or 0 if name is not a column of table.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

@@ -1,6 +1,6 @@
 
 Download the Starbase Source
-============================
+----------------------------
 
 Starbase is available in source code and binary distribution.  The binary distribution 
 includes the entire source and can be rebuilt without additional downloads.

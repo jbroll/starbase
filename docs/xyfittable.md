@@ -1,19 +1,17 @@
 
-NAME
-====
 
 `xyfittable` - Fit two pair of columns with a linear model of translation, scale, rotation and optional shear.
 
 
 SYNOPSYS
-========
+--------
 
 ```
     `xyfittable` [-<0|2|3|4>] *X* *Y* *U* *V*
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `xyfittable` fits a linear model to relate two pair of columns in a table.  The
 *X*, *Y* column pair are the indepentant or expected data.  The *U*, *V* pair
@@ -56,13 +54,13 @@ See
 [slaDcmpf]( slalib/slaDcmpf.3.html)
 
 OPTIONS
-=======
+-------
 
   * -4 - select solid body rotation model
   * -6 - select six coefficient model.
 
 SEE ALSO
-========
+--------
 
 
 - [svdfittable]( svdfittable.html) - Fit any set of columns to with linear coefficients on arbitrary basis functions.

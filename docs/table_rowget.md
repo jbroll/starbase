@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_rowget  - read the next row from a table file.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - file to read from.
   * `"TableHead` table" - table header.
   * `"TableRow` row" - row structure.
@@ -26,14 +24,14 @@ PARAMETERS
   * `"int` nsel" - Not Documented.
 
 DESCRIPTION
-===========
+-----------
  A row is read in from file. If the row argumant is NULL a new
  row structure is allocated for the row.
  
  Returns a TableRow.
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

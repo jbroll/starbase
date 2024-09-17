@@ -1,24 +1,22 @@
 
-NAME
-====
 
 tawk - extension to the awk programming language.
 
 DESCRIPTION
-===========
+-----------
 
 `tawk` is an extended version of the awk programming langauge.  It is based on 
 the [mawk](mawk.html) implementation.  The extensions are intended to make processing
 data files in astronomy easier.
 
 EXTENSIONS
-==========
+----------
 
 
 - Sexagesimal Notation
 
 
-   In the text of a program or expression run by [table,](table,.html) [compute](compute.html) or [calc](calc.html) (and
+   In the text of a program or expression run by [table](table.html), [compute](compute.html) or [calc](calc.html) (and
    others) a number may be represented in sexagesimal notation.  In this context
    the number must form a single lexical token ie it cannot contain spaces.  In
    a data table the degrees mininutes and seconds portions of the number may be
@@ -119,13 +117,13 @@ Binary          0b000
         and degrees are converted to Julian r2000, d2000 coordiantes.  Catalog
         data for proper motion, paralax and velocity may optionally be
         provided and will be returned.  See
-        [slaFk425](slalib/slaFk425.3.html) and [{slaFk45z,slalib/slaFk45z.3.html}.]({slaFk45z,slalib/slaFk45z.3.html}..html)
+        [slaFk425](slalib/slaFk425.3.html) and [{slaFk45z]({slaFk45z.html),slalib/slaFk45z.3.html}.
 
         With `fk524` and `fk54z` the Julian r2000, d2000 coordinates in hours
         and degrees are converted to Besellian r1950, d1950 coordiantes.
         Catalog data for proper motion, paralax and velocity may optionally be
         provided and will be returned.  See
-        [slaFk524](slalib/slaFk524.3.html) and [{slaFk54z,slalib/slaFk54z.3.html}.]({slaFk54z,slalib/slaFk54z.3.html}..html)
+        [slaFk524](slalib/slaFk524.3.html) and [{slaFk54z]({slaFk54z.html),slalib/slaFk54z.3.html}.
 
    * Tangent Plane Coordinates
 
@@ -278,7 +276,7 @@ KECK1           ?                                          2.714         0.346  
 ```
 
         Return the siderial time at place for the given datestring.
-        See  [slaGmst](slaGmst.3.html), [{slaEqeqx,slalib/slaEqeqx.3.html}.]({slaEqeqx,slalib/slaEqeqx.3.html}..html)
+        See  [slaGmst](slaGmst.3.html), [{slaEqeqx]({slaEqeqx.html),slalib/slaEqeqx.3.html}.
 
    * Alt Az pointing direction
 

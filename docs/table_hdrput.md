@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrput  - output a table header.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -17,7 +15,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` file" - output file.
   * `"TableHead` table" - table header to output.
   * `"int` flags" - header output flags
@@ -26,13 +24,13 @@ PARAMETERS
   * `"int` nsel" - the number of selected columns.
 
 DESCRIPTION
-===========
+-----------
  The table header is output on file.
  
  #
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

@@ -1,25 +1,23 @@
 
-NAME
-====
 
 `pastetable` - join starbase data tables by row number
 
 SYNOPSYS
-========
+--------
 
 ```
         `pastetable` *table1* *table2* [*tableN*] ...
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `pastetable` joins all of the tables on its command line by row number.
 
 {% include join-rename.md %}
 
 EXAMPLES
-========
+--------
 
 Paste a small table to itself
 
@@ -32,7 +30,7 @@ Paste a small table to itself
 ```
 
 SEE ALSO
-========
+--------
 
 
 - [jointable]( jointable.html) - join two starbase data tables on matching key columns.

@@ -1,18 +1,16 @@
 
-NAME
-====
 
 `svdfittable` - linear coefficient fit of a set of basis functions to a dependent column.
 
 SYNOPSYS
-========
+--------
 
 ```
      `svdfittable` [-m '*model* *spec*'] *column* [*col* ...]
 ```
 
 DESCRIPTION
-===========
+-----------
 
     `svdfittable` fits a set of model functions to the data in *column*.  The
     model is a comma separated list of basis functions.  `svdfittable` computes
@@ -22,12 +20,12 @@ DESCRIPTION
     header values.  The columns of the table used in the basis function
     expressions are the independent variables of the fit.  More than one
     dependent variable column may be given and an independent fit will be
-    performed for each.  See [slaSvd]( slalib/slaSvd.3.html) [{slaSvdcov,]({slaSvdcov,.html)
+    performed for each.  See [slaSvd]( slalib/slaSvd.3.html) [{slaSvdcov]({slaSvdcov.html),
     slalib/slaSvdcov.3.html} [slaSvdsol]( slalib/slaSvdsol.3.html)
 
 
 OPTIONS
-=======
+-------
 
     * -m *model* *spec*
 
@@ -35,7 +33,7 @@ OPTIONS
 
 
 EXAMPLE
-=======
+-------
 
 `
  A simple linear fit of measured data in column Y to actual position column X.
@@ -67,7 +65,7 @@ EXAMPLE
 '
 
 SEE ALSO
-========
+--------
 
 
 - [xyfittable]( xyfittable.html)   - Fit one pair of X, Y columns to another pair with a linear model of translation, scale and optional shear.

@@ -1,11 +1,9 @@
 
-NAME
-====
 
 row - select rows from a starbase data table
 
 SYNOPSYS
-========
+--------
 
 ```
     `row` 'selection expression' < *tablefile*
@@ -13,7 +11,7 @@ SYNOPSYS
 ```
 
 DESCRIPTION
-===========
+-----------
 
 `row` reads a starbase data table from its standard input and prints the rows
 for which the selection expression evaluates to true on the standard output.
@@ -26,12 +24,12 @@ references to column names and header keyword values.
 {% include mawk-inc.md %}
 
 OPTIONS
-=======
+-------
 
 {% include tabstd-opts.md %}
 
 EXAMPLES
-========
+--------
 
 Select all the rows that are for which the magnitude is fainter than 19:
 

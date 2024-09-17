@@ -1,6 +1,6 @@
 
 Starbase C Function Alphabetical Listing
-========================================
+----------------------------------------
 
 
 
@@ -43,6 +43,6 @@ Starbase C Function Alphabetical Listing
 
 
 SEE ALSO
-========
+--------
 
 {% include starbase-seealso.md %}

@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_hdrfree  - release memory of the table header structures when done.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,15 +14,15 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableHead` table" - table to be done with.
 
 DESCRIPTION
-===========
+-----------
  #
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

@@ -1,11 +1,9 @@
 
 
-NAME
-====
  table_rowfree  - release memory of the row structures when done.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -16,15 +14,15 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"TableRow` row" - table row to be done with.
 
 DESCRIPTION
-===========
+-----------
  #
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)

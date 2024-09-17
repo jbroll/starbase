@@ -1,12 +1,10 @@
 
 
-NAME
-====
  table_loadva  - load a table directly into a data structure from varargs table
  description.
 
 SYNOPSIS
-========
+--------
  
 
 ```
@@ -18,7 +16,7 @@ SYNOPSIS
 
 ```
 PARAMETERS
-==========
+----------
   * `"File` ifile" - File pointer to read table from.
   * `"TableHead` *t" - Table header if already read in
   * `"void` *hbase" - Base pointer for header values.
@@ -29,12 +27,12 @@ PARAMETERS
   * `"..."` - Not Documented.
 
 DESCRIPTION
-===========
+-----------
  `table_loadva` constructs a TblDescriptor from its arguments and calls
  `table_load.`
 
 SEE ALSO
-========
+--------
 [table_colval](table_colval.html)
  ,
 [table_colvals](table_colvals.html)
