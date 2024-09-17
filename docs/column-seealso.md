@@ -1,0 +1,14 @@
+SEE ALSO
+========
+
+- @column, @project project columns from a starbase data table.
+- @justify justify columns of a starbase data table.
+- @trim trim columns of an starbase data table.
+- @check check the format of a starbase data table.
+- @header print the header of a table file.
+- @headoff print the body (data rows) of a starbase data table file wo/ the header.
+- @headline print the column headline of a starbase data table.
+- @dashline print the dashline from a starbase data table.
+
+
+{% include starbase-seealso.md %}

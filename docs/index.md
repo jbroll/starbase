@@ -1,72 +1,84 @@
 
-## Quick Start
+NAME
+====
 
-configure --prefix=/home/john
-make
-make install
+`index` - index a starbase data table for fast access using the [search](search.html) command.
 
-exit
+SYNOPSIS
+========
 
- Starbase Data Tables	- An Ascii Relational Database for UNIX
- 
- DESCRIPTION
- -----------
-
- This distribution is made up of five independent parts.  Each was developed
- by a different author and comes with its own licensing arangements.  The
- distribution contains a set of command line filter programs and a library of
- subroutines to read/write and operate on data tables.
+```
+    `index` -m[sbihr] [-n] [-h] [-r] [-L] *table* *column*
+```
 
 
- Documentation is provided at:
+DESCRIPTION
+===========
 
-	http://www-cfa.harvard.edu/~john/starbase/starabase.html
+ `index` creates a sorted index file (or sorts the table itself) so that 
+ the [search](search.html) command may be used to access rows of the table more quickly
+ than the sequential access provided by `row.`
 
-
-A top level configure script is provided.  Among other things, this creates
-a Makefile for each package, based on the hand-created Makefile.in files.
-It should suffice to run configure and then run make.  Each of the lower 
-level directories will be configured and compiled from here.
-
--
-	> configure --prefix=xxx
-	> make
-	> make install
--
-
- 1. tablelib, tablesrc, utillib - starbase library and program source code.
-	This source was written at SAO and is distributed under Smithsonain
-	Astrophysical Observatory Copyright
-
-	A configure script is provided.
-
-	The source code should compile on any reasonable unix system.  The
-	only real system dependent parts are in file system directory access
-	(in utillib).  Macros from autoconf are used to do this.
+OPTIONS
+=======
 
 
- 2. tawk - a modified version of the mawk programming language
-	This code was written by Mike Brennan at Boeing and is distributed
-	under a Gnu General Public License.
-
-	A configure script is provided.
+- -m[sbihr]    Search method to index for.  `Index` creates an index for use
+                with a particular search method.
 
 
- 3. gnu sort/join - a modified version of the gnu textutils.
-	This code was written by the GNU Project and is distributed
-	under a Gnu General Public License.
+                * s     sequential (no op)
+                * b     primary key index on column
+                * i     secondary key index on column
+                * h     hash index
+                * r     row index
 
-	A configure script is provided.
+                Hash and Row indexing are untested and Do NOT work.
+                
+
+- -n           sort index in numeric order.  The default is dictionary order.
+- -h           sort index in astronomical numeric order.  This option 
+                enables the use of RA, Dec values formated in sexagesimal.
+- -r           reverse the index ordering (search -r is broken, don't use this).
+- -L           record the record locations in the index file.  This option
+                allows faster access with index files.  The index file contains
+                extra information and will be larger.
 
 
- 4. bsd derrived source - the jot program.
-	A Makefile.in was written at SAO to config and compile jot.c
-
-	This product includes software developed by the University of
-	California, Berkeley and its contributors.
+EXAMPLES
+========
 
 
- 5. radar - The radar library is provided by its author for use with Starbase and
-	    further redistribution is not authorized.  The radar library is not 
-	    available from the github based distribution.
+        Example of primary indexing.  Make a numeric primary index of file foo
+        on column A.
+
+```
+        john@panic: index -mb -n foo.mmethod A
+```
+
+        Make three indicies for the file ZYX.tab.  The X column is the primary
+        index and the file XYZ.tab will be sorted in X order by the index
+        command.  The other two index commands make secondary of "indirect" 
+        indexes.  They will create auxillery files that will be used by search.
+```
+
+        john@panic: index -mb -n XYZ.tab X
+        john@panic: index -mi -n XYZ.tab Y
+        john@panic: index -mi -n XYZ.tab Z
+```
+        Make indexes for RA Dec and Magnitude searching.  The -h option should
+        be used for RA, Dec column if they are in HH MM SS.SSS format.
+
+```
+        john@panic: index -mb -h coords.tab RA
+        john@panic: index -mi -h coords.tab Dec
+        john@panic: index -mi -n coords.tab Mag
+```
+'
+
+SEE ALSO
+========
+
+  * [search](search.html)     - quickly search an indexed starbase data table.
+{% include starbase-seealso.md %}
 

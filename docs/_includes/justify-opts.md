@@ -1,0 +1,81 @@
+Justification Options
+---------------------
+
+The use of any justification flags implies that all the columns will be
+justified.  Justification options that are listed on the command line apply to
+all following columns until a different option is given.  Options that are
+suffixed to a column name with ":" only apply to that column.  The default
+justification is left for text and right for numbers.  The output width of
+a column may be controlled by appending a width for the column in
+characters to a column name with a ",".  A column can be reformatted by 
+appending a sprintf format spec to the columns name with a "%".
+
+
+- -d Justify the column with its default justification.  Numeric values are
+      right justified and text is left justified.  
+- -l Left justify.
+- -c Center justify.  
+- -r Right justify.  
+- -e Expand the column.
+- -w *width*
+
+
+      Set the output column *width*.  Care should be taken with the width
+      option, column data will be truncated if they are width than the *width*
+      specification.
+
+
+- -s Skip the data in the column.
+- -x Delete the column.
+- -p Pass the column through with no justification.
+
+
+Some examples of justification options with justify.  Other column programs also support
+these options:
+
+
+`
+ Justify the table:
+```
+    john@panic : justify < foo
+    X       Name            Y      
+    ------  --------        -------
+       4.5  Star1           5000   
+     435    Star2_bk           4.3 
+    2300    Star3              2.04
+
+```
+ Justify all the column, override the default left for text:
+
+```
+    john@panic : justify < foo -a -r Name
+        Name        X       Y      
+    --------        ------  -------
+       Star1           4.5  5000   
+    Star2_bk         435       4.3 
+       Star3        2300       2.04
+```
+
+ Do the same thing with an appended column option:
+
+```
+    john@panic : justify < foo -a Name:r
+        Name        X       Y
+    --------        ------  -------
+       Star1           4.5  5000
+    Star2_bk         435       4.3
+       Star3        2300       2.04
+```
+
+ Sepcify a column width for the name column:
+
+```
+    john@panic : justify Name,20 < foo
+    Name                
+    --------------------
+    Star1               
+    Star2_bk            
+    Star3               
+```
+ 
+'

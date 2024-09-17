@@ -54,7 +54,7 @@ Starbase Data Tables
       * @{project, column.html} 	- project columns from a starbase data table.
       * @{trim, trim.html} 		- trim columns of an starbase data table.
 
-    Header Access:
+     Header Access:
 
       * @{dashline, dashline.html}	- print the dashline from a starbase data table.
       * @{headoff, headoff.html}	- remove the header from a starbase data table.
@@ -79,7 +79,7 @@ Starbase Data Tables
       * @{sorttable, sorttable.html}	- sort a starbase data table by specified columns.
       * @{uniontable, uniontable.html}	- produce the union of two starbase data tables.
 	    
-    Astronomical Programs:
+     Astronomical Programs:
 
       * @{precess, precess.html}	- precess coordinates
 
@@ -106,7 +106,7 @@ Starbase Data Tables
       * @{xytotng, xytotng.html}        - place circle regions at X, Y points on saotng
       					  image display.
 
-    Beyond Compute:
+     Beyond Compute:
 
       * @{coproctable, coproctable.html} - run a coprocess on the rows of a table.
       * @{jiggletable, jiggletable.html} - add a random gausian distribution to a column.
@@ -120,13 +120,13 @@ Starbase Data Tables
       * @{xytorttable, xytorttable.html} - convert a pair of columns in cartesain coordinates to polar coordinates.
 
 
-    Fitting:
+     Fitting:
 
       * @{simplexfittable, simplexfittable.html} - coefficient fit of a an expression to a dependent column.
       * @{svdfittable, svdfittable.html} - fit any set of columns to with linear coefficients on arbitrary basis functions.
       * @{xyfittable, xyfittable.html}   - fit two pair of columns with a linear model of translation, scale, rotation and optional shear.
 
-    @{Combining Lab Data Tables, datasets.html}:
+     @{Combining Lab Data Tables, datasets.html}:
 
       * @{avg3dtable, avg3dtable.html} - stack several similar tables, compute the average value in each cell
       * @{compute3dtable, compute3dtable.html} - stack several similar tables, evaluate statements for each cell
@@ -136,7 +136,7 @@ Starbase Data Tables
       * @{sub3dtable, sub3dtable.html} - stack two similar tables, compute the difference for each cell
       * @{sum3dtable, sum3dtable.html} - stack several similar tables, compute the sum for each cell
 
-    Statistics:
+     Statistics:
 
       * @{statstable, statstable.html}	- compute basic stats about the columns of a table.
 
@@ -154,7 +154,7 @@ Starbase Data Tables
       * @{histtable, histtable.html}	- compute the histogram of a column in a table.
 
 
-    Table Input
+     Table Input
 
       * @{cvstattable, cvstattable.html} - display CVS stat as a table.
       * @{daophototable, daophototable.html} - convert a daophot table to starbase
@@ -170,7 +170,7 @@ Starbase Data Tables
 					  data table.
       * @{sextotable, sextotable.html}  - inport a sextractor table to starbase.
 
-    Table Output
+     Table Output
 
       * @{justify, justify.html} 	- justify columns of a starbase data table.
       * @{extracttable, extracttable.html} - execute a program for each matching table in the input 
@@ -184,7 +184,7 @@ Starbase Data Tables
       * @{tabletosed, tabletosed.html} 	- write a set of sed substitution commands.
 					  format.
 
-    Utilities
+     Utilities
 
       * @{headtable, headtable.html}	- use the head utility on a starbase data table.
       * @{randtable, headtable.html}	- pick random rows from a starbase data table.
@@ -192,7 +192,7 @@ Starbase Data Tables
       * @{tailtable, tailtable.html}	- use the tail utility on a starbase data table.
       * @{wctable, wctable.html}	- use the wc utility on a starbase data table.
 
-    File Substitution:
+     File Substitution:
 
       * @{grestable, grestable.html}	- table driven general regular expression
 					  substitution.
@@ -200,7 +200,7 @@ Starbase Data Tables
       * @{trantable, trantable.html}	- table driven token substitution.
       * @{tabletom4, tabletom4.html}	- convert a table to m4 substitutions.
 
-    Associated Programs and Documentation:
+     Associated Programs and Documentation:
 
       * @{calc, calc.html}		- a command line calculator.
       * @{filebytes, filebytes.html}    - output a specified byte range from a file

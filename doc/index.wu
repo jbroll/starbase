@@ -45,7 +45,7 @@ OPTIONS
 EXAMPLES
 ========
 
-`
+
 	Example of primary indexing.  Make a numeric primary index of file foo
 	on column A.
 

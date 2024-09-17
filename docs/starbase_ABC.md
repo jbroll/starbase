@@ -1,0 +1,104 @@
+
+
+Starbase Programs Alphabetical Listing
+======================================
+
+
+- [appendtable]( appendtable.html) - append rows to the end of a table
+- [avg3dtable]( avg3dtable.html) - stack several similar tables, compute the average value in each cell
+- [calc]( calc.html) - a command line calcutator
+- [check]( check.html) - check for column errors in a starbase database.
+- [classifytable]( classifytable.html) - group together rows in a table into similar classes.
+- [column]( column.html) - project columns from a [starbase](starbase.html) data table
+- [compute]( compute.html) - compute column values for the rows of a starbase data table
+- [compute3dtable]( compute3dtable.html) - stack several similar tables, evaluate statements for each cell
+- [coproctable]( coproctable.html) - run a coprocess on the rows of a table.
+- [cprodtable]( cprodtable.html) - compute the cartesian product of a list of input tables.
+- [cvstattable]( cvstattable.html) - display CVS stat is a table.
+- [daophototable]( daophototable.html) - convert a daophoto table to starbase
+- [dashline]( dashline.html) - output the dashline of a starbase data table.
+- [diffrtable]( diffrtable.html) - compute the difference of two starbase data table.
+- [domaintable]( domaintable.html) - convert the domain of a column from one set to another
+- [edittable]( edittable.html) - Fast indexed editing of a starbase data table.
+- [expr3dtable]( exprte3dtable.html) - stack several similar tables, evaluate the expression for each cell
+- [extracttable]( extracttable.html) - execute a program for each matching table in the input 
+- [filebytes]( filebytes.html) - output a specified byte range from a file
+- [fitsbase]( fitsbase.html) - create a starbase database from fits files
+- [fitshdr]( fitshdr.html) - create a starbase table for each input fits file
+- [fixtotable]( fixtotable.html) - convert a file of fix format columns to a starbase data table.
+- [fk425]( fk425.html) - convert ra, dec columns from fk4 to fk5 with proper motion,
+- [fk45z]( fk45z.html) - convert ra, dec columns from fk4 to fk5 assuming zero proper motion.
+- [fk524]( fk524.html) - convert ra, dec columns from fk5 to fk4 with proper motion,
+- [fk54z]( fk54z.html) - convert coordinates from FK5 to FK4
+- [formattable]( formattable.html) - justify a table according to predefined arguments given in the table header
+- [fldtotable]( fldtotable.html) - convert a whitespace delimited file of columns to an starbase data table.
+- [gridtable]( gridtable.html)    - create a table with columns representing cartesian coordinates.
+- [header]( header.html) - output the header of a starbase data table
+- [headline]( headline.html) - output the headline of a starbase data table.
+- [headoff]( headoff.html) - remove the header of a starbase data table and output the data part.
+- [headtable]( headtable.html) - use the head utility on an ascii tab table.
+- [histtable]( histtable.html) - compute the histogram of a column in a table.
+- [index]( index.html) - index a starbase data table for fast access using the search command.
+- [indexsorttable]( indexsorttable.html) - output a table in the odrer of and indexed column.
+- [intertable]( intertable.html) - compute the intersection of two starbase data table.
+- [jiggletable]( jiggletable.html) - add a random gausian distribution to a column.
+- [jointable]( jointable.html) - join two starbase data tables on matching key columns.
+- [jottable]( jottable.html)   - print a table of sequential or random data
+- [justify]( justify.html) - justify the columns of a starbase data table.
+- [listtotable]( listtotable.html) - convert a /rdb compatible list to a table.
+- [maxtable]( statstable.html) - compute the min of each column of a table.
+- [avgtable]( avgtable.html)   - compute the mean of each column of a table.
+- [medtable]( statstable.html) - compute the median of each column of a table.
+- [mintable]( statstable.html) - compute the max of each column of a table.
+- [pastetable]( pastetable.html) - join starbase data tables by row number
+- [precess]( precess.html) - Precess the ra and dec columns from one equinox to another.
+- [prectable]( statstable.html) - compute the precision of each column of a table.
+- [project]( column.html) - project columns from a [starbase](starbase.html) data table
+- [radecbox]( radecbox.html) - Search an starbase data table catalog for targets in an ra dec
+- [radeccirc]( radeccirc.html) - Search an starbase data table catalog for targets in an ra dec
+- [radialsort]( radialsort.html) - sort the rows of a table in by the distance from a point.
+- [randtable]( randtable.html) - pick random rows from an starbase data table .
+- [reckon]( reckon.html) - execute a block of awk program statements.
+- [report]( report.html) - create a report from a table.
+- [resampletable]( resampletable.html) - resample numeric columns in a table
+- [reseqtable]( resampletable.html) - resequence a numeric column in a table to a monotonic sequence
+- [rms3dtable]( rms3dtable.html) - stack several similar tables, compute the rms for each cell
+- [rmstable]( statstable.html) - compute the rms of each column of a table.
+- [rngtable]( statstable.html) - compute the range of each column of a table.
+- [rotatetable]( rotatetable.html)   - rotate two columns of a table representing cartesian coordinates.
+- [row]( row.html) - select rows from a starbase data table
+- [rttoxytable]( rttoxytable.html) - convert a pair of columns in polar coordinates to cartesain coordinates.
+- [s2tptable]( s2tptable.html) - convert a pair of columns in spherical coordinates to tangent plane coordinates.
+- [scaletable]( scaletable.html)   - multiply columns by a scale factor.
+- [search]( search.html) - search a table using a fast access method.
+- [select]( row.html) - select rows from a starbase data table
+- [sextotable]( sextotable.html)  - inport a sextractor table to starbase.
+- [simplexfittable]( simplexfittable.html) - coefficient fit of a an expression to a dependent column.
+- [shifttable]( shifttable.html)   - add an offset to columns.
+- [sorttable]( sorttable.html) - sort a starbase data table on specified columns.
+- [statstable]( statstable.html)  - compute basic stats about the columns of a table.
+- [sub3dtable]( sub3dtable.html) - stack two similar tables, compute the difference for each cell
+- [sum3dtable]( sum3dtable.html) - stack several similar tables, compute the sum for each cell
+- [sumtable]( statstable.html) - compute the sum of each column of a table.
+- [svdfittable]( svdfittable.html) - Fit one set of columns to another set with a set of linear coefficients on arbitrary basis functions.
+- [table]( table.html) - run an awk program with a starbase data table as input.
+- [tabletodaophot]( tabletodaophot.html) - convert a table to a DAOphot table.
+- [tabletofits]( tabletofits.html) - convert a table to a FITS binary table.
+- [tabletohtml]( tabletohtml.html) - convert a table to HTML.
+- [tabletolist]( tabletolist.html) - convert a table to a /rdb compatible list.
+- [tabletom4]( tabletom4.html) - write a set of m4 substitution commands.
+- [tabletosed]( tabletosed.html) - write a set of sed substitution commands.
+- [tactable]( tactable.html)   - use the tac utility on a starbase data table.
+- [tailtable]( tailtable.html) - use the tail utility on an ascii tab table.
+- [tawk]( tawk.html) - extension to the awk programming language.
+- [total]( statstable.html)    - compute the total of each column of a table.
+- [tottable]( statstable.html) - compute the total of each column of a table.
+- [tp2stable]( tp2stable.html) - tangent plane to spherical conversion
+- [trantable]( trantable.html) - table driven string substitution.
+- [trim]( trim.html) - removes extra white space from the columns of a table.
+- [uniontable]( uniontable.html) - compute the union of starbase data tables.
+- [validate]( validate.html) - validate and fix column values of a starbase data table
+- [wctable]( wctable.html) - use the wc utility on an starbase data table.
+- [xyfittable]( xyfittable.html)   - Fit one pair of X, Y columns to another pair with a linear model of translation, scale and optional shear.
+- [xytorttable]( xytorttable.html) - convert a pair of columns in cartesain coordinates to polar coordinates.
+- [xytotng]( xytotng.html)   - Place circle regions at X, Y points on saotng image display.

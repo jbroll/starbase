@@ -1,13 +1,16 @@
+WU_FILES := $(wildcard *.wu)
+MD_FILES := $(patsubst %.wu,../docs/%.md,$(WU_FILES))
 
-lib:
-	c2man -Swu -I. -I/data/mmti/include -P "cpp -D__STDC__ -E -C" ../tablelib/table.h
-	wu set Outline starbase.3.wu table_*.wu
-	wu 2html table_*.wu
-	cat starbase.3.ABC.head  > starbase.3.ABC.wu
-	awk '$$2 ~ /^-/ { $$1 = " * @{"$$1", "$$1".html}"; print }' table_*.wu >> starbase.3.ABC.wu
-	cat starbase.3.ABC.tail >> starbase.3.ABC.wu
-	wu 2html starbase.3.ABC.wu
+WI_FILES := $(notdir $(wildcard ./include/*.wi))
+MI_FILES := $(patsubst %.wi,../docs/_includes/%.md,$(WI_FILES))
 
-ABC:
-	mawk '/^NAME/,/^SYNOPSYS/ { if ( $$2 ~ /^-$$/ ) { $$1 = " * @["$$1", "$$1".html]"; print } }' *.wu | grep -v table_ | sed -e s/#//g > xxABC
+all: $(MD_FILES) $(MI_FILES)
+
+../docs/%.md: %.wu wu2markdown.tcl
+	@cat $< | expand | ./wu2markdown.tcl > $@
+
+../docs/_includes/%.md: include/%.wi wu2markdown.tcl
+	@cat $< | expand | ./wu2markdown.tcl > $@
+
+.PHONY: all
 
