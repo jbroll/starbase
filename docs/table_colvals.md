@@ -1,6 +1,6 @@
 
 
- table_colvals  - get the value from the column.
+###  table_colvals  - get the value from the column.
 
 SYNOPSIS
 --------

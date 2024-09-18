@@ -1,6 +1,5 @@
 
-
-`xyfittable` - Fit two pair of columns with a linear model of translation, scale, rotation and optional shear.
+### `xyfittable` - Fit two pair of columns with a linear model of translation, scale, rotation and optional shear.
 
 
 SYNOPSYS

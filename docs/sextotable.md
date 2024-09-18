@@ -1,6 +1,5 @@
 
-
-`sextotable` - inport a sextractor table to starbase.
+### `sextotable` - inport a sextractor table to starbase.
 
 SYNOPSYS
 --------

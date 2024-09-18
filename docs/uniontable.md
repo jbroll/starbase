@@ -1,6 +1,5 @@
 
-
-uniontable - compute the union of starbase data tables.
+### uniontable - compute the union of starbase data tables.
 
 SYNOPSYS
 --------

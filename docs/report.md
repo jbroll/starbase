@@ -1,6 +1,5 @@
 
-
-report - create a report from a table.
+### report - create a report from a table.
 
 SYNOPSYS
 --------

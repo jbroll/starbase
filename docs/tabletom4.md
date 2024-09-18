@@ -1,6 +1,5 @@
 
-
-`tabletom4` - write a set of m4 substitution commands.
+### `tabletom4` - write a set of m4 substitution commands.
 
 SYNOPSYS
 --------

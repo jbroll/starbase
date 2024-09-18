@@ -1,6 +1,5 @@
 
-
-`headoff` - remove the header of a starbase data table and output the data part.
+### `headoff` - remove the header of a starbase data table and output the data part.
 
 SYNOPSYS
 --------

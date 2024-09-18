@@ -1,6 +1,6 @@
 
 
- table_extract  - extract a table from a multi table file.
+###  table_extract  - extract a table from a multi table file.
 
 SYNOPSIS
 --------

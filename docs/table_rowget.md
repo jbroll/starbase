@@ -1,6 +1,6 @@
 
 
- table_rowget  - read the next row from a table file.
+###  table_rowget  - read the next row from a table file.
 
 SYNOPSIS
 --------

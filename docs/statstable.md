@@ -1,6 +1,5 @@
 
-
-`statstable` - compute basic stats about the columns of a table.
+### `statstable` - compute basic stats about the columns of a table.
 
 SYNOPSYS
 --------

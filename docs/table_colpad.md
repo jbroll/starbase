@@ -1,6 +1,6 @@
 
 
- table_colpad  - pad column output for justification.
+###  table_colpad  - pad column output for justification.
 
 SYNOPSIS
 --------

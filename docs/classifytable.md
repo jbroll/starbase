@@ -1,6 +1,5 @@
 
-
-`classifytable` - group together rows in a table into similar classes.
+### `classifytable` - group together rows in a table into similar classes.
 
 SYNOPSIS
 --------

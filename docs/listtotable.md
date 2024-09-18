@@ -1,6 +1,5 @@
 
-
-`listtotable` - convert a /rdb compatible list to a table.
+### `listtotable` - convert a /rdb compatible list to a table.
 
 SYNOPSYS
 --------

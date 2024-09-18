@@ -1,6 +1,6 @@
 
 
- table_colnum  - look up a column in a table header.
+###  table_colnum  - look up a column in a table header.
 
 SYNOPSIS
 --------

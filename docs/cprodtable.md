@@ -1,6 +1,5 @@
 
-
-`cprodtable` -  compute the cartesian product of a list of input tables.
+### `cprodtable` -  compute the cartesian product of a list of input tables.
 
 SYNOPSYS
 --------

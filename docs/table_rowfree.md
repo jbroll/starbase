@@ -1,6 +1,6 @@
 
 
- table_rowfree  - release memory of the row structures when done.
+###  table_rowfree  - release memory of the row structures when done.
 
 SYNOPSIS
 --------

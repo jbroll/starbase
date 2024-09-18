@@ -1,6 +1,5 @@
 
-
-fldtotable - convert a whitespace delimited file of columns to an starbase data table.
+### fldtotable - convert a whitespace delimited file of columns to an starbase data table.
 
 ```
         `fldtotable` [-i *ifile*] [-o *ofile*] *column*[:*n*[-*m*]] ...

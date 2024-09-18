@@ -1,6 +1,5 @@
 
-
-table - run an awk program with a starbase data table as input.
+### table - run an awk program with a starbase data table as input.
 
 SYNOPSYS
 --------

@@ -1,6 +1,6 @@
 
 
- table_ofs  - change the output field separator.
+###  table_ofs  - change the output field separator.
 
 SYNOPSIS
 --------

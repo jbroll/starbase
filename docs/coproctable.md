@@ -1,6 +1,5 @@
 
-
-`coproctable` - run a coprocess on the rows of a table.
+### `coproctable` - run a coprocess on the rows of a table.
 
 
 SYNOPSYS

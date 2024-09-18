@@ -1,6 +1,6 @@
 
 
- table_hdrfind  - `table_hdrV` returns the row structure that holds the header value
+###  table_hdrfind  - `table_hdrV` returns the row structure that holds the header value
 
 SYNOPSIS
 --------

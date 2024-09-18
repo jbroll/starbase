@@ -1,6 +1,6 @@
 
 
- table_parsline  - parse a line from a table file.
+###  table_parsline  - parse a line from a table file.
 
 SYNOPSIS
 --------

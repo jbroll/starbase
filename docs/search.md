@@ -1,6 +1,5 @@
 
-
-`search` - search a table using a fast access method.
+### `search` - search a table using a fast access method.
 
 
 SYNOPSIS

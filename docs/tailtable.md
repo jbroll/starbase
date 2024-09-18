@@ -1,6 +1,5 @@
 
-
-`tailtable`      - use the tail utility on an ascii tab table.
+### `tailtable`      - use the tail utility on an ascii tab table.
 
 SYNOPSYS
 --------

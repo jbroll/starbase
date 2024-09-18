@@ -1,6 +1,5 @@
 
-
-`column` - project columns from a [starbase](starbase.html) data table
+### `column` - project columns from a [starbase](starbase.html) data table
 
 SYNOPSYS
 --------

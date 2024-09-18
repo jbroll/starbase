@@ -1,6 +1,5 @@
 
-
-`dashline` - output the dashline of a starbase data table.
+### `dashline` - output the dashline of a starbase data table.
 
 SYNOPSYS
 --------

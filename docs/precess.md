@@ -1,6 +1,5 @@
 
-
-precess - Precess the ra and dec columns from one equinox to another.
+### precess - Precess the ra and dec columns from one equinox to another.
 
 SYNOPSYS
 --------

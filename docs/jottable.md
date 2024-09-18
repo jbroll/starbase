@@ -1,6 +1,5 @@
 
-
-jottable - print a table of sequential or random data
+### jottable - print a table of sequential or random data
 
 SYNOPSYS
 --------

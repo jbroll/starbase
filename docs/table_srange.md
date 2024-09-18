@@ -1,6 +1,6 @@
 
 
- table_srange  - search a table for a range using a fast access method
+###  table_srange  - search a table for a range using a fast access method
 
 SYNOPSIS
 --------

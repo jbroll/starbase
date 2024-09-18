@@ -1,6 +1,6 @@
 
 
- table_hdrput  - output a table header.
+###  table_hdrput  - output a table header.
 
 SYNOPSIS
 --------

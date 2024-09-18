@@ -1,6 +1,5 @@
 
-
-`headline` - output the headline of a starbase data table.
+### `headline` - output the headline of a starbase data table.
 
 SYNOPSYS
 --------

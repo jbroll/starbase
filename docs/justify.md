@@ -1,6 +1,5 @@
 
-
-justify - justify the columns of a starbase data table.
+### justify - justify the columns of a starbase data table.
 
 SYNOPSYS
 --------

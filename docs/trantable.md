@@ -1,6 +1,5 @@
 
-
-`trantable` - table driven string substitution.
+### `trantable` - table driven string substitution.
 
 SYNOPSYS
 --------

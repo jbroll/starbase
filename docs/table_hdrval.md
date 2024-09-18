@@ -1,6 +1,6 @@
 
 
- table_hdrval  - access a header value.
+###  table_hdrval  - access a header value.
 
 SYNOPSIS
 --------

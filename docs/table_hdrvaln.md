@@ -1,6 +1,6 @@
 
 
- table_hdrvaln  - `table_hdrvaln` returns the number of values in this header keyword.
+###  table_hdrvaln  - `table_hdrvaln` returns the number of values in this header keyword.
 
 SYNOPSIS
 --------

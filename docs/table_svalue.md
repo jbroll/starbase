@@ -1,6 +1,6 @@
 
 
- table_svalue  - search a table for a value using a fast access method
+###  table_svalue  - search a table for a value using a fast access method
 
 SYNOPSIS
 --------

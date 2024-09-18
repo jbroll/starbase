@@ -1,6 +1,6 @@
 
 
- table_rowloc  - low level table row descriptor allocation.
+###  table_rowloc  - low level table row descriptor allocation.
 
 SYNOPSIS
 --------

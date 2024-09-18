@@ -1,6 +1,6 @@
 
 
- table_coladd  - add a column to the table.
+###  table_coladd  - add a column to the table.
 
 SYNOPSIS
 --------

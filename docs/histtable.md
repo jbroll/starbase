@@ -1,6 +1,5 @@
 
-
-    `histtable` - compute the histogram of a column in a table.
+###     `histtable` - compute the histogram of a column in a table.
 
 SYNOPSYS
 --------

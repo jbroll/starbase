@@ -1,6 +1,5 @@
 
-
-`header` - output the header of a starbase data table
+### `header` - output the header of a starbase data table
 
 SYNOPSYS
 --------

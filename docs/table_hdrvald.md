@@ -1,6 +1,6 @@
 
 
- table_hdrvald  - `table_hdrvald` the header value as a double.
+###  table_hdrvald  - `table_hdrvald` the header value as a double.
 
 SYNOPSIS
 --------

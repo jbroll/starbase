@@ -8,6 +8,25 @@ set in_plus_code_block 0
 set prev_line ""
 set prev_line_length 0
 
+proc inline { line } {
+    global header in_code_block in_list in_plus_code_block prev_line prev_line_length
+
+    set line [regsub {@{([^\}]+),([^\}]+)}} $line {[\1](\2)}]
+    set line [regsub {@\[([^]]+),([^]]+)\]} $line {[\1](\2)}]
+    set line [regsub -all { @\[([^ \t,]+)\]} $line {[\1](\1.html)}]
+    set line [regsub -all { @([^ \t,]+)} $line { [\1](\1.html)}]
+    set line [string map { { index.html} { index-cmd.html} { starbase.html} { index.html} } $line] 
+
+    # Convert inline formatting
+    if {!$in_code_block} {
+        set line [regsub -all {\*\*\*([^*]+)\*\*\*} $line {**\1**}]
+        set line [regsub -all {~([^~]+)~} $line {*\1*}]
+        set line [regsub -all {#([^ ]+)} $line {`\1`}]
+
+    }
+    return $line
+}
+
 proc process_line {line} {
     global header in_code_block in_list in_plus_code_block prev_line prev_line_length
 
@@ -19,6 +38,15 @@ proc process_line {line} {
 
     if { $line eq "NAME" } {
         gets stdin
+        while { [gets stdin line] >= 0 } {
+            if { $line eq "" } { continue }
+            # puts "---"
+            # puts "title: $line"
+            # puts "---"
+            puts "### [inline $line]"
+            break
+            
+        }
         return
     }
 
@@ -71,20 +99,7 @@ proc process_line {line} {
 			}
 	}
 
-    # Convert links
-    set line [regsub {@{([^\}]+),([^\}]+)}} $line {[\1](\2)}]
-    set line [regsub {@\[([^]]+),([^]]+)\]} $line {[\1](\2)}]
-    set line [regsub -all { @\[([^ \t,]+)\]} $line {[\1](\1.html)}]
-    set line [regsub -all { @([^ \t,]+)} $line { [\1](\1.html)}]
-    set line [string map { { index.html} { index-cmd.html} { starbase.html} { index.html} } $line] 
-
-    # Convert inline formatting
-    if {!$in_code_block} {
-        set line [regsub -all {\*\*\*([^*]+)\*\*\*} $line {**\1**}]
-        set line [regsub -all {~([^~]+)~} $line {*\1*}]
-        set line [regsub -all {#([^ ]+)} $line {`\1`}]
-
-    }
+    set line [inline $line]
 
     # Print the processed line
     if {$in_code_block || $in_plus_code_block} {

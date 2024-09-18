@@ -1,6 +1,5 @@
 
-
-`tabletolist` - convert a table to a /rdb compatible list.
+### `tabletolist` - convert a table to a /rdb compatible list.
 
 SYNOPSYS
 --------

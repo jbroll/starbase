@@ -1,6 +1,5 @@
 
-
-`radeccirc` - Search an starbase data table catalog for targets in an ra dec
+### `radeccirc` - Search an starbase data table catalog for targets in an ra dec
              specified circle.  radeccirc file ra dec radius
 
 SYNOPSYS

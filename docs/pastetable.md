@@ -1,6 +1,5 @@
 
-
-`pastetable` - join starbase data tables by row number
+### `pastetable` - join starbase data tables by row number
 
 SYNOPSYS
 --------

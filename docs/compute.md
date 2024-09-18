@@ -1,6 +1,5 @@
 
-
-compute - compute column values for the rows of a starbase data table
+### compute - compute column values for the rows of a starbase data table
 
 SYNOPSYS
 --------

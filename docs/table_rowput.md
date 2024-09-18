@@ -1,6 +1,6 @@
 
 
- table_rowput  - output a table row.
+###  table_rowput  - output a table row.
 
 SYNOPSIS
 --------

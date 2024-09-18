@@ -1,6 +1,5 @@
 
-
-edittable - Fast indexed editing of a starbase data table.
+### edittable - Fast indexed editing of a starbase data table.
 
 SYNOPSYS
 --------

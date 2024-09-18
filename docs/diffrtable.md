@@ -1,6 +1,5 @@
 
-
-diffrtable - compute the difference of two starbase data table.
+### diffrtable - compute the difference of two starbase data table.
 
 SYNOPSYS
 --------

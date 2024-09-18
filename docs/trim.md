@@ -1,6 +1,5 @@
 
-
-`trim` - removes extra white space from the columns of a table.
+### `trim` - removes extra white space from the columns of a table.
 
 SYNOPSYS
 --------

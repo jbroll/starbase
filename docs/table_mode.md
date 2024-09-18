@@ -1,6 +1,6 @@
 
 
- table_mode  - set the table i/o mode.
+###  table_mode  - set the table i/o mode.
 
 SYNOPSIS
 --------

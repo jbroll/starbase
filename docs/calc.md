@@ -1,6 +1,5 @@
 
-
-`calc` - a command line calcutator
+### `calc` - a command line calcutator
 
 
 SYNOPSYS

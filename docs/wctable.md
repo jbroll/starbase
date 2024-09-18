@@ -1,6 +1,5 @@
 
-
-`wctable` -   use the wc utility on an starbase data table.
+### `wctable` -   use the wc utility on an starbase data table.
 
 SYNOPSYS
 --------

@@ -1,6 +1,6 @@
 
 
- table_hdrfree  - release memory of the table header structures when done.
+###  table_hdrfree  - release memory of the table header structures when done.
 
 SYNOPSIS
 --------

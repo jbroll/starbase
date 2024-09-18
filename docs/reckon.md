@@ -1,6 +1,5 @@
 
-
-reckon - execute a block of awk program statements.
+### reckon - execute a block of awk program statements.
 
 
 SYNOPSYS

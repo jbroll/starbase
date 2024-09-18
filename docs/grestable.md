@@ -1,6 +1,5 @@
 
-
-`grestable` - table driven general regular expression substitution.
+### `grestable` - table driven general regular expression substitution.
 
 SYNOPSYS
 --------

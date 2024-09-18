@@ -1,6 +1,5 @@
 
-
-`fk45z`     - convert ra, dec columns from fk4 to fk5 assuming zero proper motion.
+### `fk45z`     - convert ra, dec columns from fk4 to fk5 assuming zero proper motion.
 
 SYNOPSYS
 --------

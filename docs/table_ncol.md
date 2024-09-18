@@ -1,6 +1,6 @@
 
 
- table_ncol  - return the number of column in a table row structure.
+###  table_ncol  - return the number of column in a table row structure.
 
 SYNOPSIS
 --------

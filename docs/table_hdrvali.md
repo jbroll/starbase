@@ -1,6 +1,6 @@
 
 
- table_hdrvali  - `table_hdrvali` returns the header value an integer.
+###  table_hdrvali  - `table_hdrvali` returns the header value an integer.
 
 SYNOPSIS
 --------

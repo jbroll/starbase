@@ -1,6 +1,5 @@
 
-
-resample - resample numeric columns in a table
+### resample - resample numeric columns in a table
 
 SYNOPSYS
 --------

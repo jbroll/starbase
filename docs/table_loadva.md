@@ -1,6 +1,6 @@
 
 
- table_loadva  - load a table directly into a data structure from varargs table
+###  table_loadva  - load a table directly into a data structure from varargs table
  description.
 
 SYNOPSIS

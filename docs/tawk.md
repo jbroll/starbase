@@ -1,6 +1,5 @@
 
-
-tawk - extension to the awk programming language.
+### tawk - extension to the awk programming language.
 
 DESCRIPTION
 -----------

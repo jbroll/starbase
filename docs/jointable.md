@@ -1,6 +1,5 @@
 
-
-jointable - join two starbase data tables on matching key columns.
+### jointable - join two starbase data tables on matching key columns.
 
 SYNOPSYS
 --------

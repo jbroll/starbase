@@ -1,6 +1,6 @@
 
 
- table_ors  - change the output record separator.
+###  table_ors  - change the output record separator.
 
 SYNOPSIS
 --------

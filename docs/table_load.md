@@ -1,6 +1,6 @@
 
 
- table_load  - load a table directly into a data structure.
+###  table_load  - load a table directly into a data structure.
 
 SYNOPSIS
 --------

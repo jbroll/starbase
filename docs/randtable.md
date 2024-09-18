@@ -1,6 +1,5 @@
 
-
-`randtable`      - pick random rows from an starbase data table .
+### `randtable`      - pick random rows from an starbase data table .
 
 SYNOPSYS
 --------

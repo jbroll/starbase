@@ -1,6 +1,5 @@
 
-
-intertable - compute the intersection of two starbase data table.
+### intertable - compute the intersection of two starbase data table.
 
 SYNOPSYS
 --------

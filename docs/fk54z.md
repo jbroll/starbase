@@ -1,7 +1,5 @@
 
-
-
-`fk54z` - convert coordinates from FK5 to FK4
+### `fk54z` - convert coordinates from FK5 to FK4
 
 SYNOPSYS
 --------

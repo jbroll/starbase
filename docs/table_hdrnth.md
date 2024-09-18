@@ -1,6 +1,6 @@
 
 
- table_hdrnth  - returns the nth header keyword.
+###  table_hdrnth  - returns the nth header keyword.
 
 SYNOPSIS
 --------

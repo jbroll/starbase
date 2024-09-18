@@ -1,6 +1,5 @@
 
-
-`daophototable` - inport a DAO Phot table to starbase.
+### `daophototable` - inport a DAO Phot table to starbase.
 
 SYNOPSYS
 --------

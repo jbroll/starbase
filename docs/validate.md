@@ -1,6 +1,5 @@
 
-
-validate - validate and fix column values of a starbase data table
+### validate - validate and fix column values of a starbase data table
 
 SYNOPSYS
 --------

@@ -1,6 +1,5 @@
 
-
-`svdfittable` - linear coefficient fit of a set of basis functions to a dependent column.
+### `svdfittable` - linear coefficient fit of a set of basis functions to a dependent column.
 
 SYNOPSYS
 --------

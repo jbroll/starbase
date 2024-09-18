@@ -1,6 +1,5 @@
 
-
-`sorttable` - sort a starbase data table on specified columns.
+### `sorttable` - sort a starbase data table on specified columns.
 
 SYNOPSYS
 --------

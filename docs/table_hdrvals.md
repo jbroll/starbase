@@ -1,6 +1,6 @@
 
 
- table_hdrvals  - `table_hdrvals` returns a copy of the column value made with with
+###  table_hdrvals  - `table_hdrvals` returns a copy of the column value made with with
  `strdup.`
 
 SYNOPSIS

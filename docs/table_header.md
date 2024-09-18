@@ -1,6 +1,6 @@
 
 
- table_header  - read the table header from a file.
+###  table_header  - read the table header from a file.
 
 SYNOPSIS
 --------

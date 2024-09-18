@@ -1,6 +1,5 @@
 
-
-fixtotable - convert a file of fix format columns to a starbase data table.
+### fixtotable - convert a file of fix format columns to a starbase data table.
 
 SYNOPSYS
 --------

@@ -1,6 +1,5 @@
 
-
-`index` - index a starbase data table for fast access using the [search](search.html) command.
+### `index` - index a starbase data table for fast access using the [search](search.html) command.
 
 SYNOPSIS
 --------

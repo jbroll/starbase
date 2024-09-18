@@ -1,6 +1,6 @@
 
 
- table_search  - set up to search a table using a fast access method
+###  table_search  - set up to search a table using a fast access method
 
 SYNOPSIS
 --------

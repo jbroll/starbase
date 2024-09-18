@@ -1,6 +1,5 @@
 
-
-`tactable`       - use the tac utility on an ascii tab table.
+### `tactable`       - use the tac utility on an ascii tab table.
 
 SYNOPSYS
 --------

@@ -1,6 +1,6 @@
 
 
- table_colarg  - parse a table program column argument.
+###  table_colarg  - parse a table program column argument.
 
 SYNOPSIS
 --------

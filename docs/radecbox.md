@@ -1,6 +1,5 @@
 
-
-`radecbox` - Search an starbase data table catalog for targets in an ra dec
+### `radecbox` - Search an starbase data table catalog for targets in an ra dec
             specified box.
 
 SYNOPSYS

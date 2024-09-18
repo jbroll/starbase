@@ -1,6 +1,5 @@
 
-
-row - select rows from a starbase data table
+### row - select rows from a starbase data table
 
 SYNOPSYS
 --------

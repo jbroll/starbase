@@ -1,6 +1,6 @@
 
 
- table_rowtrim  - trim blanks out of a row structure.
+###  table_rowtrim  - trim blanks out of a row structure.
 
 SYNOPSIS
 --------

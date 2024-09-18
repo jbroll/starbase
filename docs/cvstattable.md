@@ -1,6 +1,5 @@
 
-
-`cvstattable` - display CVS stat is a table.
+### `cvstattable` - display CVS stat is a table.
 
 SYNOPSYS
 --------

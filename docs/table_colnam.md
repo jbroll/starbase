@@ -1,6 +1,6 @@
 
 
- table_colnam  - returns the name of the column number.
+###  table_colnam  - returns the name of the column number.
 
 SYNOPSIS
 --------

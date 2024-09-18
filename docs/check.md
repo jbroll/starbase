@@ -1,6 +1,5 @@
 
-
-check - check for column errors in a starbase database.
+### `check` - check for column errors in a starbase database.
 
 SYNOPSYS
 --------

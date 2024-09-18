@@ -1,6 +1,5 @@
 
-
-`tabletosed` - write a set of sed substitution commands.
+### `tabletosed` - write a set of sed substitution commands.
 
 SYNOPSYS
 --------

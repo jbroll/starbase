@@ -1,6 +1,5 @@
 
-
-`headtable`      - use the head utility on an ascii tab table.
+### `headtable`      - use the head utility on an ascii tab table.
 
 SYNOPSYS
 --------
