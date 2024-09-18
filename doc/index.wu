@@ -12,7 +12,7 @@ Starbase Data Tables
  #Starbase is a set of filter programs and an ascii table format for UNIX.
  The current release contains over 95 programs for manipulating data tables.
  The ascii database concepts are outlined in the book
- @{Unix Relational Database Management, http://www.rdb.com/}
+ @{Unix Relational Database Management, https://www.amazon.com/Relational-Database-Management-Prentice-Hall-Software/dp/013938622X}
  by Manis, Schaffer and Jorgensen.  This implementation
  has been written at the
  @{Smithsonian Astrophysical Observatory, http://cfa-www.harvard.edu/sao-home.html}
