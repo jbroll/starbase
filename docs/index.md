@@ -16,7 +16,7 @@ Starbase Data Tables
 
    * Top Level [README]( README.html)
    * Github code repository [jbroll/starbase]( https://github.com/jbroll/starbase)
-   * [Download]( Download.html) Starbase Data Tables
+   * [Download]( https://github.com/jbroll/starbase/releases/tag/v3.5.0) Starbase Data Tables
    * A Paper I wrote: [Starbase: A User Centered Database for Astronomy]( starbase.pdf)
 
    * Summary Pages

@@ -1,5 +1,14 @@
 
+Makefile
+
 *.a
 *.o
 *.swp
 
+.config
+error.log
+nlfit/cmpfit-1.2/error.log
+tawk/config.cache
+tawk/config.h
+tawk/config.log
+tawk/config.status

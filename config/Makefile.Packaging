@@ -1,6 +1,13 @@
 # Packaging Targets
 #
-Version = $(Package)`awk '{ print \$$2; exit }' Version`
+Tag = v`awk '{ print \$$2; exit }' Version`
+Version = $(Package)-$(Tag)
+
+tag:
+	git tag -d $(Tag) || true
+	git push origin :refs/tags/$(Tag) || true
+	git tag $(Tag)
+	git push origin $(Tag) --force
 
 source  :
 	$(MAKE) tar source=1 version=$(Version)
@@ -16,15 +23,15 @@ tar 	:
 	fi
 	cd ..;									\
 	 sed < $(version)/$(Package).ex -e s/$(Package)/$(version)/ > exclude;	\
-	 tar cvfXh - exclude $(version) | gzip > $(version).tar.gz;		\
+	 tar cvfXh - exclude $(version) | gzip > $(version).tgz;		\
 	 rm -rf exclude;							\
-	 echo; ls -l $(version).tar.gz; echo
+	 echo; ls -l $(version).tgz; echo
 
 unpack  :
 	cd ..;							\
 	rm -rf $(version);					\
 	rm -rf $(version).$(Arch);				\
-	gzip -d < $(version).tar.gz | tar xf -
+	gzip -d < $(version).tgz | tar xf -
 	
 binary 	:
 	$(MAKE) unpack version=$(Version)
