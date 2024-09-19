@@ -254,7 +254,7 @@ int main(argc, argv)
 		, col2name == NULL ? "" : Col2name
 		, ( numeric == 0 ? '-' 
 		: ( numeric == 1 ? '.' 
-		: ( numeric == 2 ? ':' : '-' )))
+		: ( numeric == 2 ? '+' : '-' )))
 		, search);	
 
 	if ( search == 'i' ) {

@@ -239,11 +239,11 @@ char *table_searchcheckindexpattern(search, directo, pattern, method)
     }
 
     switch ( method & TSEARCH_NUMERIC ) {
-     case 0			: npatt = "[-.:]";;	break;
+     case 0			: npatt = "[-.+]";;	break;
      case TSEARCH_ASCII		: npatt = "-";		break;
-     case TSEARCH_NUMBER	: npatt = "[.:]";	break;
+     case TSEARCH_NUMBER	: npatt = "[.+]";	break;
      case TSEARCH_DECIMAL	: npatt = ".";		break;
-     case TSEARCH_SEXAGAS	: npatt = ":";		break;
+     case TSEARCH_SEXAGAS	: npatt = "+";		break;
     }
 
     sprintf(pattern, "%s%s%s", pattern, npatt, mpatt);
@@ -263,7 +263,7 @@ char *table_searchcheckindexpattern(search, directo, pattern, method)
 	M = list->name[len - 1];
 
 	search->Numeric = 0;
-	search->Numeric = ( N == '-' ? 0 : ( N == '.' ? 1 : ( N == ':' ? 2 : -1 )));
+	search->Numeric = ( N == '-' ? 0 : ( N == '.' ? 1 : ( N == '+' ? 2 : -1 )));
 	search->Method  = ( M == 's' ? TSEARCH_SEQUENTIAL
 			: ( M == 'b' ? TSEARCH_BINARY
 			: ( M == 'i' ? TSEARCH_INDEX
