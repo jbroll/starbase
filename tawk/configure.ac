@@ -1,0 +1,51 @@
+AC_INIT
+AC_CONFIG_SRCDIR([mawk.h])
+builtin(include,mawk.ac.m4)
+GET_USER_DEFAULTS
+PROG_CC_NO_MINUS_G_NONSENSE
+AC_PROG_CPP
+NOTSET_THEN_DEFAULT(CFLAGS,-O)
+LOOK_FOR_MATH_LIBRARY
+WHICH_YACC
+COMPILER_ATTRIBUTES
+WHERE_SIZE_T
+CHECK_HEADERS(fcntl.h, errno.h, time.h, stdarg.h, dlfcn.h)
+CHECK_FUNCTIONS(memcpy, strchr, strerror, vfprintf, strtod, fmod, matherr)
+FPRINTF_IN_STDIO
+FIND_OR_COMPUTE_MAX__INT
+DREADED_FPE_TESTS
+DO_CONFIG_H
+
+AC_EXEEXT
+
+AC_CHECK_LIB([dl],[main],[DLLIB=-ldl],[],[])ac_cv_lib_dl=ac_cv_lib_dl_main
+
+AC_SUBST(DLLIB)
+
+# Figure shared library flags for slalink.so compilation
+#
+AC_CANONICAL_TARGET
+AC_MSG_RESULT([  build=$build, build_cpu=$build_cpu, build_os=$build_os])
+
+# Add more OS or compiler cases as needed
+#
+case $build_os in
+  darwin*) C_DYNAMIC=-flat_namespace ;;
+  solaris*) 
+      case $CC in
+         gcc)     C_PIC=-fPIC;  C_SHARED=-shared;  C_DYNAMIC=-rdynamic	;;
+         *)       C_PIC=-KPIC;  C_SHARED=-G;       ;;
+      esac ;;
+  *linux-gnu)    
+          C_PIC=-fPIC;  C_SHARED=-shared;  C_DYNAMIC=-rdynamic	;;
+  *)         
+          C_PIC=-fPIC;  C_SHARED=-shared;  C_DYNAMIC=-rdynamic	;;
+esac
+AC_SUBST(C_PIC)
+AC_SUBST(C_SHARED)
+AC_SUBST(C_DYNAMIC)
+AC_MSG_RESULT([  Shared object flags for ${CC}: C_PIC=$C_PIC, C_SHARED=$C_SHARED])
+
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
