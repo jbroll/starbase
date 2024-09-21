@@ -11,6 +11,7 @@ tag:
 
 source  :
 	$(MAKE) tar source=1 version=$(Version)
+	 ./tgz2zip ../$(Version).tgz
 
 tar 	:
 	find . -follow -name '.#*'   -print | xargs rm -f
@@ -42,5 +43,6 @@ binary 	:
 	$(MAKE) install;					\
 	$(MAKE) clean;						\
 	current=`pwd`; $(MAKE) tar version=`basename $$current`;\
-	cd ..; rm -rf `basename $$current`
+	./tgz2zip ../`basename $$current`.tgz;\
+	cd ..; rm -rf `basename $$current`\
 

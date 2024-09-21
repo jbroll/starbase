@@ -37,14 +37,16 @@ jobs:
     
     - name: Move artifacts
       shell: bash
-      run: mv ../*.tgz .
+      run: |
+        mv ../*.tgz .
+        mv ../*.zip .
     
     - name: Upload Release Assets
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: bash
       run: |
-        for file in *.tgz
+        for file in *.tgz *.zip
         do
           gh release upload ${{ github.ref_name }} "$file" --clobber
         done

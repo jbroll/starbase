@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+export PATH=$PATH:`pwd`
+echo PATH $PATH
+
+# Check if a filename was provided
+if [ $# -eq 0 ]; then
+    echo "Please provide a .tgz file name"
+    exit 1
+fi
+
+# Get the input filename and output filename
+input_file="$1"
+output_file="${input_file%.tgz}.zip"
+
+# Create a temporary directory
+temp_dir=$(mktemp -d)
+
+# Extract .tgz contents to the temporary directory
+tar -xzf "$input_file" -C "$temp_dir"
+
+# Change to the temporary directory
+echo $temp_dor
+( cd "$temp_dir" && zip -r "$output_file" ./* )
+
+# Create zip file
+
+# Move the zip file to the original directory
+mv "$temp_dir/$output_file" "$(dirname "$input_file")"
+
+# Clean up: remove temporary directory
+rm -rf "$temp_dir"
+
+echo "Conversion complete. Output file: $output_file"
