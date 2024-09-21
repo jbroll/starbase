@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Check if 7-Zip is installed
+SEVENZIP="/c/Program Files/7-Zip/7z.exe"
+if [ ! -f "$SEVENZIP" ]; then
+    echo "Error: 7-Zip is not installed in the expected location." >&2
+    echo "Please install 7-Zip or update the script with the correct path." >&2
+    exit 1
+fi
+
+# Check if output zip file is provided
+if [ $# -lt 2 ]; then
+    echo "Usage: zip <output.zip> <input_files...>" >&2
+    exit 1
+fi
+
+# Get the output zip file name
+ZIPFILE="$1"
+shift
+
+# Create the zip file using 7-Zip
+"$SEVENZIP" a -tzip "$ZIPFILE" "$@"
+
+if [ $? -eq 0 ]; then
+    echo "Zip file created: $ZIPFILE"
+else
+    echo "Error: Failed to create zip file." >&2
+    exit 1
+fi
