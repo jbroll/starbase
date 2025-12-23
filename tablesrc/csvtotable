@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+
+IFS= read -r HEADER
+HEADER=$(echo $HEADER | tr , " ")
+fldtotable -ifs , $HEADER
+
+
