@@ -7,6 +7,8 @@
 #include "xos.h"
 #include <sys/time.h>
 
+void time();
+
 void SAOSleep(x)
     int             x;
 {

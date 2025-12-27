@@ -22,6 +22,8 @@ the GNU General Public License, version 2, 1991.
 #include "repl.h"
 #include "regexp.h"
 
+void SAOparsefmt();
+
 CELL field[FBANK_SZ + NUM_PFIELDS] ;
 
 CELL *fbank[NUM_FBANK] =

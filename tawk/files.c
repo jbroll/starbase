@@ -18,6 +18,10 @@ the GNU General Public License, version 2, 1991.
 #include "memory.h"
 #include "fin.h"
 
+#include <unistd.h>    // pipe, fork, dup, dup2, execl, _exit
+#include <sys/wait.h>  // wait, waitpid
+
+
 static FILE *PROTO(tfopen, (char *, char *)) ;
 static void PROTO(efflush, (FILE*)) ;
 static void PROTO(add_to_child_list, (int, int)) ;

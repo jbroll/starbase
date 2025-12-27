@@ -24,6 +24,8 @@ static STRING *PROTO(do_printf, (FILE *, char *, unsigned, CELL *)) ;
 static void PROTO(bad_conversion, (int, char *, char *)) ;
 static void PROTO(write_error,(void)) ;
 
+int atoi();
+
 /* this can be moved and enlarged  by -W sprintf=num  */
 char *sprintf_buff = string_buff ;
 char *sprintf_limit = string_buff + SPRINTF_SZ ;

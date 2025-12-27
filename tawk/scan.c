@@ -28,6 +28,8 @@ the GNU General Public License, version 2, 1991.
 
 #include  "files.h"
 
+long strtol();
+
 
 /* static functions */
 static void PROTO(scan_fillbuff, (void)) ;

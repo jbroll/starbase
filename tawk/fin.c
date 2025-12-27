@@ -21,6 +21,8 @@ the GNU General Public License, version 2, 1991.
 #include "symtype.h"
 #include "scan.h"
 
+int read();
+
 extern FILE *xOpen();
 
 #ifndef	  NO_FCNTL_H
